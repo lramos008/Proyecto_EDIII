@@ -8,24 +8,11 @@ extern QueueHandle_t display_queue;
 extern QueueHandle_t sequence_queue;
 
 /*================[Private defines]=======================*/
-#define SEQUENCE_LENGTH 6
-#define BORRAR_DIGITO '#'
-#define ENTER '*'
+
 #define KEYPAD_TIMEOUT 5000
 /*================[Public data types]=====================*/
 char buffer[SEQUENCE_LENGTH + 1];
-typedef enum{
-	ESPERANDO_DIGITO_1,
-	ESPERANDO_DIGITO_2,
-	ESPERANDO_DIGITO_3,
-	ESPERANDO_DIGITO_4,
-	ESPERANDO_DIGITO_5,
-	ESPERANDO_DIGITO_6,
-	ESPERANDO_CONFIRMACION,
-	PROCEDER_A_BUSQUEDA_DE_USUARIO,
-	SECUENCIA_INCOMPLETA,
-	TIMEOUT
-}keypad_state_t;
+
 /*================[Private functions]====================*/
 static void clear_buffer(char *buffer, uint8_t size){
 	/*Limpia el buffer que guarda la secuencia ingresada*/
@@ -59,7 +46,7 @@ static display_state_t handle_keypad_input(uint8_t input){
 				current_index++;
 				start_time = xTaskGetTickCount();
 				current_state = ESPERANDO_DIGITO_2;
-				current_screen = PANTALLA_AGREGAR_ENTRADA;
+				//current_screen = PANTALLA_AGREGAR_ENTRADA;
 			}
 		}
 		else{
@@ -79,13 +66,13 @@ static display_state_t handle_keypad_input(uint8_t input){
 					buffer[current_index] = 0;								//Borra el anterior elemento
 					start_time = xTaskGetTickCount();						//Reinicia conteo de timeout
 					current_state--;										//Volver al estado anterior
-					current_screen = PANTALLA_BORRAR_ENTRADA;
+					//current_screen = PANTALLA_BORRAR_ENTRADA;
 				}
 				else{
 					if(input == ENTER){
 						if(current_state == ESPERANDO_CONFIRMACION){
 							current_state = PROCEDER_A_BUSQUEDA_DE_USUARIO;
-							current_screen = PANTALLA_BUSQUEDA_DE_USUARIO;
+							//current_screen = PANTALLA_BUSQUEDA_DE_USUARIO;
 						}
 						else{
 							current_state = SECUENCIA_INCOMPLETA;
@@ -98,36 +85,36 @@ static display_state_t handle_keypad_input(uint8_t input){
 							current_index++;								//Aumenta indice del buffer
 							start_time = xTaskGetTickCount();				//Reinicia timeout
 							current_state++;
-							current_screen = PANTALLA_AGREGAR_ENTRADA;
+							//current_screen = PANTALLA_AGREGAR_ENTRADA;
 						}
 						else{
 							/*Si esto esperando un enter e ingreso cualquier otra cosa, va a la pantalla idle*/
-							current_screen = PANTALLA_IDLE;
+							//current_screen = PANTALLA_IDLE;
 						}
 					}
 				}
 			}
 			else{
-				current_screen = PANTALLA_IDLE;						//Pantalla idle indica que no ocurrio ningun evento. Se conserva la pantalla anterior.
+				//current_screen = PANTALLA_IDLE;						//Pantalla idle indica que no ocurrio ningun evento. Se conserva la pantalla anterior.
 			}
 		}
 		else{
 			current_state = TIMEOUT;
-			current_screen = PANTALLA_TIMEOUT;
+			//current_screen = PANTALLA_TIMEOUT;
 		}
 		break;
 	case PROCEDER_A_BUSQUEDA_DE_USUARIO:
 		send_sequence(buffer, SEQUENCE_LENGTH);						//Aca salta a la tarea de la memoria SD
 		clear_buffer(buffer, SEQUENCE_LENGTH);
 		current_state = ESPERANDO_DIGITO_1;
-		current_screen = PANTALLA_DE_INICIO;
+		//current_screen = PANTALLA_DE_INICIO;
 		break;
 	case SECUENCIA_INCOMPLETA:
 	case TIMEOUT:
 	default:
 		clear_buffer(buffer, SEQUENCE_LENGTH);
 		current_state = ESPERANDO_DIGITO_1;
-		current_screen = PANTALLA_DE_INICIO;
+		//current_screen = PANTALLA_DE_INICIO;
 		break;
 	}
 	/*Enviar pantalla al display*/

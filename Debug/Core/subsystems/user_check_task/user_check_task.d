@@ -53,11 +53,16 @@ Core/subsystems/user_check_task/user_check_task.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/sd_card/sd_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/display_functions.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/sd_card/dsp_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/dsp_functions.h \
  ../Core/Inc/arm_math.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -113,10 +118,15 @@ Core/subsystems/user_check_task/user_check_task.o: \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/sd_card/sd_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
 ../FATFS/Target/ffconf.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/display_functions.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/sd_card/dsp_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/dsp_functions.h:
 ../Core/Inc/arm_math.h:

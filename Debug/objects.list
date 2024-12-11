@@ -15,7 +15,7 @@
 "./Core/drivers/sd_card/dsp_functions.o"
 "./Core/drivers/sd_card/fatfs_sd.o"
 "./Core/drivers/sd_card/sd_functions.o"
-"./Core/subsystems/display_manager/display_manager.o"
+"./Core/subsystems/display/display_task.o"
 "./Core/subsystems/input_sequence_scan/input_sequence_scan.o"
 "./Core/subsystems/user_check_task/user_check_task.o"
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o"

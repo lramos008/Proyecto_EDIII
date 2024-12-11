@@ -66,7 +66,7 @@ static col_state read_col(col_t col){
 }
 
 /*================[Public functions]=====================*/
-uint8_t read_keypad(void){
+char read_keypad(void){
 	uint8_t key_pressed = 0;
 	for(uint8_t i = 0; i < ROW_LENGTH; i++){
 		set_row(keypad_rows[i]);

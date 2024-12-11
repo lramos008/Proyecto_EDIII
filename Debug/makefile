@@ -20,7 +20,7 @@ RM := rm -rf
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/subsystems/user_check_task/subdir.mk
 -include Core/subsystems/input_sequence_scan/subdir.mk
--include Core/subsystems/display_manager/subdir.mk
+-include Core/subsystems/display/subdir.mk
 -include Core/drivers/sd_card/subdir.mk
 -include Core/drivers/keypad/subdir.mk
 -include Core/drivers/display/subdir.mk
@@ -74,8 +74,8 @@ all: main-build
 main-build: EDIII_Control_Acceso.elf secondary-outputs
 
 # Tool invocations
-EDIII_Control_Acceso.elf EDIII_Control_Acceso.map: $(OBJS) $(USER_OBJS) C:\Users\leora\OneDrive\ -\ Universidad\ de\ San\ Martin\Facultad\Proyecto\Espacio\ de\ trabajo\EDIII_Control_Acceso\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "EDIII_Control_Acceso.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\leora\OneDrive - Universidad de San Martin\Facultad\Proyecto\Espacio de trabajo\EDIII_Control_Acceso\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EDIII_Control_Acceso.map" -Wl,--gc-sections -static -L"C:\Users\leora\OneDrive - Universidad de San Martin\Facultad\Proyecto\Espacio de trabajo\EDIII_Control_Acceso\Lib" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+EDIII_Control_Acceso.elf EDIII_Control_Acceso.map: $(OBJS) $(USER_OBJS) C:\Users\dramos\Documents\Final\Proyecto_EDIII\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "EDIII_Control_Acceso.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\dramos\Documents\Final\Proyecto_EDIII\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EDIII_Control_Acceso.map" -Wl,--gc-sections -static -L"C:\Users\dramos\Documents\Final\Proyecto_EDIII\Lib" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

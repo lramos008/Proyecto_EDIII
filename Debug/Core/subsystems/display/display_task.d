@@ -1,6 +1,7 @@
-Core/subsystems/display_manager/display_manager.o: \
- ../Core/subsystems/display_manager/display_manager.c ../Core/Inc/main.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+Core/subsystems/display/display_task.o: \
+ ../Core/subsystems/display/display_task.c \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h \
+ ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
@@ -53,12 +54,12 @@ Core/subsystems/display_manager/display_manager.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306_conf.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306_fonts.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306_tests.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/display_functions.h
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -113,9 +114,8 @@ Core/subsystems/display_manager/display_manager.o: \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306_conf.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306_fonts.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/ssd1306_tests.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/display_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:

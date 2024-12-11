@@ -1,1 +1,13 @@
-../Core/drivers/display/display_functions.c:12:6:send_screen_to_display	16	static
+../Core/drivers/display/display_functions.c:7:6:send_screen_to_display	16	static
+../Core/drivers/display/display_functions.c:16:6:display_init	8	static
+../Core/drivers/display/display_functions.c:22:6:display_start_msg	24	static
+../Core/drivers/display/display_functions.c:37:6:display_sequence_entry_msg	40	static
+../Core/drivers/display/display_functions.c:58:6:display_timeout_msg	24	static
+../Core/drivers/display/display_functions.c:67:6:display_incomplete_entry_msg	24	static
+../Core/drivers/display/display_functions.c:84:6:display_access_granted_msg	24	static
+../Core/drivers/display/display_functions.c:96:6:display_user_not_found_msg	24	static
+../Core/drivers/display/display_functions.c:113:6:display_start_voice_recognition_msg	24	static
+../Core/drivers/display/display_functions.c:130:6:countdown_msg	24	static
+../Core/drivers/display/display_functions.c:150:6:display_capturing_voice_msg	24	static
+../Core/drivers/display/display_functions.c:163:6:display_recognized_voice_msg	24	static
+../Core/drivers/display/display_functions.c:177:6:display_not_recognized_voice_msg	24	static

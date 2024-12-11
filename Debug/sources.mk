@@ -27,7 +27,7 @@ Core/Startup \
 Core/drivers/display \
 Core/drivers/keypad \
 Core/drivers/sd_card \
-Core/subsystems/display_manager \
+Core/subsystems/display \
 Core/subsystems/input_sequence_scan \
 Core/subsystems/user_check_task \
 Drivers/STM32F4xx_HAL_Driver/Src \

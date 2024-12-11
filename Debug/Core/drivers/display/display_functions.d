@@ -1,5 +1,6 @@
 Core/drivers/display/display_functions.o: \
- ../Core/drivers/display/display_functions.c ../Core/Inc/main.h \
+ ../Core/drivers/display/display_functions.c \
+ ../Core/drivers/display/display_functions.h ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -55,8 +56,8 @@ Core/drivers/display/display_functions.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  ../Core/drivers/display/ssd1306.h ../Core/drivers/display/ssd1306_conf.h \
  ../Core/drivers/display/ssd1306_fonts.h \
- ../Core/drivers/display/ssd1306_tests.h \
- ../Core/drivers/display/display_functions.h
+ ../Core/drivers/display/ssd1306_tests.h
+../Core/drivers/display/display_functions.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -115,4 +116,3 @@ Core/drivers/display/display_functions.o: \
 ../Core/drivers/display/ssd1306_conf.h:
 ../Core/drivers/display/ssd1306_fonts.h:
 ../Core/drivers/display/ssd1306_tests.h:
-../Core/drivers/display/display_functions.h:

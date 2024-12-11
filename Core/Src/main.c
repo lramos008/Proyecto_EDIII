@@ -26,9 +26,7 @@
 #define ARM_MATH_CM4
 #include "arm_math.h"
 #include "display_functions.h"
-#include "display_manager.h"
-#include "input_sequence_scan.h"
-#include "user_check_task.h"
+#include "tasks.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -141,7 +139,7 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-  display_queue = xQueueCreate(1, sizeof(display_state_t));
+  display_queue = xQueueCreate(1, sizeof(uint8_t));
   sequence_queue = xQueueCreate(1, sizeof(uint32_t));
   /* USER CODE END RTOS_QUEUES */
 
@@ -149,10 +147,10 @@ int main(void)
   /* definition and creation of defaultTask */
 
   /* USER CODE BEGIN RTOS_THREADS */
-  //xTaskCreate(display_manager, "Tarea 05", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
+  xTaskCreate(display_task, "Tarea 05", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
   //xTaskCreate(LockControl, "Tarea 04", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
   //xTaskCreate(VoiceProcessing, "Tarea 03", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
-  xTaskCreate(user_check_task, "Tarea 02", 3 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
+  //xTaskCreate(user_check_task, "Tarea 02", 3 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
   //xTaskCreate(input_sequence_scan, "Tarea 01", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
   xTaskCreate(idle_task, "Tarea Idle", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
   /* USER CODE END RTOS_THREADS */

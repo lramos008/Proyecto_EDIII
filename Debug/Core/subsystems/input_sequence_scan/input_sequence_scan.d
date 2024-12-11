@@ -53,8 +53,13 @@ Core/subsystems/input_sequence_scan/input_sequence_scan.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/keypad/keypad_functions.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/display_functions.h
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/keypad/keypad_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -109,5 +114,10 @@ Core/subsystems/input_sequence_scan/input_sequence_scan.o: \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/keypad/keypad_functions.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/display/display_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/keypad/keypad_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:

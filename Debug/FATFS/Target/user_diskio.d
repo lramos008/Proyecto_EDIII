@@ -56,7 +56,7 @@ FATFS/Target/user_diskio.o: ../FATFS/Target/user_diskio.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/sd_card/fatfs_sd.h
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/fatfs_sd.h
 ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h:
 ../Middlewares/Third_Party/FatFs/src/diskio.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
@@ -116,4 +116,4 @@ FATFS/Target/user_diskio.o: ../FATFS/Target/user_diskio.c \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/Proyecto/Espacio\ de\ trabajo/EDIII_Control_Acceso/Core/drivers/sd_card/fatfs_sd.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/fatfs_sd.h:
