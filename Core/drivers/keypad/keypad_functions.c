@@ -1,11 +1,7 @@
-#include "main.h"
-#include "cmsis_os.h"
-#include <stdio.h>
-#include <string.h>
+#include "utils.h"
 /*================[Private defines]=======================*/
 #define ROW_LENGTH 4
 #define COL_LENGTH 4
-#define DEBOUNCE_DELAY 20						//En ms
 #define GPIO_ROW GPIOC
 #define GPIO_COL GPIOC
 
@@ -48,37 +44,31 @@ static void reset_row(row_t row){
 	return;
 }
 
-static col_state read_col(col_t col){
-	col_state state;
-	if(HAL_GPIO_ReadPin(GPIO_COL, col) == GPIO_PIN_SET){
-		vTaskDelay( 20 /portTICK_RATE_MS);
-		if(HAL_GPIO_ReadPin(GPIO_COL, col) == GPIO_PIN_SET){
-			state = ACTIVE_COL;
-		}
-		else{
-			state = IDLE_COL;
-		}
-	}
-	else{
-		state = IDLE_COL;
-	}
-	return state;
+static GPIO_PinState read_col(col_t col){
+	return HAL_GPIO_ReadPin(GPIO_COL, col);
 }
 
 /*================[Public functions]=====================*/
 char read_keypad(void){
-	uint8_t key_pressed = 0;
+	/* La funcion barre las filas del keypad, activando una por una individualmente y leyendo la columna asociada,
+	 * para así poder triangular la tecla presionada. Se realiza doble confirmacion de tecla presionada.
+	 */
+	char key_pressed;
 	for(uint8_t i = 0; i < ROW_LENGTH; i++){
 		set_row(keypad_rows[i]);
 		for(uint8_t j = 0; j < COL_LENGTH; j++){
-			if(read_col(keypad_cols[j]) == ACTIVE_COL){
-				key_pressed = (uint8_t) keypad_chars[i][j];
-				reset_row(keypad_rows[i]);
-				vTaskDelay( 100 /portTICK_RATE_MS);
-				return key_pressed;
+			if(read_col(keypad_cols[j]) == GPIO_PIN_SET){					//Verifico si alguna columna esta en alto (tecla presionada)
+				vTaskDelay(20 / portTICK_RATE_MS);							//Si una de las columnas dio alto, espero 20ms y verifico que siga en alto para confirmar
+				if(read_col(keypad_cols[j]) == GPIO_PIN_SET){
+					key_pressed = keypad_chars[i][j];						//Guardo la tecla presionada
+					while(read_col(keypad_cols[j]) == GPIO_PIN_SET);		//Espero a que se deje de apretar la tecla
+					reset_row(keypad_rows[i]);								//Reseteo la fila en alto antes de salir de la funcion
+					vTaskDelay(10/portTICK_RATE_MS);						//Pequeño delay para asegurar que el boton fue liberado completamente
+					return key_pressed;
+				}
 			}
 		}
 		reset_row(keypad_rows[i]);
 	}
-	return key_pressed;
+	return 0;
 }

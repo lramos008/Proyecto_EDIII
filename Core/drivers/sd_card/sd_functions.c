@@ -1,15 +1,13 @@
-#include "main.h"
 #include "fatfs.h"
 #include "ff.h"
 #include "fatfs_sd.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include "utils.h"
 
 
 #define UART &huart2
 
-#define LINE_SIZE 100
+#define LINE_BUFFER_SIZE 128
 
 FATFS fs;  // file system
 FIL fil; // File
@@ -42,18 +40,20 @@ void send_buffer_via_uart(uint16_t *buffer, size_t size){
 
 void mount_sd(const char* path){
 	fresult = f_mount(&fs, path, 1);
-
+	if(fresult != FR_OK){
+		send_uart("Error al dmontar la tarjeta SD!!!\n");
+		while(1);
+	}
 	return;
 }
 
 void unmount_sd(const char* path){
 	fresult = f_mount(NULL, path, 1);
 	if(fresult != FR_OK){
-		send_uart("Error al desmontar la tarjeta SD!!!\n\n");
+		send_uart("Error al desmontar la tarjeta SD!!!\n");
 		while(1);
 	}
 }
-
 
 
 FRESULT check_if_file_exists(char *filename){
@@ -65,7 +65,9 @@ FRESULT check_if_file_exists(char *filename){
 FRESULT create_file(char *filename, char *header){
 	/*Creo el archivo*/
 	fresult = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
-	if(fresult != FR_OK) return fresult;
+	if(fresult != FR_OK){
+		return fresult;
+	}
 	/*Escribo el header*/
 	fresult = f_write(&fil, header, strlen(header), &bw);
 	if(fresult != FR_OK || bw < strlen(header)){
@@ -94,106 +96,63 @@ void get_time_from_rtc(char *rtc_lecture){
 	return;
 }
 
-FRESULT save_buffer_on_sd(char *filename, uint16_t *buffer, uint16_t buf_size){
-	char line[20];
-	fresult = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
+FRESULT save_buffer_on_sd(char *filename, float *buffer, size_t size){
+	/* Guarda los valores de un vector float con tamaño size en el archivo filename.
+	 * Es importante que el archivo sea .bin, ya que es más conveniente guardar
+	 * los datos en este formato (ocupa menos espacio y es más directa la escritura).
+	 */
+
+	//Abro el archivo
+	fresult = f_open(&fil, filename, FA_OPEN_APPEND | FA_WRITE);						//Se abre con append por si es necesario seguir escribiendo desde el final
 	if(fresult != FR_OK){
 		return fresult;
 	}
-	/*Escribo cada dato del buffer en una linea separada*/
-	for(uint16_t i = 0; i < buf_size; i++){
-		/*Formateo numero como string*/
-		snprintf(line, 20, "%u\n", buffer[i]);
-		/*Escribo en el archivo*/
-		fresult = f_write(&fil, line, strlen(line), &bw);
-		if (fresult != FR_OK || bw < strlen(line)) {
-			f_close(&fil); // Cerrar el archivo antes de retornar
-		    return fresult;  // Error al escribir en el archivo
-		}
+
+	//Escribo los datos del buffer en el archivo
+	fresult = f_write(&fil, buffer, FLOAT_SIZE_BYTES(size), &bw);
+	if(fresult != FR_OK || bw < FLOAT_SIZE_BYTES(size)){
+		f_close(&fil);																	//Frente a un error cierro el archivo y salgo de la funcion
+		return (fresult != FR_OK) ? fresult : FR_DISK_ERR;								//Si se escribieron bytes de menos, devuelve FR_DISK_ERR
 	}
+
+	//Cierro el archivo
 	f_close(&fil);
 	return FR_OK;
 }
 
-void read_voice_buffer(char *filename, uint16_t *buffer, uint16_t length){
-	char line[5];
-	FRESULT fresult;
-	static uint32_t current_pos = 0;
-	uint32_t count = 0;
-	/*Abro el archivo*/
+FRESULT read_buffer_from_sd(char *filename, float *buffer, size_t size, uint32_t current_pos){
+	/* Lee un bloque de valores float con tamaño size desde el archivo filename
+	 * y los guarda en un vector. Es importante que el archivo sea .bin.
+	 * La funcion esta pensada para leer de a bloques iguales, no guarda la ultima
+	 * posicion del puntero de lectura, se debe llevar cuenta externamente.
+	 */
+
+	//Abro el archivo
 	fresult = f_open(&fil, filename, FA_READ);
 	if(fresult != FR_OK){
-		send_uart("Error al abrir el archivo current_voice.txt.\n");
-		unmount_sd("/");
-		while(1);
+		return fresult;
 	}
-	/*Posiciono el cursor en la posicion inicial a leer*/
+
+	//Posiciono el puntero de lectura en el archivo
 	fresult = f_lseek(&fil, current_pos);
 	if(fresult != FR_OK){
-		send_uart("Error al mover el puntero del archivo.\n");
 		f_close(&fil);
-		unmount_sd("/");
-		while(1);
+		return fresult;
 	}
-	while(count < length){
-		/*Leo una linea del archivo y verifico que no este vacia*/
-		if(f_gets(line, sizeof(line), &fil) != NULL){
-			if(strlen(line) > 1){
-				/*Si cumple con el largo esperado, guardar el valor en el buffer*/
-				buffer[count] = (uint16_t) strtoul(line, NULL, 10);
-				count++;
-			}
-		}
-		else{
-			/*Si alcanzo el final del archivo salgo del bucle*/
-			break;
-		}
+
+	//Leo el bloque de tamaño size desde el archivo
+	fresult = f_read(&fil, buffer, FLOAT_SIZE_BYTES(size), &br);
+	if(fresult != FR_OK){
+		f_close(&fil);
+		return fresult;
 	}
-	current_pos = f_tell(&fil);
+
+	//Cierro el archivo
 	f_close(&fil);
-	return;
+	return FR_OK;
 }
 
-void read_template(char *filename, float *buffer, uint16_t length){
-	char line[9];
-	FRESULT fresult;
-	static uint32_t current_pos = 0;
-	uint32_t count = 0;
-	float value;
-	/*Abro el archivo*/
-	fresult = f_open(&fil, filename, FA_READ);
-	if(fresult != FR_OK){
-		send_uart("Error al abrir el archivo template.\n");
-		unmount_sd("/");
-		while(1);
-	}
-	/*Posiciono el cursor en la posicion inicial a leer*/
-	fresult = f_lseek(&fil, current_pos);
-	if(fresult != FR_OK){
-		send_uart("Error al mover el puntero del archivo.\n");
-		f_close(&fil);
-		unmount_sd("/");
-		while(1);
-	}
-	while(count < length){
-		/*Leo una linea del archivo y verifico que no este vacia*/
-		if(f_gets(line, 9, &fil) != NULL){
-			if(strlen(line) > 1){
-				/*Si cumple con el largo esperado, guardar el valor en el buffer*/
-				value = strtof(line, NULL);
-				buffer[count] = value;
-				count++;
-			}
-		}
-		else{
-			/*Si alcanzo el final del archivo salgo del bucle*/
-			break;
-		}
-	}
-	current_pos = f_tell(&fil);
-	f_close(&fil);
-	return;
-}
+
 
 FRESULT write_entry(char *filename, char *entry){
 	/*Abro el archivo en modo append*/
@@ -206,42 +165,47 @@ FRESULT write_entry(char *filename, char *entry){
 		if(fresult != FR_OK || bw < strlen(buffer)){
 			return FR_DISK_ERR;
 		}
+		vPortFree(buffer);
 		f_close(&fil);
 	}
 	return fresult;
 }
 
-FRESULT look_for_user(char *filename, char *username, uint32_t sequence){
-	char line[LINE_SIZE];					//Buffer para leer las lineas del archivo
-	char *token;
-	uint32_t line_sequence;
-	/*Abro el archivo*/
+FRESULT search_user(char *filename, char *user_key, char *user_name){
+	char line[LINE_BUFFER_SIZE];
+	char *line_key;
+	char *line_user;
+	//Abro el archivo
 	fresult = f_open(&fil, filename, FA_READ);
-	if(fresult != FR_OK) return fresult;
-	/*Descarto linea de header del archivo*/
-	f_gets(line, LINE_SIZE, &fil);
-	/*Busco linea por linea en el archivo*/
-	while(f_gets(line, LINE_SIZE, &fil) != NULL){
-		/*Separo clave de nombre de usuario*/
-		token = strtok(line, " ");
-		if(token != NULL){
-			/*Convierto la clave string a entero sin signo*/
-			line_sequence = (uint32_t) atoi(token);
-			/*Obtengo usuario*/
-			token = strtok(NULL, " ");
-			if(token != NULL){
-				if(line_sequence == sequence){
-					/*Si hay usuario, y concuerdan las claves, guardo el usuario*/
-					strcpy(username, token);
-					fresult = f_close(&fil);
-					return FR_OK;
-				}
-			}
-
-		}
+	if(fresult != FR_OK){
+		return fresult;
 	}
-	/*Devuelve FR_NO_FILE si no hay usuario*/
-	return FR_NO_PATH;
+
+	//Descarto el header
+	f_gets(line, LINE_BUFFER_SIZE, &fil);
+
+	//Busco el usuario asociado linea por linea
+	while(f_gets(line, LINE_BUFFER_SIZE, &fil) != NULL){
+		line_key = strtok(line, " ");								//Separo la clave
+		line_user = strtok(NULL, "\n");								//Separo el usuario
+
+		//Comparo clave
+		if(line_key && strcmp(line_key, user_key) == 0){
+			if(line_user){
+				strncpy(user_name, line_user, USER_STR_SIZE - 1);
+				user_name[USER_STR_SIZE - 1] = '\0';				//Me aseguro de que haya terminacion nula
+				f_close(&fil);
+				return FR_OK;
+			}
+		}
+
+		//Limpio la linea para que no se acumulen caracteres de palabras largas
+		clear_buffer(line, LINE_BUFFER_SIZE);
+	}
+
+	//Si se llego al final sin encontrar el usuario, devuelve mensaje de error
+	f_close(&fil);
+	return FR_NO_FILE;												//Devuelve FR_NO_FILE si no se encuentra el usuario
 }
 
 

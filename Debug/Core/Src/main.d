@@ -58,15 +58,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/user_diskio.h \
  ../Core/Inc/arm_math.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h \
- ../Core/Src/../subsystems/display/display_task.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/input_sequence_scan/input_sequence_scan.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/user_check_task/user_check_task.h
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/tasks.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -130,12 +122,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../FATFS/Target/user_diskio.h:
 ../Core/Inc/arm_math.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_conf.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_fonts.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/ssd1306_tests.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/display/display_functions.h:
-../Core/Src/../subsystems/display/display_task.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/input_sequence_scan/input_sequence_scan.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/user_check_task/user_check_task.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/tasks.h:

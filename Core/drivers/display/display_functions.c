@@ -1,5 +1,7 @@
-#include "display_functions.h"
-
+#include "ssd1306.h"
+#include "ssd1306_fonts.h"
+#include "ssd1306_tests.h"
+#include "utils.h"
 /*================[Public functions]=====================*/
 void display_init(void){
 	/*Wrapper de la función que inicializa el display*/
@@ -94,7 +96,7 @@ void display_user_found_msg(void){
 	x = 20;
 	y += 18;
 	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("encontrado", Font_11x18, White);
+	ssd1306_WriteString("hallado", Font_11x18, White);
 	ssd1306_UpdateScreen();
 }
 

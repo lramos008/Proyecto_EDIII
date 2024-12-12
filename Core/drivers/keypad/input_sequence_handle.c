@@ -2,7 +2,7 @@
 /*==================[Private Defines]========================*/
 #define BORRAR_DIGITO '#'
 #define ENTER '*'
-#define KEYPAD_TIMEOUT 5000
+#define KEYPAD_TIMEOUT 5000						//en ms
 /*================[Private Structures]=======================*/
 typedef struct{
 	keypad_state_t current_state;
@@ -11,25 +11,17 @@ typedef struct{
 	char buffer[SEQUENCE_LENGTH + 1];
 }keypad_context_t;
 
-void clear_buffer(char *buffer, size_t length) {
-    if (buffer == NULL) {
-        return; // Verifica que el puntero no sea nulo
-    }
-    for (size_t i = 0; i < length; i++) {
-        buffer[i] = '\0'; // Llena el buffer con caracteres nulos
-    }
-}
 
-static indicatorMessage handle_keypad_input(char input){
+indicatorMessage handle_keypad_input(char input, char *buffer, uint8_t *send_flag){
+	char comp_buffer[7] = "123456";
 	static keypad_context_t context = { .current_state = ESPERANDO_DIGITO_1,
 										.current_index = 0,
-										.start_time = 0,
-										.buffer = {0}						};
+										.start_time = 0,					};
 	indicatorMessage current_message = PANTALLA_IDLE;
 	switch(context.current_state){
 	case ESPERANDO_DIGITO_1:
 		if(input != 0 && input != BORRAR_DIGITO && input != ENTER){
-			context.buffer[0] = input;											//Guardo digito en el buffer
+			buffer[0] = input;													//Guardo digito en el buffer
 			context.current_index = 1;
 			context.start_time = xTaskGetTickCount();							//Reinicio el timeout
 			context.current_state = ESPERANDO_DIGITO_2;							//Avanzo al siguiente estado
@@ -45,12 +37,12 @@ static indicatorMessage handle_keypad_input(char input){
 	case ESPERANDO_DIGITO_5:
 	case ESPERANDO_DIGITO_6:
 	case ESPERANDO_CONFIRMACION:
-		if((xTaskGetTickCount() - context.start_time) < pdMS_TO_TICKS(5000)){
+		if((xTaskGetTickCount() - context.start_time) < pdMS_TO_TICKS(KEYPAD_TIMEOUT)){
 			if(input != 0){
 				if(input == BORRAR_DIGITO){
 					if(context.current_index > 0){
 						context.current_index--;
-						context.buffer[context.current_index] = '\0';			//Borro el contenido previo
+						buffer[context.current_index] = '\0';					//Borro el contenido previo
 						context.start_time = xTaskGetTickCount();				//Reinicio el timeout
 						current_message = PANTALLA_BORRAR_KEYPAD;
 						context.current_state = (context.current_state > ESPERANDO_DIGITO_1) ? context.current_state - 1 : ESPERANDO_DIGITO_1;
@@ -62,14 +54,14 @@ static indicatorMessage handle_keypad_input(char input){
 						//En este caso no hace falta devolver la pantalla
 					}
 					else{
-						context->current_state = SECUENCIA_INCOMPLETA;
+						context.current_state = SECUENCIA_INCOMPLETA;
 						current_message = PANTALLA_SECUENCIA_INCOMPLETA;
 					}
 				}
 				else{
 					if(context.current_index < SEQUENCE_LENGTH){
-						context.buffer[context.current_index++] = input;		//Agrego el digito al buffer
-						context.buffer[context.current_index] = '\0';			//Aseguro que el buffer siempre termine en caracter nulo
+						buffer[context.current_index++] = input;				//Agrego el digito al buffer
+						buffer[context.current_index] = '\0';					//Aseguro que el buffer siempre termine en caracter nulo
 						context.start_time = xTaskGetTickCount();				//Reinicio el timeout
 						current_message = PANTALLA_INGRESO_KEYPAD;
 						if(context.current_state != ESPERANDO_CONFIRMACION){
@@ -78,6 +70,9 @@ static indicatorMessage handle_keypad_input(char input){
 					}
 				}
 			}
+			else{
+				current_message = PANTALLA_IDLE;
+			}
 		}
 		else{
 			context.current_state = TIMEOUT;
@@ -85,13 +80,21 @@ static indicatorMessage handle_keypad_input(char input){
 		}
 		break;
 	case BUSQUEDA_DE_USUARIO:
-		//Enviar la secuencia a la tarea SD
-		//Resetear la secuencia
+		//*send_flag = 1;															//Habilito flag para enviar el string
+		if(strcmp(buffer, comp_buffer) == 0){
+			current_message = PANTALLA_USUARIO_ENCONTRADO;
+		}
+		else{
+			current_message = PANTALLA_USUARIO_NO_EXISTE;
+		}
+		context.current_state = ESPERANDO_DIGITO_1;
+		context.current_index = 0;
+		//current_message = PANTALLA_DE_INICIO;									//Luego del procesamiento se vuelve al estado inicial
 		break;
 	case SECUENCIA_INCOMPLETA:
 	case TIMEOUT:
 	default:
-		clear_buffer(context.buffer, SEQUENCE_LENGTH + 1);
+		clear_buffer(buffer, SEQUENCE_LENGTH + 1);
 		context.current_state = ESPERANDO_DIGITO_1;								//Vuelvo al estado inicial
 		context.current_index = 0;
 		current_message = PANTALLA_DE_INICIO;

@@ -61,6 +61,8 @@
 									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/FatFs/src"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\Juli-Leo\Documents\Facultad\stm32 workspace\EDIII_Control_Acceso\Core\Inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Core/drivers/utils}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Core/subsystems}&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1862373519" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

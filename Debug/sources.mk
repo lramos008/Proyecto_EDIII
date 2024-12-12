@@ -27,9 +27,8 @@ Core/Startup \
 Core/drivers/display \
 Core/drivers/keypad \
 Core/drivers/sd_card \
-Core/subsystems/display \
-Core/subsystems/input_sequence_scan \
-Core/subsystems/user_check_task \
+Core/drivers/utils \
+Core/subsystems \
 Drivers/STM32F4xx_HAL_Driver/Src \
 FATFS/App \
 FATFS/Target \

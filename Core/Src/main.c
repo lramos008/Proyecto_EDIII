@@ -25,7 +25,6 @@
 /* USER CODE BEGIN Includes */
 #define ARM_MATH_CM4
 #include "arm_math.h"
-#include "display_functions.h"
 #include "tasks.h"
 /* USER CODE END Includes */
 
@@ -140,18 +139,18 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   display_queue = xQueueCreate(1, sizeof(uint8_t));
-  sequence_queue = xQueueCreate(1, sizeof(uint32_t));
+  sequence_queue = xQueueCreate(1, sizeof(char));
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
 
   /* USER CODE BEGIN RTOS_THREADS */
-  xTaskCreate(display_task, "Tarea 05", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
+  xTaskCreate(display_task, "Tarea display", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
   //xTaskCreate(LockControl, "Tarea 04", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
   //xTaskCreate(VoiceProcessing, "Tarea 03", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
-  //xTaskCreate(user_check_task, "Tarea 02", 3 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
-  //xTaskCreate(input_sequence_scan, "Tarea 01", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+  xTaskCreate(sd_task, "Tarea SD", 5 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
+  xTaskCreate(keypad_task, "Tarea keypad", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
   xTaskCreate(idle_task, "Tarea Idle", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
   /* USER CODE END RTOS_THREADS */
 

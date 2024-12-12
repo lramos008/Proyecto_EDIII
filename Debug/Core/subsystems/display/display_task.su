@@ -1,2 +1,0 @@
-../Core/subsystems/display/display_task.c:8:24:receive_screen	16	static
-../Core/subsystems/display/display_task.c:50:6:display_task	16	static

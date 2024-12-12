@@ -1,6 +1,6 @@
 Core/drivers/display/display_functions.o: \
  ../Core/drivers/display/display_functions.c \
- ../Core/drivers/display/display_functions.h ../Core/Inc/main.h \
+ ../Core/drivers/display/ssd1306.h ../Core/drivers/display/ssd1306_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -37,6 +37,10 @@ Core/drivers/display/display_functions.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ ../Core/drivers/display/ssd1306_fonts.h \
+ ../Core/drivers/display/ssd1306_tests.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h \
+ ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
@@ -53,12 +57,9 @@ Core/drivers/display/display_functions.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- ../Core/drivers/display/ssd1306.h ../Core/drivers/display/ssd1306_conf.h \
- ../Core/drivers/display/ssd1306_fonts.h \
- ../Core/drivers/display/ssd1306_tests.h
-../Core/drivers/display/display_functions.h:
-../Core/Inc/main.h:
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+../Core/drivers/display/ssd1306.h:
+../Core/drivers/display/ssd1306_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -95,6 +96,10 @@ Core/drivers/display/display_functions.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+../Core/drivers/display/ssd1306_fonts.h:
+../Core/drivers/display/ssd1306_tests.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h:
+../Core/Inc/main.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -112,7 +117,3 @@ Core/drivers/display/display_functions.o: \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-../Core/drivers/display/ssd1306.h:
-../Core/drivers/display/ssd1306_conf.h:
-../Core/drivers/display/ssd1306_fonts.h:
-../Core/drivers/display/ssd1306_tests.h:

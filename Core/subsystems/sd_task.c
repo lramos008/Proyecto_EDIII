@@ -1,16 +1,13 @@
-#include "main.h"
-#include "cmsis_os.h"
 #include "sd_functions.h"
 #include "display_functions.h"
 #include "dsp_functions.h"
-#include <stdio.h>
-#include <string.h>
+#include "utils.h"
 /*================[Private defines]========================*/
 #define SEQUENCE_LENGTH 6
 #define USER_STR_SIZE 50
 #define CODE_VERSION 3
 /*================[Private variables]======================*/
-display_state_t current_screen;
+
 /*================[Extern variables]=======================*/
 extern QueueHandle_t sequence_queue;
 extern ADC_HandleTypeDef hadc1;
@@ -126,13 +123,22 @@ void user_check_task(void *pvParameters){
 
 #elif CODE_VERSION == 3
 /*Comprobacion de voz simple*/
-void user_check_task(void *pvParameters){
-	uint16_t buffer[5] = {1, 2, 3, 4, 5};
-
-	mount_sd("/");
-	save_buffer_on_sd("prueba.txt", buffer, 5);
-	unmount_sd("/");
+void sd_task(void *pvParameters){
+	char user_key_retrieved[SEQUENCE_LENGTH + 1];							//Buffer asociado a la clave obtenida con el keypad
 	while(1){
+		//Espero a que llegue la clave de usuario obtenida con el keypad
+		for(uint8_t i = 0; i < SEQUENCE_LENGTH + 1; i++){
+			xQueueReceive(sequence_queue, &user_key_retrieved[i], portMAX_DELAY);
+		}
+
+		//Verifico existencia de clave en el registro
+
+
+		//Si existe la clave, procedo al reconocimiento de voz.
+		//Si no existe, indico pantalla al display, bloqueo la tarea para dejar ejecutar la del keypad
+
+
+		//Si el reconocimiento de voz es correcto, escribir entrada en registro.
 
 	}
 }

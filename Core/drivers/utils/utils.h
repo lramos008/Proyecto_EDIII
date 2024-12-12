@@ -2,11 +2,17 @@
 #define UTILS_H
 #include "main.h"
 #include "cmsis_os.h"
+#include <stdio.h>
+#include <string.h>
 /*======================[Extern variables]==========================*/
 extern QueueHandle_t display_queue;
+extern QueueHandle_t sequence_queue;
 /*=======================[Public defines]==========================*/
 #define MAX_DIGITS 6
 #define SEQUENCE_LENGTH 6
+#define USER_STR_SIZE 50
+/*========================[Public macros]==========================*/
+#define FLOAT_SIZE_BYTES(X) ((X) * sizeof(float))
 /*====================== [Public Typedefs]=========================*/
 typedef uint8_t indicatorMessage;
 /*========================[Public enums]===========================*/
@@ -39,6 +45,6 @@ typedef enum{										//Para nombrar los estados de la adquisicion con el keypa
 }keypad_state_t;
 
 enum {INGRESAR = 0, BORRAR};						//Para ingresar / borrar digitos en el display
-
-
+/*========================[Public function prototypes]===========================*/
+void clear_buffer(char *buffer, size_t length);
 #endif /* UTILS_H */

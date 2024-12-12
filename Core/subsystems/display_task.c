@@ -1,5 +1,4 @@
 #include "display_functions.h"
-#include "utils.h"
 #define DISPLAY_FUNCTION 1										//0 realiza prueba de display completa
 																//1 provee la version funcional del codigo
 
