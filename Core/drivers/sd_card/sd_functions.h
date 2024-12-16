@@ -12,6 +12,7 @@ FRESULT save_buffer_on_sd(char *filename, float *buffer, size_t size);
 FRESULT read_buffer_from_sd(char *filename, float *buffer, size_t size, uint32_t current_pos);
 FRESULT search_user(char *filename, char *user_key, char *user_name);
 FRESULT write_entry(char *filename, char *entry);
+FRESULT check_for_dir(char *filename);
 void get_time_from_rtc(char *rtc_lecture);
 void send_buffer_via_uart(uint16_t *buffer, size_t size);
 

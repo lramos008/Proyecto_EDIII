@@ -2,12 +2,52 @@
 #include "ssd1306_fonts.h"
 #include "ssd1306_tests.h"
 #include "utils.h"
+
+//#define LINE_HEIGHT 18  // Altura de la fuente (ajustar según la fuente usada)
+//#define DISPLAY_WIDTH 128
+//#define DISPLAY_HEIGHT 64
 /*================[Public functions]=====================*/
 void display_init(void){
 	/*Wrapper de la función que inicializa el display*/
 	ssd1306_Init();
 	return;
 }
+
+//void display_text(const char *text) {
+//    uint8_t x = 0;  // Posición inicial en X
+//    uint8_t y = 0;  // Posición inicial en Y
+//
+//    ssd1306_Fill(Black);  // Limpiar la pantalla
+//
+//    while (*text) {
+//        // Verificar si es un salto de línea manual
+//        if (*text == '\n') {
+//            y += LINE_HEIGHT;  // Avanzar a la siguiente línea
+//            x = 0;             // Reiniciar X
+//        } else {
+//            // Escribir el carácter actual
+//            ssd1306_SetCursor(x, y);
+//            ssd1306_WriteChar(*text, Font_11x18, White);
+//
+//            // Avanzar la posición X
+//            x += 11;  // Avanzar por el ancho de la fuente (ajustar según la fuente)
+//            if (x + 11 > DISPLAY_WIDTH) {  // Si se pasa del ancho de pantalla
+//                x = 0;                      // Reiniciar X
+//                y += LINE_HEIGHT;           // Avanzar a la siguiente línea
+//            }
+//        }
+//
+//        // Avanzar al siguiente carácter
+//        text++;
+//
+//        // Verificar si alcanzamos el final de la pantalla
+//        if (y + LINE_HEIGHT > DISPLAY_HEIGHT) {
+//            break;  // No hay más espacio para mostrar texto
+//        }
+//    }
+//
+//    ssd1306_UpdateScreen();  // Actualizar pantalla
+//}
 
 void display_start_msg(void){
 	/*Muestra mensaje de insertar clave*/
@@ -197,6 +237,48 @@ void display_not_recognized_voice_msg(void){
 	y += 18;
 	ssd1306_SetCursor(x, y);
 	ssd1306_WriteString("reconocida", Font_11x18, White);
+	ssd1306_UpdateScreen();
+}
+
+void display_processing_data_msg(void){
+	/*Muestra mensaje de voz reconocida*/
+	uint8_t x = 40;
+	uint8_t y = 0;
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("Procesando", Font_11x18, White);
+	x = 10;
+	y += 18;
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("datos", Font_11x18, White);
+	ssd1306_UpdateScreen();
+}
+
+void display_missing_database_msg(void){
+	/*Muestra mensaje de database faltante*/
+	uint8_t x = 40;
+	uint8_t y = 0;
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("Database", Font_11x18, White);
+	x = 10;
+	y += 18;
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("faltante", Font_11x18, White);
+	ssd1306_UpdateScreen();
+}
+
+void display_missing_template_msg(void){
+	/*Muestra mensaje de template faltante*/
+	uint8_t x = 40;
+	uint8_t y = 0;
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("Template", Font_11x18, White);
+	x = 10;
+	y += 18;
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("faltante", Font_11x18, White);
 	ssd1306_UpdateScreen();
 }
 

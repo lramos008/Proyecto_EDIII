@@ -209,6 +209,30 @@ FRESULT search_user(char *filename, char *user_key, char *user_name){
 	return FR_NO_FILE;												//Devuelve FR_NO_FILE si no se encuentra el usuario
 }
 
+FRESULT check_for_dir(char *filename){
+	DIR dir;
+	FRESULT res;
+	fresult = f_opendir(&dir, filename);
+	if(fresult != FR_OK){
+		//Si no existe el directorio, lo creo
+		fresult = f_mkdir(filename);
+		if(fresult != FR_OK){
+			//Devuelve FR_NO_PATH si no pudo crearse
+			res = FR_NO_PATH;
+		}
+		else{
+			//Si se pudo crear el directorio, devuelvo OK
+			res = FR_OK;
+		}
+	}
+	else{
+		//Si existe, cierro el directorio y devuelve OK
+		f_closedir(&dir);
+		res = FR_OK;
+	}
+	return res;
+}
+
 
 
 

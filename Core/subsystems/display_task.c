@@ -94,6 +94,10 @@ void display_task(void *pvParameters){
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
 			break;
+		case PANTALLA_PROCESANDO_DATOS:
+			display_processing_data_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			break;
 		case PANTALLA_ACCESO_CONCEDIDO:
 			display_access_granted_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
@@ -106,6 +110,13 @@ void display_task(void *pvParameters){
 		case PANTALLA_SECUENCIA_INCOMPLETA:
 			display_incomplete_entry_msg();
 			counter = 0;
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			break;
+		case PANTALLA_DATABASE_NO_EXISTE:
+			display_missing_database_msg();
+			break;
+		case PANTALLA_TEMPLATE_NO_EXISTE:
+			display_missing_template_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
 		default:

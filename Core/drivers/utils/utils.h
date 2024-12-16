@@ -18,6 +18,7 @@ extern volatile bool conv_cplt_flag;
 #define SEQUENCE_LENGTH 6
 #define USER_STR_SIZE 30
 #define TEMPLATE_STR_SIZE 30
+#define DIR_STR_SIZE 20
 #define ENTRY_STR_SIZE 60
 
 #define VOICE_BUFFER_SIZE 18432							//Buffer necesario para capturar 1.5 segundos de voz a 12 kHz
@@ -26,6 +27,8 @@ extern volatile bool conv_cplt_flag;
 
 #define ADC_RESOLUTION 4096.0
 #define VOLTAGE_REFERENCE 3.3
+
+#define TEMPLATE_SAMPLES 5
 /*========================[Public macros]==========================*/
 #define FLOAT_SIZE_BYTES(X) ((X) * sizeof(float))
 /*====================== [Public Typedefs]=========================*/
@@ -46,7 +49,8 @@ enum{												//Para nombrar las pantallas del display
 	PANTALLA_TIMEOUT,
 	PANTALLA_SECUENCIA_INCOMPLETA,
 	PANTALLA_TEMPLATE_NO_EXISTE,
-	PANTALLA_DATABASE_NO_EXISTE
+	PANTALLA_DATABASE_NO_EXISTE,
+	PANTALLA_PROCESANDO_DATOS
 };
 
 typedef enum{										//Para nombrar los estados de la adquisicion con el keypad
