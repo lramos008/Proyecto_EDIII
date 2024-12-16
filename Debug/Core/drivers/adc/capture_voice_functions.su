@@ -1,0 +1,2 @@
+../Core/drivers/adc/capture_voice_functions.c:4:6:capture_voice	16	static
+../Core/drivers/adc/capture_voice_functions.c:10:6:get_voltage	40	static

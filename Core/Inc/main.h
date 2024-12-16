@@ -71,10 +71,10 @@ void blockingDelay(uint32_t ms);
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define CS_SD_Pin GPIO_PIN_15
+#define CS_SD_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
-#define cs_Pin GPIO_PIN_4
-#define cs_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

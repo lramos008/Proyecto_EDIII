@@ -12,7 +12,6 @@
 #define MAG_SIZE (FRAME_SIZE/2)
 #define CHUNK_SIZE (BUFFER_SIZE / FRAME_SIZE)
 /*=========================[Public functions]=============================*/
-void capture_voice(uint16_t *buffer, uint16_t buf_size);
-void process_signal(uint16_t *psrc, float32_t *pdst, size_t block_size);
+void process_signal(float32_t *psrc, float32_t *pdst, size_t block_size);
 uint8_t compare_features(float32_t *feature_1, float32_t *feature_2, size_t length);
 #endif /* DSP_FUNCTIONS_H */

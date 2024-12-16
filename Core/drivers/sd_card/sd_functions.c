@@ -1,8 +1,8 @@
-#include "fatfs.h"
+
 #include "ff.h"
-#include "fatfs_sd.h"
 #include <stdlib.h>
 #include "utils.h"
+#include "fatfs_sd.h"
 
 
 #define UART &huart2
@@ -38,7 +38,7 @@ void send_buffer_via_uart(uint16_t *buffer, size_t size){
 	return;
 }
 
-void mount_sd(const char* path){
+void mount_sd(char* path){
 	fresult = f_mount(&fs, path, 1);
 	if(fresult != FR_OK){
 		send_uart("Error al dmontar la tarjeta SD!!!\n");
@@ -47,8 +47,8 @@ void mount_sd(const char* path){
 	return;
 }
 
-void unmount_sd(const char* path){
-	fresult = f_mount(NULL, path, 1);
+void unmount_sd(char* path){
+	fresult = f_mount(NULL, path, 0);
 	if(fresult != FR_OK){
 		send_uart("Error al desmontar la tarjeta SD!!!\n");
 		while(1);
@@ -63,6 +63,7 @@ FRESULT check_if_file_exists(char *filename){
 
 
 FRESULT create_file(char *filename, char *header){
+	FIL fil;
 	/*Creo el archivo*/
 	fresult = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
 	if(fresult != FR_OK){
@@ -89,7 +90,7 @@ void get_time_from_rtc(char *rtc_lecture){
 	/*Obtengo la fecha actual*/
 	HAL_RTC_GetDate(&hrtc, &currentDate, RTC_FORMAT_BIN);
 	/*Guardo fecha y hora en los buffers correspondientes*/
-	snprintf(time, 15, "%02d:%02d:%02d", currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
+	snprintf(time, 15, "%02d:%02d:%02d ", currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
 	snprintf(rtc_lecture, 15, "%02d-%02d-%2d ", currentDate.Date, currentDate.Month, 2000 + currentDate.Year);
 	strcat(rtc_lecture, time);
 	vPortFree(time);
@@ -101,13 +102,12 @@ FRESULT save_buffer_on_sd(char *filename, float *buffer, size_t size){
 	 * Es importante que el archivo sea .bin, ya que es más conveniente guardar
 	 * los datos en este formato (ocupa menos espacio y es más directa la escritura).
 	 */
-
 	//Abro el archivo
+	FIL fil;
 	fresult = f_open(&fil, filename, FA_OPEN_APPEND | FA_WRITE);						//Se abre con append por si es necesario seguir escribiendo desde el final
 	if(fresult != FR_OK){
 		return fresult;
 	}
-
 	//Escribo los datos del buffer en el archivo
 	fresult = f_write(&fil, buffer, FLOAT_SIZE_BYTES(size), &bw);
 	if(fresult != FR_OK || bw < FLOAT_SIZE_BYTES(size)){
@@ -116,7 +116,7 @@ FRESULT save_buffer_on_sd(char *filename, float *buffer, size_t size){
 	}
 
 	//Cierro el archivo
-	f_close(&fil);
+	fresult = f_close(&fil);
 	return FR_OK;
 }
 
@@ -148,13 +148,14 @@ FRESULT read_buffer_from_sd(char *filename, float *buffer, size_t size, uint32_t
 	}
 
 	//Cierro el archivo
-	f_close(&fil);
+	fresult = f_close(&fil);
 	return FR_OK;
 }
 
 
 
 FRESULT write_entry(char *filename, char *entry){
+	FIL fil;
 	/*Abro el archivo en modo append*/
 	fresult = f_open(&fil, filename, FA_OPEN_APPEND | FA_WRITE);
 	if(fresult == FR_OK){
@@ -166,7 +167,7 @@ FRESULT write_entry(char *filename, char *entry){
 			return FR_DISK_ERR;
 		}
 		vPortFree(buffer);
-		f_close(&fil);
+		fresult = f_close(&fil);
 	}
 	return fresult;
 }
@@ -204,7 +205,7 @@ FRESULT search_user(char *filename, char *user_key, char *user_name){
 	}
 
 	//Si se llego al final sin encontrar el usuario, devuelve mensaje de error
-	f_close(&fil);
+	fresult = f_close(&fil);
 	return FR_NO_FILE;												//Devuelve FR_NO_FILE si no se encuentra el usuario
 }
 

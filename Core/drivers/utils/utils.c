@@ -8,3 +8,15 @@ void clear_buffer(char *buffer, size_t length) {
         buffer[i] = '\0'; // Llena el buffer con caracteres nulos
     }
 }
+
+void clear_char(char *buffer, char character){
+	char *ptr = buffer;
+	while(*ptr != character){
+		if(*ptr == 0){
+			break;
+		}
+		ptr++;
+	}
+	*ptr = 0;
+	return;
+}

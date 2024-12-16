@@ -1,4 +1,5 @@
 #include "display_functions.h"
+#include "utils.h"
 #define DISPLAY_FUNCTION 1										//0 realiza prueba de display completa
 																//1 provee la version funcional del codigo
 
@@ -64,9 +65,11 @@ void display_task(void *pvParameters){
 			}
 			break;
 		case PANTALLA_USUARIO_ENCONTRADO:
+			xSemaphoreTake(sd_display_sync, portMAX_DELAY);			//Se utiliza para sincronizar las tareas sd y display
 			display_user_found_msg();
 			counter = 0;
 			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case PANTALLA_USUARIO_NO_EXISTE:
 			display_user_not_found_msg();
@@ -74,11 +77,12 @@ void display_task(void *pvParameters){
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
 		case PANTALLA_RECONOCIMIENTO_DE_VOZ:
+			xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 			display_start_voice_recognition_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			countdown_msg();
 			display_capturing_voice_msg();
-			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case PANTALLA_VOZ_RECONOCIDA:
 			display_recognized_voice_msg();
@@ -86,7 +90,9 @@ void display_task(void *pvParameters){
 			break;
 		case PANTALLA_VOZ_NO_RECONOCIDA:
 			display_not_recognized_voice_msg();
+			xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case PANTALLA_ACCESO_CONCEDIDO:
 			display_access_granted_msg();

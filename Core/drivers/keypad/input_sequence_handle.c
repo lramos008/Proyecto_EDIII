@@ -13,7 +13,6 @@ typedef struct{
 
 
 indicatorMessage handle_keypad_input(char input, char *buffer, uint8_t *send_flag){
-	char comp_buffer[7] = "123456";
 	static keypad_context_t context = { .current_state = ESPERANDO_DIGITO_1,
 										.current_index = 0,
 										.start_time = 0,					};
@@ -80,13 +79,7 @@ indicatorMessage handle_keypad_input(char input, char *buffer, uint8_t *send_fla
 		}
 		break;
 	case BUSQUEDA_DE_USUARIO:
-		//*send_flag = 1;															//Habilito flag para enviar el string
-		if(strcmp(buffer, comp_buffer) == 0){
-			current_message = PANTALLA_USUARIO_ENCONTRADO;
-		}
-		else{
-			current_message = PANTALLA_USUARIO_NO_EXISTE;
-		}
+		*send_flag = 1;															//Habilito flag para enviar el string
 		context.current_state = ESPERANDO_DIGITO_1;
 		context.current_index = 0;
 		//current_message = PANTALLA_DE_INICIO;									//Luego del procesamiento se vuelve al estado inicial

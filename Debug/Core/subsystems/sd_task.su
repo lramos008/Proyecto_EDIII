@@ -1,2 +1,1 @@
-../Core/subsystems/sd_task.c:18:17:receive_sequence	16	static
-../Core/subsystems/sd_task.c:126:6:sd_task	24	static
+../Core/subsystems/sd_task.c:12:6:sd_task	72	static

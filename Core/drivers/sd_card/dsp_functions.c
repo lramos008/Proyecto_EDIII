@@ -1,59 +1,48 @@
 #include "dsp_functions.h"
-/*=====================[Extern variables]========================*/
-extern ADC_HandleTypeDef hadc1;
-extern TIM_HandleTypeDef htim3;
-extern uint8_t conv_cplt_flag;
-/*=====================[Private defines]=========================*/
-#define ADC_RESOLUTION 4096
-#define VOLTAGE_REFERENCE 3.3f
-#define NUM_TAPS 100
+
+#define NUM_TAPS 50
 #define STATE_SIZE (NUM_TAPS + FRAME_SIZE - 1)
-#define THRESHOLD 0.1f
-#define	BIN_PERCENTAGE_THRESHOLD 0.8f
+#define THRESHOLD 0.1f									//Threshold entre bins
+#define	BIN_PERCENTAGE_THRESHOLD 0.8f					//Threshold de porcentaje de bins correctos
 /*=====================[Private variables]=======================*/
 arm_fir_instance_f32 fir_instance;
 arm_rfft_fast_instance_f32 fft_instance;
-const float32_t fir_coeff[NUM_TAPS] =
-				{ 0.011382947313982183, 0.007278960905837157, -0.006998062915062974, -0.01203024080070622, 0.006178892093241564,
-				  0.02652850663025597, 0.02332814015761635, 0.00720967093499501, 0.003874921882229113, 0.009214774027249427,
-				  0.0029841400362301635, -0.008634063062966789, -0.00574221019882645, 0.004013259203023682, 0.00007839824056997462,
-				  -0.009225910167748234, -0.0037379046374667537, 0.005926664706238162, -0.0011544947403069354, -0.01226263399042312,
-				  -0.0055742028639393145, 0.00394247940742394, -0.006217083187201803, -0.018253966782994423, -0.008631839895822805,
-				  0.0017142896845039116, -0.011791198897201458, -0.024596929631868294, -0.011040183660379834, 0.00012220764355865894,
-				  -0.018002431036377536, -0.03171499562847049, -0.012749934889886252, -0.000698807729755436, -0.025373295764521756,
-				  -0.03996929589125958, -0.012730954552648721, 0.0005541247857911273, -0.034402622521298575, -0.05015576787247386,
-				  -0.008711180157744471, 0.006649563124164676, -0.04810422073146836, -0.06669536801210646, 0.006590491265364713,
-				  0.028816836721552816, -0.08463900603542567, -0.12422680797956051, 0.11508617612207177, 0.4287639166258248,
-				  0.4287639166258248, 0.11508617612207177, -0.12422680797956051, -0.08463900603542567, 0.028816836721552816,
-				  0.006590491265364713, -0.06669536801210646, -0.04810422073146836, 0.006649563124164676, -0.008711180157744471,
-				  -0.05015576787247386, -0.034402622521298575, 0.0005541247857911273, -0.012730954552648721, -0.03996929589125958,
-				  -0.025373295764521756, -0.000698807729755436, -0.012749934889886252, -0.03171499562847049, -0.018002431036377536,
-				  0.00012220764355865894, -0.011040183660379834, -0.024596929631868294, -0.011791198897201458, 0.0017142896845039116,
-				  -0.008631839895822805, -0.018253966782994423, -0.006217083187201803, 0.00394247940742394, -0.0055742028639393145,
-				  -0.01226263399042312, -0.0011544947403069354, 0.005926664706238162, -0.0037379046374667537, -0.009225910167748234,
-				  0.00007839824056997462, 0.004013259203023682, -0.00574221019882645, -0.008634063062966789, 0.0029841400362301635,
-				  0.009214774027249427, 0.003874921882229113, 0.00720967093499501, 0.02332814015761635, 0.02652850663025597,
-				  0.006178892093241564, -0.01203024080070622, -0.006998062915062974, 0.007278960905837157, 0.011382947313982183 };
+/*
+
+FIR filter designed with
+http://t-filter.appspot.com
+
+sampling frequency: 12000 Hz
+
+* 0 Hz - 100 Hz
+  gain = 0
+  desired attenuation = -40 dB
+  actual attenuation = -45.06015749030636 dB
+
+* 400 Hz - 3500 Hz
+  gain = 1
+  desired ripple = 5 dB
+  actual ripple = 2.3015718508000034 dB
+
+* 4000 Hz - 6000 Hz
+  gain = 0
+  desired attenuation = -40 dB
+  actual attenuation = -45.06015749030636 dB
+
+*/
+//Se colocaron los coeficientes obtenidos en orden inverso, pues la biblioteca cmsis dsp asi los necesita
+const float32_t filter_taps[NUM_TAPS] = { 0.025663017507547244, 0.043161199365629975, 0.009987413560588994, -0.019344649278080953, 0.003579388809249739,
+		 	 	 	 	 	 	 	 	  0.009067929219325404, -0.01872037528825959, -0.007413256377189857, 0.006276987439723166, -0.02485046961359185,
+										  -0.02205694447886603, 0.0028270126760762916, -0.03125345871490819, -0.04154747028815444, -0.0014112320202949225,
+										  -0.03404755206589369, -0.06602492769687618, -0.00582972886335776, -0.027505345684807933, -0.0989845714402987,
+										  -0.009438922328850387, 0.006415464554856044, -0.17166579577787455, -0.011509402813520562, 0.48183338925387226,
+										  0.48183338925387226, -0.011509402813520562, -0.17166579577787455, 0.006415464554856044, -0.009438922328850387,
+										  -0.0989845714402987, -0.027505345684807933, -0.00582972886335776, -0.06602492769687618, -0.03404755206589369,
+										  -0.0014112320202949225, -0.04154747028815444, -0.03125345871490819, 0.0028270126760762916, -0.02205694447886603,
+										  -0.02485046961359185, 0.006276987439723166, -0.007413256377189857, -0.01872037528825959, 0.009067929219325404,
+										  0.003579388809249739, -0.019344649278080953, 0.009987413560588994, 0.043161199365629975, 0.025663017507547244   };
 
 /*Defino instancias para el filtro fir y la fft*/
-
-void capture_voice(uint16_t *buffer, uint16_t buf_size){
-	HAL_TIM_Base_Start_IT(&htim3);
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)buffer, buf_size);
-	while(conv_cplt_flag == 0);
-	conv_cplt_flag = 0;
-	return;
-}
-
-
-
-
-static void get_voltage(uint16_t *psrc, float32_t *pdst, size_t block_size){
-	for(size_t i = 0; i < block_size; i++){
-		pdst[i] = ((float) psrc[i]) * VOLTAGE_REFERENCE / ADC_RESOLUTION;
-	}
-	return;
-}
 
 static void fir_filter(float32_t *psrc, float32_t *pdst, const float32_t *coeff, uint16_t num_coeff, size_t block_size){
 	static uint8_t fir_init_flag = 0;
@@ -119,22 +108,20 @@ static void get_fft_norm_mag(float32_t *psrc, float32_t *pdst, size_t block_size
 	return;
 }
 
-void process_signal(uint16_t *psrc, float32_t *pdst, size_t block_size){
-	/*Reservo memoria y realizo conversion a tension*/
-	float32_t *voltage_conversion = pvPortMalloc(block_size * sizeof(float32_t));
-	get_voltage(psrc, voltage_conversion, block_size);
-	/*Reservo memoria para salida filtrada y filtro la señal. Libero memoria no utilizada.*/
+void process_signal(float32_t *psrc, float32_t *pdst, size_t block_size){
+	/*Reservo memoria para salida filtrada y filtro la señal.*/
 	float32_t *filtered = pvPortMalloc(block_size * sizeof(float32_t));
-	fir_filter(voltage_conversion, filtered, fir_coeff, NUM_TAPS, block_size);
-	vPortFree(voltage_conversion);													//Libero memoria
-	voltage_conversion = NULL;														//Me aseguro que no se produzca un dangling pointer
-	/*Aplico ventana de hamming a la salida filtrada*/
+	fir_filter(psrc, filtered, filter_taps, NUM_TAPS, block_size);
+
+	//Aplico ventana de hamming al vector
 	hamming_window(filtered, block_size);
+
 	/*Reservo memoria para la salida de FFT y calculo la fft. Libero memoria de salida filtrada*/
 	float32_t *fft_output = pvPortMalloc(block_size * sizeof(float32_t));
 	calculate_fft(filtered, fft_output, block_size);
 	vPortFree(filtered);
 	filtered = NULL;
+
 	/*Calculo la magnitud de la fft y libero la memoria ocupada por la fft.*/
 	get_fft_norm_mag(fft_output, pdst, block_size / 2);
 	vPortFree(fft_output);
@@ -162,10 +149,10 @@ uint8_t compare_features(float32_t *feature_1, float32_t *feature_2, size_t leng
 	vPortFree(abs_diff);
 	/*Chequeo si el porcentaje de bins aceptados supera el threshold*/
 	if(bins_percentage >= BIN_PERCENTAGE_THRESHOLD){
-		return 1;
+		return 1;										//Bloque reconocido
 	}
 	else{
-		return 0;
+		return 0;										//Bloque no reconocido
 	}
 }
 

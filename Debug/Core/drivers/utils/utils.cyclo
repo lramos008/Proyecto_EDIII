@@ -1,1 +1,2 @@
 ../Core/drivers/utils/utils.c:3:6:clear_buffer	3
+../Core/drivers/utils/utils.c:12:6:clear_char	3
