@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "fatfs.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -124,6 +125,7 @@ int main(void)
   MX_RTC_Init();
   MX_ADC1_Init();
   MX_TIM3_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -148,6 +150,7 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
+
 
   /* USER CODE BEGIN RTOS_THREADS */
   xTaskCreate(display_task, "Tarea display", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
@@ -526,6 +529,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, Lock_Pin|GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8
                           |GPIO_PIN_9, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(CS_SDB4_GPIO_Port, CS_SDB4_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
@@ -553,6 +559,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : CS_SDB4_Pin */
+  GPIO_InitStruct.Pin = CS_SDB4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(CS_SDB4_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

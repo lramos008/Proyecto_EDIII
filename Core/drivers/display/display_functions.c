@@ -3,9 +3,9 @@
 #include "ssd1306_tests.h"
 #include "utils.h"
 
-//#define LINE_HEIGHT 18  // Altura de la fuente (ajustar según la fuente usada)
-//#define DISPLAY_WIDTH 128
-//#define DISPLAY_HEIGHT 64
+#define LINE_HEIGHT 18  // Altura de la fuente (ajustar según la fuente usada)
+#define DISPLAY_WIDTH 128
+#define DISPLAY_HEIGHT 64
 /*================[Public functions]=====================*/
 void display_init(void){
 	/*Wrapper de la función que inicializa el display*/
@@ -13,41 +13,73 @@ void display_init(void){
 	return;
 }
 
-//void display_text(const char *text) {
-//    uint8_t x = 0;  // Posición inicial en X
-//    uint8_t y = 0;  // Posición inicial en Y
-//
-//    ssd1306_Fill(Black);  // Limpiar la pantalla
-//
-//    while (*text) {
-//        // Verificar si es un salto de línea manual
-//        if (*text == '\n') {
-//            y += LINE_HEIGHT;  // Avanzar a la siguiente línea
-//            x = 0;             // Reiniciar X
-//        } else {
-//            // Escribir el carácter actual
-//            ssd1306_SetCursor(x, y);
-//            ssd1306_WriteChar(*text, Font_11x18, White);
-//
-//            // Avanzar la posición X
-//            x += 11;  // Avanzar por el ancho de la fuente (ajustar según la fuente)
-//            if (x + 11 > DISPLAY_WIDTH) {  // Si se pasa del ancho de pantalla
-//                x = 0;                      // Reiniciar X
-//                y += LINE_HEIGHT;           // Avanzar a la siguiente línea
-//            }
-//        }
-//
-//        // Avanzar al siguiente carácter
-//        text++;
-//
-//        // Verificar si alcanzamos el final de la pantalla
-//        if (y + LINE_HEIGHT > DISPLAY_HEIGHT) {
-//            break;  // No hay más espacio para mostrar texto
-//        }
-//    }
-//
-//    ssd1306_UpdateScreen();  // Actualizar pantalla
-//}
+void display_text(const char *text,  uint8_t font_size) {
+    uint8_t x = 0;  			// Posición inicial en X
+    uint8_t y = 0;  			// Posición inicial en Y
+    uint8_t char_width = 0;   	// Ancho del carácter actual
+    uint8_t line_height = 0;  	// Altura de la línea actual
+    // Configurar la fuente según el tamaño
+    switch (font_size) {
+        case 1: 									// Tamaño pequeño
+            char_width = 7;
+            line_height = 10;
+            break;
+        case 2: 									// Tamaño mediano
+            char_width = 11;
+            line_height = 18;
+            break;
+        case 3: 									// Tamaño grande
+            char_width = 16;
+            line_height = 24;
+            break;
+        default: 									// Tamaño por defecto
+            char_width = 7;
+            line_height = 10;
+            break;
+    }
+
+    ssd1306_Fill(Black);  // Limpiar la pantalla
+
+    while (*text) {
+        // Verificar si es un salto de línea manual
+        if (*text == '\n') {
+            y += line_height;  											// Avanzo a la siguiente linea
+            x = 0;             											// Reinicio x
+        } else {
+            // Escribir el carácter actual
+            ssd1306_SetCursor(x, y);
+            if(font_size == 1){
+            	ssd1306_WriteChar(*text, Font_7x10, White);
+            }
+            else if(font_size == 2){
+            	ssd1306_WriteChar(*text, Font_11x18, White);
+            }
+            else if(font_size == 3){
+            	ssd1306_WriteChar(*text, Font_16x24, White);
+            }
+            else{
+            	ssd1306_WriteChar(*text, Font_7x10, White);
+            }
+
+            // Avanzar la posición X
+            x += char_width;  // Avanzar por el ancho de la fuente
+            if (x + char_width > DISPLAY_WIDTH) {  							// Si se pasa del ancho de pantalla
+                x = 0;                      								// Reinicio x
+                y += line_height;           								// Avanzo a la siguiente linea
+            }
+        }
+
+        // Avanzar al siguiente carácter
+        text++;
+
+        // Verificar si alcanzamos el final de la pantalla
+        if (y + line_height > DISPLAY_HEIGHT) {
+            break;  // No hay más espacio para mostrar texto
+        }
+    }
+
+    ssd1306_UpdateScreen();  // Actualizar pantalla
+}
 
 void display_start_msg(void){
 	/*Muestra mensaje de insertar clave*/
@@ -57,7 +89,7 @@ void display_start_msg(void){
 	ssd1306_SetCursor(x, y);
 	ssd1306_WriteString("Ingrese", Font_16x26, White);
 	x += 15;
-	y += 26;
+	y += 28;
 	ssd1306_SetCursor(x, y);
 	ssd1306_WriteString("clave", Font_16x26, White);
 	ssd1306_UpdateScreen();
@@ -86,94 +118,33 @@ void display_sequence_entry_msg(uint8_t input_cont){
 
 
 void display_timeout_msg(void){
-	/*Muestra mensaje de timeout en display*/
-	uint8_t x = 5;
-	uint8_t y = 18;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Timeout!!!", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("\n Timeout!!!", 2);
+	return;
 }
 
 void display_incomplete_entry_msg(void){
-	/*Muestra mensaje de secuencia incompleta en display*/
-	uint8_t x = 20;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Ingrese", Font_11x18, White);
-	x = 10;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("secuencia", Font_11x18, White);
-	x = 20;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("valida", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Ingrese\n secuencia\n  valida", 2);
+	return;
 }
 
 void display_access_granted_msg(void){
-	/*Muestra mensaje de acceso concedido*/
-	uint8_t x = 5;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Acceso", Font_11x18, White);
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("concedido", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Acceso\n concedido", 2);
+	return;
 }
 
 void display_user_found_msg(void){
-	/*Muestra mensaje de usuario encontrado*/
-	uint8_t x = 20;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Usuario", Font_11x18, White);
-	x = 20;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("hallado", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Usuario\n  hallado", 2);
+	return;
 }
 
 void display_user_not_found_msg(void){
-	/*Muestra mensaje de usuario no encontrado*/
-	uint8_t x = 20;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Usuario", Font_11x18, White);
-	x = 20;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("no", Font_11x18, White);
-	x = 20;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("existente", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Usuario\n    no\n  existe", 2);
+	return;
 }
 
 void display_start_voice_recognition_msg(void){
-	/*Muestra mensaje que indica el inicio de reconocimiento de voz*/
-	uint8_t x = 20;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Comienza", Font_11x18, White);
-	x = 20;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("captura ", Font_11x18, White);
-	x = 20;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("de voz", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Comienza\n  captura\n  de voz", 2);
+	return;
 }
 
 void countdown_msg(void){
@@ -198,102 +169,39 @@ void countdown_msg(void){
 }
 
 void display_capturing_voice_msg(void){
-	/*Muestra mensaje que indica que se esta capturando voz*/
-	uint8_t x = 10;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Capturando", Font_11x18, White);
-	x = 50;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("...", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Captura\n    ...", 2);
+	return;
 }
 
 void display_recognized_voice_msg(void){
-	/*Muestra mensaje de voz reconocida*/
-	uint8_t x = 40;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Voz", Font_11x18, White);
-	x = 10;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("reconocida", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("    Voz\n reconocida", 2);
+	return;
 }
 
 
 void display_not_recognized_voice_msg(void){
-	/*Muestra mensaje de voz no reconocida*/
-	uint8_t x = 20;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Voz no", Font_11x18, White);
-	x = 10;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("reconocida", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("   Voz no\n reconocida", 2);
+	return;
 }
 
 void display_processing_data_msg(void){
-	/*Muestra mensaje de voz reconocida*/
-	uint8_t x = 40;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Procesando", Font_11x18, White);
-	x = 10;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("datos", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Aguarde\n    ...", 2);
+	return;
 }
 
 void display_missing_database_msg(void){
-	/*Muestra mensaje de database faltante*/
-	uint8_t x = 40;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Database", Font_11x18, White);
-	x = 10;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("faltante", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Database\n  faltante", 2);
+	return;
 }
 
 void display_missing_template_msg(void){
-	/*Muestra mensaje de template faltante*/
-	uint8_t x = 40;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Template", Font_11x18, White);
-	x = 10;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("faltante", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Template\n  faltante", 2);
+	return;
 }
 
 void display_template_saved_msg(void){
-	/*Muestra mensaje de template faltante*/
-	uint8_t x = 40;
-	uint8_t y = 0;
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("Template", Font_11x18, White);
-	x = 10;
-	y += 18;
-	ssd1306_SetCursor(x, y);
-	ssd1306_WriteString("guardado", Font_11x18, White);
-	ssd1306_UpdateScreen();
+	display_text("  Template\n  guardado", 2);
+	return;
 }
 
 

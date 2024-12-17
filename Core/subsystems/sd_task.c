@@ -228,7 +228,7 @@ void sd_task(void *pvParameters){
 			xQueueSend(display_queue, &current_message, portMAX_DELAY);
 
 			//Convierto los valores a tension y los guardo en la memoria SD
-			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i);							//Nombre del archivo a guardar
+			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i + 1);						//Nombre del archivo a guardar
 			for(uint8_t j = 0; j < NUM_OF_BLOCKS; j++){
 				//La conversion es por bloques para ahorrar espacio
 				get_voltage(&voice_buffer[j * BLOCK_SIZE], current_block, BLOCK_SIZE);
@@ -294,6 +294,12 @@ void sd_task(void *pvParameters){
 		current_message = PANTALLA_TEMPLATE_GUARDADO;
 		xQueueSend(display_queue, &current_message, portMAX_DELAY);
 
+		//Borro los archivos creados para hacer el template
+		for(uint8_t i = 0; i < TEMPLATE_SAMPLES; i++){
+			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i + 1);
+			f_unlink(filename);
+		}
+
 		unmount_sd("");
 		//Libero memoria
 		vPortFree(voice_1);
@@ -303,6 +309,7 @@ void sd_task(void *pvParameters){
 		vPortFree(voice_5);
 		vPortFree(aux);
 		vPortFree(template);
+		vPortFree(filename);
 	}
 
 	while(1){

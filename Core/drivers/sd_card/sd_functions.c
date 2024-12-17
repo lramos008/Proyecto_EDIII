@@ -1,8 +1,9 @@
 
+#include <fatfs_sd.h>
 #include "ff.h"
 #include <stdlib.h>
 #include "utils.h"
-#include "fatfs_sd.h"
+
 
 
 #define UART &huart2
@@ -41,14 +42,14 @@ void send_buffer_via_uart(uint16_t *buffer, size_t size){
 void mount_sd(char* path){
 	fresult = f_mount(&fs, path, 1);
 	if(fresult != FR_OK){
-		send_uart("Error al dmontar la tarjeta SD!!!\n");
+		send_uart("Error al montar la tarjeta SD!!!\n");
 		while(1);
 	}
 	return;
 }
 
 void unmount_sd(char* path){
-	fresult = f_mount(NULL, path, 0);
+	fresult = f_mount(NULL, path, 1);
 	if(fresult != FR_OK){
 		send_uart("Error al desmontar la tarjeta SD!!!\n");
 		while(1);

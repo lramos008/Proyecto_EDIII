@@ -1,5 +1,0 @@
-../Middlewares/fatfs/diskio.c:23:9:disk_status	1
-../Middlewares/fatfs/diskio.c:36:9:disk_initialize	1
-../Middlewares/fatfs/diskio.c:51:9:disk_read	1
-../Middlewares/fatfs/diskio.c:71:9:disk_write	1
-../Middlewares/fatfs/diskio.c:89:9:disk_ioctl	1

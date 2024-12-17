@@ -10,7 +10,7 @@ void display_task(void *pvParameters){
 	display_init();
 	while(1){
 		display_start_msg();
-		vTaskDelay(500 / portTICK_RATE_MS);
+		vTaskDelay(1000 / portTICK_RATE_MS);
 		for(uint8_t i = 0; i < MAX_DIGITS; i++){
 			display_sequence_entry_msg(i);
 			vTaskDelay(200 / portTICK_RATE_MS);
@@ -20,22 +20,30 @@ void display_task(void *pvParameters){
 			vTaskDelay(200 / portTICK_RATE_MS);
 		}
 		display_access_granted_msg();
-		vTaskDelay(500 / portTICK_RATE_MS);
+		vTaskDelay(1000 / portTICK_RATE_MS);
 		display_timeout_msg();
-		vTaskDelay(500 / portTICK_RATE_MS);
+		vTaskDelay(1000 / portTICK_RATE_MS);
 		display_incomplete_entry_msg();
-		vTaskDelay(500 / portTICK_RATE_MS);
+		vTaskDelay(1000 / portTICK_RATE_MS);
 		display_user_not_found_msg();
-		vTaskDelay(500 / portTICK_RATE_MS);
+		vTaskDelay(1000 / portTICK_RATE_MS);
 		display_start_voice_recognition_msg();
-		vTaskDelay(2000 / portTICK_RATE_MS);
+		vTaskDelay(1000 / portTICK_RATE_MS);
 		countdown_msg();
 		display_capturing_voice_msg();
-		vTaskDelay(3000/portTICK_RATE_MS);
+		vTaskDelay(1000/portTICK_RATE_MS);
 		display_not_recognized_voice_msg();
-		vTaskDelay(2000/portTICK_RATE_MS);
+		vTaskDelay(1000/portTICK_RATE_MS);
 		display_recognized_voice_msg();
-		vTaskDelay(2000/portTICK_RATE_MS);
+		vTaskDelay(1000/portTICK_RATE_MS);
+		display_processing_data_msg();
+		vTaskDelay(1000/portTICK_RATE_MS);
+		display_missing_database_msg();
+		vTaskDelay(1000/portTICK_RATE_MS);
+		display_missing_template_msg();
+		vTaskDelay(1000/portTICK_RATE_MS);
+		display_template_saved_msg();
+		vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
 
