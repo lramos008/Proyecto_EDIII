@@ -9,3 +9,4 @@
 ../Core/drivers/sd_card/sd_functions.c:123:9:read_buffer_from_sd	32	static
 ../Core/drivers/sd_card/sd_functions.c:157:9:write_entry	616	static
 ../Core/drivers/sd_card/sd_functions.c:175:9:search_user	160	static
+../Core/drivers/sd_card/sd_functions.c:212:9:check_for_dir	104	static

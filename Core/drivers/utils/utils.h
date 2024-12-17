@@ -50,7 +50,8 @@ enum{												//Para nombrar las pantallas del display
 	PANTALLA_SECUENCIA_INCOMPLETA,
 	PANTALLA_TEMPLATE_NO_EXISTE,
 	PANTALLA_DATABASE_NO_EXISTE,
-	PANTALLA_PROCESANDO_DATOS
+	PANTALLA_PROCESANDO_DATOS,
+	PANTALLA_TEMPLATE_GUARDADO
 };
 
 typedef enum{										//Para nombrar los estados de la adquisicion con el keypad

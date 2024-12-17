@@ -188,16 +188,18 @@ void sd_task(void *pvParameters){
 #elif CODE_VERSION == 2
 //Template generator
 void sd_task(void *pvParameters){
+	indicatorMessage current_message;
 	uint16_t *voice_buffer;
 	float *current_block;
-	float *template_block;
-	float *input;
-	float *output;
+	float *template;
+	float *aux;
+	float *voice_1, *voice_2, *voice_3, *voice_4, *voice_5;
 	char *filename = pvPortMalloc(DIR_STR_SIZE * sizeof(char));
 	char *dir = pvPortMalloc(DIR_STR_SIZE * sizeof(char));
 	snprintf(dir, DIR_STR_SIZE, "/voces_template");
 
 	//Chequeo que exista la carpeta, sino la crea
+	mount_sd("");
 	if(check_for_dir(dir) == FR_OK){
 		voice_buffer = pvPortMalloc(VOICE_BUFFER_SIZE * sizeof(uint16_t));
 		current_block = pvPortMalloc(BLOCK_SIZE * sizeof(float));
@@ -240,20 +242,67 @@ void sd_task(void *pvParameters){
 		voice_buffer = NULL;
 		current_block = NULL;
 
-		//Estando los 5 archivo guardados proceso a procesar los 5 y promediar las fft
-		current_block = pvPortMalloc(BLOCK_SIZE * sizeof(float));
-		input = pvPortMalloc(BLOCK_SIZE * sizeof(float));
-		output = pvPortMalloc((BLOCK_SIZE / 2) * sizeof(float));
-
+		//Proceso de a bloques cada uno de los archivos, y promedio
+		template = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE / 2));
+		aux = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE / 2));
+		voice_1 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
+		voice_2 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
+		voice_3 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
+		voice_4 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
+		voice_5 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
+		arm_fill_f32(0.0f, template, BLOCK_SIZE / 2);													//Lleno arrays con ceros
+		arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
 		for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
-			for(uint8_t j = 0; j < TEMPLATE_SAMPLES; j++){
-				snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", j);
-				read_buffer_from_sd(filename, input, BLOCK_SIZE, i * BLOCK_SIZE);
-				process_signal(input, output, BLOCK_SIZE);									//Proceso la señal
+			//Leo los bloques desde sus respectivos archivos
+			read_buffer_from_sd("voice_1.bin", voice_1, BLOCK_SIZE, i * BLOCK_SIZE);
+			read_buffer_from_sd("voice_2.bin", voice_2, BLOCK_SIZE, i * BLOCK_SIZE);
+			read_buffer_from_sd("voice_3.bin", voice_3, BLOCK_SIZE, i * BLOCK_SIZE);
+			read_buffer_from_sd("voice_4.bin", voice_4, BLOCK_SIZE, i * BLOCK_SIZE);
+			read_buffer_from_sd("voice_5.bin", voice_5, BLOCK_SIZE, i * BLOCK_SIZE);
 
-			}
+			//Proceso y sumo voz 1
+			process_signal(voice_1, aux, BLOCK_SIZE);
+			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
+			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
+
+			//Proceso y sumo voz 2
+			process_signal(voice_2, aux, BLOCK_SIZE);
+			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
+			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
+
+			//Proceso y sumo voz 3
+			process_signal(voice_3, aux, BLOCK_SIZE);
+			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
+			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
+
+			//Proceso y sumo voz 4
+			process_signal(voice_4, aux, BLOCK_SIZE);
+			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
+
+			//Proceso y sumo voz 5
+			process_signal(voice_5, aux, BLOCK_SIZE);
+			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
+			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
+
+			//Escalo el vector para obtener el promedio
+			arm_scale_f32(template, TEMPLATE_SAMPLES, template, BLOCK_SIZE / 2);
+
+			save_buffer_on_sd("current_template.bin", template, BLOCK_SIZE / 2);
 
 		}
+
+		current_message = PANTALLA_TEMPLATE_GUARDADO;
+		xQueueSend(display_queue, &current_message, portMAX_DELAY);
+
+		unmount_sd("");
+		//Libero memoria
+		vPortFree(voice_1);
+		vPortFree(voice_2);
+		vPortFree(voice_3);
+		vPortFree(voice_4);
+		vPortFree(voice_5);
+		vPortFree(aux);
+		vPortFree(template);
 	}
 
 	while(1){

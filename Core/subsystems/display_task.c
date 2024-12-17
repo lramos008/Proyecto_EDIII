@@ -119,6 +119,9 @@ void display_task(void *pvParameters){
 			display_missing_template_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
+		case PANTALLA_TEMPLATE_GUARDADO:
+			display_template_saved_msg();
+			break;
 		default:
 		}
 	}

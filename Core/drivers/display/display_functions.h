@@ -18,4 +18,5 @@ void display_not_recognized_voice_msg(void);
 void display_processing_data_msg(void);
 void display_missing_database_msg(void);
 void display_missing_template_msg(void);
+void display_template_saved_msg(void);
 #endif /* DISPLAY_FUNCTIONS_H */

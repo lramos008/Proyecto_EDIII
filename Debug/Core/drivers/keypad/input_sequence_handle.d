@@ -1,6 +1,6 @@
 Core/drivers/keypad/input_sequence_handle.o: \
  ../Core/drivers/keypad/input_sequence_handle.c \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h \
+ C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/utils/utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -54,7 +54,7 @@ Core/drivers/keypad/input_sequence_handle.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h:
+C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/utils/utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:

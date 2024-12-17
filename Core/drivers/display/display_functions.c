@@ -282,6 +282,20 @@ void display_missing_template_msg(void){
 	ssd1306_UpdateScreen();
 }
 
+void display_template_saved_msg(void){
+	/*Muestra mensaje de template faltante*/
+	uint8_t x = 40;
+	uint8_t y = 0;
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("Template", Font_11x18, White);
+	x = 10;
+	y += 18;
+	ssd1306_SetCursor(x, y);
+	ssd1306_WriteString("guardado", Font_11x18, White);
+	ssd1306_UpdateScreen();
+}
+
 
 
 
