@@ -186,111 +186,38 @@ void sd_task(void *pvParameters){
 }
 
 #elif CODE_VERSION == 2
-//Template generator
+//Generador de template
 void sd_task(void *pvParameters){
 	indicatorMessage current_message;
 	uint16_t *voice_buffer;
-	float *current_block;
-	float *template;
-	float *aux;
-	float *voice_1, *voice_2, *voice_3, *voice_4, *voice_5;
 	char *filename = pvPortMalloc(DIR_STR_SIZE * sizeof(char));
-	char *dir = pvPortMalloc(DIR_STR_SIZE * sizeof(char));
-	snprintf(dir, DIR_STR_SIZE, "/voces_template");
 
-	//Chequeo que exista la carpeta, sino la crea
-	mount_sd("");
-	if(check_for_dir(dir) == FR_OK){
+	//Monto la tarjeta SD. Si  esta correcto, se continua con el procesamiento.
+	if(mount_sd("") == FR_OK){
 		voice_buffer = pvPortMalloc(VOICE_BUFFER_SIZE * sizeof(uint16_t));
-		current_block = pvPortMalloc(BLOCK_SIZE * sizeof(float));
 		for(uint8_t i = 0; i < TEMPLATE_SAMPLES; i++){
 			//Si existe el template, realizo reconocimiento de voz
 			current_message = PANTALLA_RECONOCIMIENTO_DE_VOZ;
 
 			//Sincronizo tarea de display y memoria SD
-			xSemaphoreGive(sd_display_sync);
-
-			//Envio pantalla al display
+			xSemaphoreGive(sd_display_sync);												//Doy el semaforo para que lo tome el display
 			xQueueSend(display_queue, &current_message, portMAX_DELAY);						//Envio el evento de reconocimiento al display
-
-			//Bloqueo la tarea hasta que el display termine el conteo
 			xSemaphoreTake(sd_display_sync, portMAX_DELAY);									//Bloqueo la tarea hasta que el display me devuelva el semaforo
-																											//despues del countdown.
 
 			//Capturo 1.5 segundos de voz
+			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i + 1);
+			capture_and_store_voice(voice_buffer, VOICE_BUFFER_SIZE, filename);
 
-			capture_voice(voice_buffer, VOICE_BUFFER_SIZE);
-			while(!conv_cplt_flag);															//Espero a que termine la captura
-			conv_cplt_flag = false;
-
-			//Mandar cartel procesando valores
+			//Envio mensaje al display para indicarle que se estan procesando datos
 			current_message = PANTALLA_PROCESANDO_DATOS;
 			xQueueSend(display_queue, &current_message, portMAX_DELAY);
-
-			//Convierto los valores a tension y los guardo en la memoria SD
-			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i + 1);						//Nombre del archivo a guardar
-			for(uint8_t j = 0; j < NUM_OF_BLOCKS; j++){
-				//La conversion es por bloques para ahorrar espacio
-				get_voltage(&voice_buffer[j * BLOCK_SIZE], current_block, BLOCK_SIZE);
-				save_buffer_on_sd(filename, current_block, BLOCK_SIZE);
-			}
 		}
-
-		//Libero memoria utilizada
 		vPortFree(voice_buffer);
-		vPortFree(current_block);
-		voice_buffer = NULL;
-		current_block = NULL;
 
-		//Proceso de a bloques cada uno de los archivos, y promedio
-		template = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE / 2));
-		aux = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE / 2));
-		voice_1 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
-		voice_2 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
-		voice_3 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
-		voice_4 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
-		voice_5 = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
-		arm_fill_f32(0.0f, template, BLOCK_SIZE / 2);													//Lleno arrays con ceros
-		arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
-		for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
-			//Leo los bloques desde sus respectivos archivos
-			read_buffer_from_sd("voice_1.bin", voice_1, BLOCK_SIZE, i * BLOCK_SIZE);
-			read_buffer_from_sd("voice_2.bin", voice_2, BLOCK_SIZE, i * BLOCK_SIZE);
-			read_buffer_from_sd("voice_3.bin", voice_3, BLOCK_SIZE, i * BLOCK_SIZE);
-			read_buffer_from_sd("voice_4.bin", voice_4, BLOCK_SIZE, i * BLOCK_SIZE);
-			read_buffer_from_sd("voice_5.bin", voice_5, BLOCK_SIZE, i * BLOCK_SIZE);
+		//Genero template
+		generate_template();
 
-			//Proceso y sumo voz 1
-			process_signal(voice_1, aux, BLOCK_SIZE);
-			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
-			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
-
-			//Proceso y sumo voz 2
-			process_signal(voice_2, aux, BLOCK_SIZE);
-			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
-			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
-
-			//Proceso y sumo voz 3
-			process_signal(voice_3, aux, BLOCK_SIZE);
-			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
-			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
-
-			//Proceso y sumo voz 4
-			process_signal(voice_4, aux, BLOCK_SIZE);
-			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
-
-			//Proceso y sumo voz 5
-			process_signal(voice_5, aux, BLOCK_SIZE);
-			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
-			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);
-
-			//Escalo el vector para obtener el promedio
-			arm_scale_f32(template, TEMPLATE_SAMPLES, template, BLOCK_SIZE / 2);
-
-			save_buffer_on_sd("current_template.bin", template, BLOCK_SIZE / 2);
-
-		}
-
+		//Envio mensaje al display para indicarle que ya se guardo el template
 		current_message = PANTALLA_TEMPLATE_GUARDADO;
 		xQueueSend(display_queue, &current_message, portMAX_DELAY);
 
@@ -302,13 +229,6 @@ void sd_task(void *pvParameters){
 
 		unmount_sd("");
 		//Libero memoria
-		vPortFree(voice_1);
-		vPortFree(voice_2);
-		vPortFree(voice_3);
-		vPortFree(voice_4);
-		vPortFree(voice_5);
-		vPortFree(aux);
-		vPortFree(template);
 		vPortFree(filename);
 	}
 
