@@ -196,7 +196,7 @@ void sd_task(void *pvParameters){
 	if(mount_sd("") == FR_OK){
 		voice_buffer = pvPortMalloc(VOICE_BUFFER_SIZE * sizeof(uint16_t));
 		for(uint8_t i = 0; i < TEMPLATE_SAMPLES; i++){
-			//Si existe el template, realizo reconocimiento de voz
+			//Indico al display que se inicia el reconocimiento de voz
 			current_message = PANTALLA_RECONOCIMIENTO_DE_VOZ;
 
 			//Sincronizo tarea de display y memoria SD
@@ -204,13 +204,9 @@ void sd_task(void *pvParameters){
 			xQueueSend(display_queue, &current_message, portMAX_DELAY);						//Envio el evento de reconocimiento al display
 			xSemaphoreTake(sd_display_sync, portMAX_DELAY);									//Bloqueo la tarea hasta que el display me devuelva el semaforo
 
-			//Capturo 1.5 segundos de voz
+			//Capturo 1.5 segundos de voz y lo guardo en el archivo voice_x.bin
 			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i + 1);
 			capture_and_store_voice(voice_buffer, VOICE_BUFFER_SIZE, filename);
-
-			//Envio mensaje al display para indicarle que se estan procesando datos
-			current_message = PANTALLA_PROCESANDO_DATOS;
-			xQueueSend(display_queue, &current_message, portMAX_DELAY);
 		}
 		vPortFree(voice_buffer);
 
@@ -221,14 +217,8 @@ void sd_task(void *pvParameters){
 		current_message = PANTALLA_TEMPLATE_GUARDADO;
 		xQueueSend(display_queue, &current_message, portMAX_DELAY);
 
-		//Borro los archivos creados para hacer el template
-		for(uint8_t i = 0; i < TEMPLATE_SAMPLES; i++){
-			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i + 1);
-			f_unlink(filename);
-		}
-
+		//Desmonto tarjeta SD y libero memoria ocupada con filename
 		unmount_sd("");
-		//Libero memoria
 		vPortFree(filename);
 	}
 

@@ -18,7 +18,6 @@
 "./Core/drivers/sd_card/dsp_functions.o"
 "./Core/drivers/sd_card/sd_functions.o"
 "./Core/drivers/utils/utils.o"
-"./Core/subsystems/adc_task.o"
 "./Core/subsystems/display_task.o"
 "./Core/subsystems/keypad_task.o"
 "./Core/subsystems/sd_task.o"

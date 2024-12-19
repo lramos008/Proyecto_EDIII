@@ -57,7 +57,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/user_diskio.h \
- ../Core/Inc/arm_math.h \
  C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h \
  C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/my_tasks.h
 ../Core/Inc/main.h:
@@ -122,6 +121,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/Third_Party/FatFs/src/diskio.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../FATFS/Target/user_diskio.h:
-../Core/Inc/arm_math.h:
 C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h:
 C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/my_tasks.h:

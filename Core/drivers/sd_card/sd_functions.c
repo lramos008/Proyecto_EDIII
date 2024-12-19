@@ -39,21 +39,22 @@ void send_buffer_via_uart(uint16_t *buffer, size_t size){
 	return;
 }
 
-void mount_sd(char* path){
+FRESULT mount_sd(char* path){
 	fresult = f_mount(&fs, path, 1);
 	if(fresult != FR_OK){
 		send_uart("Error al montar la tarjeta SD!!!\n");
 		while(1);
 	}
-	return;
+	return fresult;
 }
 
-void unmount_sd(char* path){
+FRESULT unmount_sd(char* path){
 	fresult = f_mount(NULL, path, 1);
 	if(fresult != FR_OK){
 		send_uart("Error al desmontar la tarjeta SD!!!\n");
 		while(1);
 	}
+	return fresult;
 }
 
 

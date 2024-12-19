@@ -1,5 +1,8 @@
 #include "utils.h"
 #include "sd_functions.h"
+#define ARM_MATH_CM4
+#include "arm_math.h"
+#include "dsp_functions.h"
 /*================[Public functions]=====================*/
 void capture_voice(uint16_t *buffer, uint32_t size){
 	HAL_TIM_Base_Start_IT(&htim3);
@@ -15,7 +18,6 @@ void get_voltage(uint16_t *in_buffer, float *out_buffer, uint32_t size){
 
 void capture_and_store_voice(uint16_t *voice_buffer, uint32_t size, char *filename){
 	indicatorMessage current_message;
-
 	//Capturo voz
 	capture_voice(voice_buffer, size);
 	while(!conv_cplt_flag);
@@ -80,6 +82,10 @@ void generate_template(void){
 
 		//Guardo bloque de template en la SD
 		save_buffer_on_sd("current_template.bin", template, BLOCK_SIZE / 2);
+	}
+	//Borro los archivos creados para hacer el template
+	for(uint8_t i = 0; i < TEMPLATE_SAMPLES; i++){
+		f_unlink(filenames[i]);
 	}
 
 	//Libero memoria alocada dinamicamente para las voces

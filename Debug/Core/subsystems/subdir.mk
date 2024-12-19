@@ -5,19 +5,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Core/subsystems/adc_task.c \
 ../Core/subsystems/display_task.c \
 ../Core/subsystems/keypad_task.c \
 ../Core/subsystems/sd_task.c 
 
 OBJS += \
-./Core/subsystems/adc_task.o \
 ./Core/subsystems/display_task.o \
 ./Core/subsystems/keypad_task.o \
 ./Core/subsystems/sd_task.o 
 
 C_DEPS += \
-./Core/subsystems/adc_task.d \
 ./Core/subsystems/display_task.d \
 ./Core/subsystems/keypad_task.d \
 ./Core/subsystems/sd_task.d 
@@ -30,7 +27,7 @@ Core/subsystems/%.o Core/subsystems/%.su Core/subsystems/%.cyclo: ../Core/subsys
 clean: clean-Core-2f-subsystems
 
 clean-Core-2f-subsystems:
-	-$(RM) ./Core/subsystems/adc_task.cyclo ./Core/subsystems/adc_task.d ./Core/subsystems/adc_task.o ./Core/subsystems/adc_task.su ./Core/subsystems/display_task.cyclo ./Core/subsystems/display_task.d ./Core/subsystems/display_task.o ./Core/subsystems/display_task.su ./Core/subsystems/keypad_task.cyclo ./Core/subsystems/keypad_task.d ./Core/subsystems/keypad_task.o ./Core/subsystems/keypad_task.su ./Core/subsystems/sd_task.cyclo ./Core/subsystems/sd_task.d ./Core/subsystems/sd_task.o ./Core/subsystems/sd_task.su
+	-$(RM) ./Core/subsystems/display_task.cyclo ./Core/subsystems/display_task.d ./Core/subsystems/display_task.o ./Core/subsystems/display_task.su ./Core/subsystems/keypad_task.cyclo ./Core/subsystems/keypad_task.d ./Core/subsystems/keypad_task.o ./Core/subsystems/keypad_task.su ./Core/subsystems/sd_task.cyclo ./Core/subsystems/sd_task.d ./Core/subsystems/sd_task.o ./Core/subsystems/sd_task.su
 
 .PHONY: clean-Core-2f-subsystems
 

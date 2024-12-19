@@ -4,7 +4,7 @@
 #include "utils.h"
 /*===============[Public functions]=====================*/
 void send_uart(char *string);
-void mount_sd(const char* path);
+FRESULT mount_sd(char* path);
 void unmount_sd(const char* path);
 FRESULT check_if_file_exists(char *filename);
 FRESULT create_file(char *filename, char *header);
