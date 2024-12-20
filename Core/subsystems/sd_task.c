@@ -4,7 +4,26 @@
 #include "capture_voice_functions.h"
 #include "utils.h"
 /*================[Private defines]========================*/
-#define CODE_VERSION 2
+#define CODE_VERSION 1
+/*================[Private functions]======================*/
+FRESULT initialize_files(void){
+	indicatorMessage message;
+	FRESULT res;
+	if(check_if_file_exists("usuarios.txt" == FR_NO_FILE)){
+		message = PANTALLA_DATABASE_NO_EXISTE;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
+	}
+	if(check_if_file_exists("registro.txt") == FR_NO_FILE){
+		res = create_file("registro.txt", "Fecha Usuario Estado\n");
+		if(res != FR_OK){
+			//Mostrar en pantalla que no se pudo crear el archivo
+			while(1);
+		}
+	}
+	return FR_OK;
+}
+
 /*================[Public task]==========================*/
 
 #if CODE_VERSION == 1
@@ -25,20 +44,9 @@ void sd_task(void *pvParameters){
 	uint8_t is_recognized;
 	uint8_t block_counter;
 
-	//Controles iniciales. Verifico archivos importantes
-	mount_sd("");															//Monto la tarjeta SD
-
-	//Chequeo existencia de base de datos de usuario
-	if(check_if_file_exists("usuarios.txt") == FR_NO_FILE){
-		current_message = PANTALLA_DATABASE_NO_EXISTE;						//Si no existe la base de datos, se muestra mensaje
-		xQueueSend(display_queue, &current_message, portMAX_DELAY);			//Reiniciar y cargar la base de datos
-		while(1);
-	}
-
-	//Chequeo si existe registro de accesos
-	if(check_if_file_exists("registro.txt") == FR_NO_FILE){
-		create_file("registro.txt", "Fecha Usuario Estado\n");				//Si no existe se crea
-	}
+	//Controles iniciales. Verifico archivos importantes.
+	mount_sd("");
+	initialize_files();
 	unmount_sd("");															//Desmonto tarjeta SD en caso de que sea necesario retirarla
 
 	while(1){
@@ -190,23 +198,26 @@ void sd_task(void *pvParameters){
 void sd_task(void *pvParameters){
 	indicatorMessage current_message;
 	uint16_t *voice_buffer;
-	char *filename = pvPortMalloc(DIR_STR_SIZE * sizeof(char));
-
+	char filename[NUM_OF_SAMPLES][15] = {"voice_1.bin", "voice_2.bin", "voice_3.bin", "voice_4.bin", "voice_5.bin"};
 	//Monto la tarjeta SD. Si  esta correcto, se continua con el procesamiento.
 	if(mount_sd("") == FR_OK){
 		voice_buffer = pvPortMalloc(VOICE_BUFFER_SIZE * sizeof(uint16_t));
-		for(uint8_t i = 0; i < TEMPLATE_SAMPLES; i++){
+		for(uint8_t i = 0; i < NUM_OF_SAMPLES; i++){
 			//Indico al display que se inicia el reconocimiento de voz
+			xSemaphoreGive(sd_display_sync);												//Doy el semaforo para que el display pueda tomarlo
 			current_message = PANTALLA_RECONOCIMIENTO_DE_VOZ;
-
-			//Sincronizo tarea de display y memoria SD
-			xSemaphoreGive(sd_display_sync);												//Doy el semaforo para que lo tome el display
 			xQueueSend(display_queue, &current_message, portMAX_DELAY);						//Envio el evento de reconocimiento al display
 			xSemaphoreTake(sd_display_sync, portMAX_DELAY);									//Bloqueo la tarea hasta que el display me devuelva el semaforo
 
-			//Capturo 1.5 segundos de voz y lo guardo en el archivo voice_x.bin
-			snprintf(filename, DIR_STR_SIZE, "voice_%d.bin", i + 1);
-			capture_and_store_voice(voice_buffer, VOICE_BUFFER_SIZE, filename);
+			//Capturo 1.5 segundos de voz
+			capture_voice(voice_buffer, VOICE_BUFFER_SIZE);
+
+			//Envio mensaje al display que indique que se estan procesando los datos
+			current_message = PANTALLA_PROCESANDO_DATOS;
+			xQueueSend(sd_display_sync, &current_message, portMAX_DELAY);					//En este caso puedo seguir procesando mientras se muestra el mensaje
+
+			//Guardo la voz en la SD
+			store_voice(voice_buffer, VOICE_BUFFER_SIZE, filename[i]);						//Guardo voz en el archivo voice_{i+1}.bin
 		}
 		vPortFree(voice_buffer);
 
@@ -214,12 +225,13 @@ void sd_task(void *pvParameters){
 		generate_template();
 
 		//Envio mensaje al display para indicarle que ya se guardo el template
+		xSemaphoreGive(sd_display_sync);
 		current_message = PANTALLA_TEMPLATE_GUARDADO;
 		xQueueSend(display_queue, &current_message, portMAX_DELAY);
+		xSemaphoreTake(sd_display_sync, portMAX_DELAY);										//Bloqueo la tarea hasta que el display me devuelva el semaforo
 
 		//Desmonto tarjeta SD y libero memoria ocupada con filename
 		unmount_sd("");
-		vPortFree(filename);
 	}
 
 	while(1){

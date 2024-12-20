@@ -20,3 +20,7 @@ void clear_char(char *buffer, char character){
 	*ptr = 0;
 	return;
 }
+
+void send_message_to_display(indicatorMessage message, SemaphoreHandle_t sem){
+
+}

@@ -24,11 +24,12 @@ extern volatile bool conv_cplt_flag;
 #define VOICE_BUFFER_SIZE 18432							//Buffer necesario para capturar 1.5 segundos de voz a 12 kHz
 #define BLOCK_SIZE 2048									//Tamaño de bloque de procesamiento
 #define NUM_OF_BLOCKS (VOICE_BUFFER_SIZE / BLOCK_SIZE)
+#define FFT_NORM_MAG_SIZE (BLOCK_SIZE / 2)
 
 #define ADC_RESOLUTION 4096.0
 #define VOLTAGE_REFERENCE 3.3
 
-#define TEMPLATE_SAMPLES 5
+#define NUM_OF_SAMPLES 5
 /*========================[Public macros]==========================*/
 #define FLOAT_SIZE_BYTES(X) ((X) * sizeof(float))
 /*====================== [Public Typedefs]=========================*/
