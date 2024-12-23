@@ -5,192 +5,167 @@
 #include "utils.h"
 /*================[Private defines]========================*/
 #define CODE_VERSION 1
+#define NO_DATABASE FR_NO_FILE
+#define NO_REGISTER FR_DISK_ERR
 /*================[Private functions]======================*/
+
 FRESULT initialize_files(void){
 	indicatorMessage message;
 	FRESULT res;
-	if(check_if_file_exists("usuarios.txt" == FR_NO_FILE)){
-		message = PANTALLA_DATABASE_NO_EXISTE;
-		xQueueSend(display_queue, &message, portMAX_DELAY);
-		while(1);
+
+	//Chequeo que exista el archivo con la database de usuarios
+	res = check_if_file_exists("usuarios.txt");
+	if(res != FR_OK){
+		return NO_DATABASE;
 	}
-	if(check_if_file_exists("registro.txt") == FR_NO_FILE){
+
+	//Chequeo si existe el archivo de registro de accesos. Si no existe, lo creo
+	res = check_if_file_exists("registro.txt");
+	if(res != FR_OK){
 		res = create_file("registro.txt", "Fecha Usuario Estado\n");
 		if(res != FR_OK){
-			//Mostrar en pantalla que no se pudo crear el archivo
-			while(1);
+			return NO_REGISTER;
 		}
 	}
 	return FR_OK;
 }
 
+void build_entry_message(char *entry, char *user_name, const char *status){
+	get_time_from_rtc(entry);						//Obtengo fecha y hora
+	if(user_name != NULL){
+		strcat(entry, user_name);					//Concateno nombre de usuario
+	}
+	else{
+		strcat(entry, "Desconocido");				//Si no existe, concateno desconocido
+	}
+	strcat(entry, " ");
+	strcat(entry, status);							//Concateno estado de acceso
+	strcat(entry, "\n");
+	return;
+}
+
 /*================[Public task]==========================*/
-
 #if CODE_VERSION == 1
-/*Comprobacion de voz simple*/
 void sd_task(void *pvParameters){
-	//Variables y punteros par el manejo de archivos / keypad
-	indicatorMessage current_message;
-	char user_key_retrieved[SEQUENCE_LENGTH + 1];							//Buffer asociado a la clave obtenida con el keypad
-	char *user_name;														//Donde se almacena el usuario extraido de la base de datos
-	char *entry;															//Donde se almacena la entrada nueva del registro
-	char *template_path;
+	//Variables usadas por la tarea SD
+	indicatorMessage message;										//Para enviar mensajes al display
+	FRESULT res;													//Para guardar los resultados de las operaciones de manejo de archivos
+	char user_key_retrieved[SEQUENCE_LENGTH + 1];					//Para recibir los digitos desde el keypad
+	char *template_path;											//Para guardar la direccion del template asociado al usuario
+	char *user_name;												//Para guardar el nombre de usuario
+	char *entry;													//Para guardar la entrada a escribir en el registro
+	uint16_t *voice_buf;											//Para guardar la voz capturada (buffer)
+	bool is_recognized;												//Para guardar estado de reconocimiento de voz
 
-	//Variables y punteros utilizados en el procesamiento
-	uint16_t *voice_buffer;
-	float *current_block;
-	float *template_block;
-	float *output;
-	uint8_t is_recognized;
-	uint8_t block_counter;
-
-	//Controles iniciales. Verifico archivos importantes.
-	mount_sd("");
-	initialize_files();
-	unmount_sd("");															//Desmonto tarjeta SD en caso de que sea necesario retirarla
+	//Control inicial. Verifico existencia de archivos importantes
+	res = mount_sd("");
+	if(res == FR_OK){
+		res = initialize_files();									//Compruebo archivos importantes
+		if(res != FR_OK){
+			if(res == NO_DATABASE){
+				message = PANTALLA_DATABASE_NO_EXISTE;
+			}
+			else if(res == NO_REGISTER){
+				message = PANTALLA_REGISTRO_NO_CREADO;
+			}
+			else{
+				message = PANTALLA_ERROR_DESCONOCIDO;
+			}
+			xQueueSend(display_queue, &message, portMAX_DELAY);		//Envio pantalla al display
+			while(1);												//Me quedo en este loop eternamente. Reiniciar y solucionar el problema
+		}
+		unmount_sd("");												//Desmonto tarjeta SD
+	}
+	else{
+		message = PANTALLA_ERROR_MONTAJE_SD;
+		xQueueSend(display_queue, &message, portMAX_DELAY);			//Envio pantalla al display
+		while(1);
+	}
 
 	while(1){
 		//Espero a que llegue la clave de usuario ingresada desde la tarea keypad
 		for(uint8_t i = 0; i < SEQUENCE_LENGTH + 1; i++){
 			xQueueReceive(sequence_queue, &user_key_retrieved[i], portMAX_DELAY);
 		}
-		xSemaphoreTake(keypad_sd_sync, 0);											//Tomo el semaforo para que el keypad no continue su ejecucion
 
-		//Monto la SD para su uso y reservo memoria para guardar strings
-		mount_sd("");
-		user_name = pvPortMalloc(USER_STR_SIZE * sizeof(char));						//Reservo espacio en heap para guardar el usuario
-		entry = pvPortMalloc(ENTRY_STR_SIZE * sizeof(char));						//Reservo para guardar la entrada del registro
+		res = mount_sd("");
+		if(res == FR_OK){
+			//Reservo memoria para almacenar usuario y entrada de registro
+			user_name = pvPortMalloc(USER_STR_SIZE * sizeof(char));
+			entry = pvPortMalloc(ENTRY_STR_SIZE * sizeof(char));
 
-		//Verifico existencia de clave en el registro
-		if(search_user("usuarios.txt", user_key_retrieved, user_name) == FR_OK){
-			//Si existe el usuario en la base de datos, lo muestro por pantalla
-			current_message = PANTALLA_USUARIO_ENCONTRADO;
+			//Verifico que la clave exista dentro de la database
+			res = search_user("usuarios.txt", user_key_retrieved, user_name);
+			if(res == FR_OK){
+				//Se encontro la clave
+				xSemaphoreGive(sd_display_sync);										//Cedo el semaforo para que lo tome el display
+				message = PANTALLA_USUARIO_ENCONTRADO;
+				xQueueSend(display_queue, &message, portMAX_DELAY);						//Envio mensaje al display
 
-			//Sincronizo tarea de display y memoria SD
-			xSemaphoreGive(sd_display_sync);
+				//Limpio el carriage return que suele colocar windows
+				clear_char(user_name, '\r');
 
-			//Envio pantalla al display
-			xQueueSend(display_queue, &current_message, portMAX_DELAY);				//Muestro en display que se encontro el usuario
+				//Verifico que exista el template
+				template_path = pvPortMalloc(TEMPLATE_STR_SIZE * sizeof(char));
+				clear_buffer(template_path, TEMPLATE_STR_SIZE);
+				snprintf(template_path, TEMPLATE_STR_SIZE, "%s.bin", user_name);		//Compongo nombre del archivo .bin
+				res = check_if_file_exists(template_path);
+				if(res == FR_OK){
+					//Se encontro el template en la SD
+					message = PANTALLA_RECONOCIMIENTO_DE_VOZ;
+					xQueueSend(display_queue, &message, portMAX_DELAY);
+					xSemaphoreTake(sd_display_sync, portMAX_DELAY);						//Espero que el display ceda el semaforo para sincronizar tareas
+																						//Inicia reconocimiento de voz luego del countdown
 
-			//Bloqueo la tarea hasta que el display muestre su mensaje
-			xSemaphoreTake(sd_display_sync, portMAX_DELAY);
+					//Capturo voz del usuario
+					voice_buf = pvPortMalloc(VOICE_BUFFER_SIZE * sizeof(uint16_t));
+					capture_voice(voice_buf, VOICE_BUFFER_SIZE);
+					store_voice(voice_buf, VOICE_BUFFER_SIZE, "current.bin");			//Almaceno voz en la tarjeta SD
+					vPortFree(voice_buf);												//Libero memoria utilizada
 
-			//Limpio el carriage return
-			clear_char(user_name, '\r');
+					//Extraigo features de la voz y lo guardo en la tarjeta SD
+					extract_and_save_features("current.bin", "current_feature.bin");
 
-			//Verifico existencia de template
-			template_path = pvPortMalloc(TEMPLATE_STR_SIZE * sizeof(char));
-			snprintf(template_path, TEMPLATE_STR_SIZE, "%s.bin", user_name);
-			if(check_if_file_exists(template_path) == FR_OK){
-				//Si existe el template, realizo reconocimiento de voz
-				current_message = PANTALLA_RECONOCIMIENTO_DE_VOZ;
+					//Comparo features extraidos con el template bin a bin
+					is_recognized = check_voice(template_path, "current_feature.bin");
+					if(is_recognized){
+						//Se reconocio la voz
+						build_entry_message(entry, user_name, "Concedido");
+						write_entry("registro.txt", entry);
+						message = PANTALLA_VOZ_RECONOCIDA;
 
-				//Sincronizo tarea de display y memoria SD
-				xSemaphoreGive(sd_display_sync);
+						//Enviar acceso a la tarea de la cerradura (pendiente)
 
-				//Envio pantalla al display
-				xQueueSend(display_queue, &current_message, portMAX_DELAY);						//Envio el evento de reconocimiento al display
-
-				//Bloqueo la tarea hasta que el display termine el conteo
-				xSemaphoreTake(sd_display_sync, portMAX_DELAY);									//Bloqueo la tarea hasta que el display me devuelva el semaforo
-																								//despues del countdown.
-
-				//Capturo 1.5 segundos de voz
-				voice_buffer = pvPortMalloc(VOICE_BUFFER_SIZE * sizeof(uint16_t));
-				current_block = pvPortMalloc(BLOCK_SIZE * sizeof(float));
-				capture_voice(voice_buffer, VOICE_BUFFER_SIZE);
-				while(!conv_cplt_flag);															//Espero a que termine la captura
-				conv_cplt_flag = false;
-
-				//Mandar cartel procesando valores
-				current_message = PANTALLA_PROCESANDO_DATOS;
-				xQueueSend(display_queue, &current_message, portMAX_DELAY);
-
-				//Convierto los valores a tension y los guardo en la memoria SD
-				for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
-					//La conversion es por bloques para ahorrar espacio
-					get_voltage(&voice_buffer[i * BLOCK_SIZE], current_block, BLOCK_SIZE);
-					save_buffer_on_sd("current voice.bin", current_block, BLOCK_SIZE);
-				}
-
-				//Libero memoria utilizada para poder seguir procesando
-				vPortFree(voice_buffer);
-				vPortFree(current_block);
-
-				//Voy leyendo el template y el current voice
-				current_block = pvPortMalloc(BLOCK_SIZE * sizeof(float));
-				template_block = pvPortMalloc(BLOCK_SIZE / 2 * sizeof(float)); 					//El modulo de la fft tiene la mitad de tamaño
-				output = pvPortMalloc(BLOCK_SIZE / 2 * sizeof(float));
-				block_counter = 0;																//Reinicio contador de bloques aceptados
-				for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
-					//Leo template y voz capturada
-					read_buffer_from_sd("current voice.bin", current_block, BLOCK_SIZE, i * BLOCK_SIZE);
-					read_buffer_from_sd(template_path, template_block, BLOCK_SIZE / 2, i * (BLOCK_SIZE / 2));
-
-					//Proceso la voz capturada
-					process_signal(current_block, output, BLOCK_SIZE);
-
-					//Comparo features
-					is_recognized = compare_features(output, template_block, BLOCK_SIZE / 2);
-					if(!is_recognized){
-						break;																	//Salgo del ciclo si algun bloque no fue reconocido
 					}
-					block_counter++;
-				}
-
-				//Obtengo la hora del RTC y empiezo a armar la entrada del registro
-				get_time_from_rtc(entry);
-				strcat(entry, user_name);														//Concateno fecha, hora y usuario
-
-				//Chequeo si todos los bloques pasaron la prueba
-				if(block_counter >= NUM_OF_BLOCKS){
-					strcat(entry, " Concedido\n");												//Agrego estado concedido al string
-
-					//Si todos los bloques pasaron la prueba, se reconoce la voz y se da acceso
-					current_message = PANTALLA_VOZ_RECONOCIDA;
-					xQueueSend(display_queue, &current_message, portMAX_DELAY);					//Envio pantalla de voz reconocida al display
-					current_message = PANTALLA_ACCESO_CONCEDIDO;								//Envio pantalla de acceso concedido
+					else{
+						//No se reconocio la voz
+						build_entry_message(entry, user_name, "Denegado");
+						write_entry("registro.txt", entry);
+						message = PANTALLA_VOZ_NO_RECONOCIDA;
+					}
 				}
 				else{
-					strcat(entry, " Denegado\n");												//Agrego estado denegado al string
-					current_message = PANTALLA_VOZ_NO_RECONOCIDA;
+					//No se encontro el template en la SD
+					message = PANTALLA_TEMPLATE_NO_EXISTE;
 				}
-
-				//Escribo el registro con la nueva entrada
-				write_entry("registro.txt", entry);
-
-				//Libero memoria usada para el procesamiento
-				vPortFree(current_block);
-				vPortFree(template_block);
-				vPortFree(output);
 			}
 			else{
-				//Si no existe el template, no realizo reconocimiento de voz y mando la pantalla
-				current_message = PANTALLA_TEMPLATE_NO_EXISTE;
+				//No se encontro la clave
+				build_entry_message(entry, NULL, "Denegado");
+				write_entry("registro.txt", entry);
+				message = PANTALLA_USUARIO_NO_EXISTE;
 			}
 		}
 		else{
-			//Si no se encuentra el usuario, guardo intento de entrada en el registro
-			get_time_from_rtc(entry);												//Obtengo fecha y hora del rtc
-			strcat(entry, "Desconocido Denegado");
-			write_entry("registro.txt", entry);										//Escribo entrada en registro
-			current_message = PANTALLA_USUARIO_NO_EXISTE;							//Indico en pantalla que no se encontro el usuario
+			//No se pudo montar la SD
+			message = PANTALLA_ERROR_MONTAJE_SD;
 		}
 
-		//Libero memoria utilizada para escribir el registro
-		vPortFree(entry);
-		vPortFree(user_name);
-		vPortFree(template_path);
-
-		//Desmonto la tarjeta SD
-		unmount_sd("");
-
-		//Envio el mensaje al display
-		xQueueSend(display_queue, &current_message, portMAX_DELAY);
-
-		//Devuelvo el semaforo a la tarea keypad para que pueda continuar su ejecucion
-		xSemaphoreGive(keypad_sd_sync);
+		//Envio la pantalla resultante del procesamiento de datos
+		xQueueSend(display_queue, &message, portMAX_DELAY);
 	}
+
+
 }
 
 #elif CODE_VERSION == 2

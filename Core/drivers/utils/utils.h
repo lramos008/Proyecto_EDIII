@@ -38,6 +38,7 @@ typedef uint8_t indicatorMessage;
 /*========================[Public enums]===========================*/
 enum{												//Para nombrar las pantallas del display
 	PANTALLA_IDLE,
+	//Pantallas de funcionamiento normal
 	PANTALLA_DE_INICIO,
 	PANTALLA_INGRESO_KEYPAD,
 	PANTALLA_BORRAR_KEYPAD,
@@ -49,10 +50,14 @@ enum{												//Para nombrar las pantallas del display
 	PANTALLA_ACCESO_CONCEDIDO,
 	PANTALLA_TIMEOUT,
 	PANTALLA_SECUENCIA_INCOMPLETA,
+	PANTALLA_PROCESANDO_DATOS,
+	PANTALLA_TEMPLATE_GUARDADO,
+	//Pantallas asociadas a errores
 	PANTALLA_TEMPLATE_NO_EXISTE,
 	PANTALLA_DATABASE_NO_EXISTE,
-	PANTALLA_PROCESANDO_DATOS,
-	PANTALLA_TEMPLATE_GUARDADO
+	PANTALLA_REGISTRO_NO_CREADO,
+	PANTALLA_ERROR_MONTAJE_SD,
+	PANTALLA_ERROR_DESCONOCIDO
 };
 
 typedef enum{										//Para nombrar los estados de la adquisicion con el keypad

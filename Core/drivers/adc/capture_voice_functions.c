@@ -38,6 +38,24 @@ void store_voice(uint16_t *voice_buffer, uint32_t size, char *filename){
 	vPortFree(current_block);
 }
 
+void extract_and_save_features(char *voice_name, char *feature_name){
+	float *current_block = pvPortMalloc(FLOAT_SIZE_BYTES(BLOCK_SIZE));
+	float *feature_block = pvPortMalloc(FLOAT_SIZE_BYTES(FFT_NORM_MAG_SIZE));
+	for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
+		read_buffer_from_sd(voice_name, current_block, BLOCK_SIZE, i * BLOCK_SIZE);
+		process_signal(current_block, feature_block, BLOCK_SIZE);
+		save_buffer_on_sd(feature_name, feature_block, FFT_NORM_MAG_SIZE);
+	}
+
+	//Elimino el archivo de voz para quedarme solo con los features
+	f_unlink(voice_name);
+
+	//Libero memoria utilizada
+	vPortFree(current_block);
+	vPortFree(feature_block);
+	return;
+}
+
 void generate_template(void){
 	float *template, *aux;
 	float *voices[NUM_OF_SAMPLES];
@@ -54,32 +72,25 @@ void generate_template(void){
 
 	//Inicializo bloque de template con ceros
 	arm_fill_f32(0.0f, template, FFT_NORM_MAG_SIZE);
+	arm_fill_f32(0.0f, aux, FFT_NORM_MAG_SIZE);
 
 	for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
-		//Lectura de voces desde archivo
+		//En cada iteracion se leen los bloques de todas las voces, se procesan y luego se procesan las magnitudes de fft normalizadas
 		for(uint8_t j = 0; j < NUM_OF_SAMPLES; j++){
-			//Leo el bloque j de cada uno de los archivos de voz, los procesos
-			read_buffer_from_sd(filenames[j], voices[j], BLOCK_SIZE, i * BLOCK_SIZE);		//Se lee el bloque i de cada una de las voces
-			process_signal(voices[j], aux, BLOCK_SIZE);
-			arm_add_f32(template, aux, template, FFT_NORM_MAG_SIZE);
+			read_buffer_from_sd(filenames[j], voices[j], BLOCK_SIZE, i * BLOCK_SIZE);		//Se lee el bloque i de la voz voice_j.bin
+			process_signal(voices[j], aux, BLOCK_SIZE);										//Proceso voz para obtener feature deseada
+			arm_add_f32(template, aux, template, FFT_NORM_MAG_SIZE);						//Sumo elemento a elemento al vector template
 			arm_fill_f32(0.0f, aux, FFT_NORM_MAG_SIZE);
 		}
 
-		//Proceso cada bloque de las diferentes voces y lo sumo al template
-		for(uint8_t j = 0; j < NUM_OF_SAMPLES; j++){
-			process_signal(voices[j], aux, BLOCK_SIZE);
-			arm_add_f32(template, aux, template, BLOCK_SIZE / 2);
-			arm_fill_f32(0.0f, aux, BLOCK_SIZE / 2);										//Reseteo para el siguiente procesamiento
-		}
-
 		//Escalo para obtener el promedio
-		arm_scale_f32(template, 1.0f / NUM_OF_SAMPLES, template, BLOCK_SIZE / 2);
+		arm_scale_f32(template, 1.0f / NUM_OF_SAMPLES, template, FFT_NORM_MAG_SIZE);
 
 		//Guardo bloque de template en la SD
-		save_buffer_on_sd("current_template.bin", template, BLOCK_SIZE / 2);
+		save_buffer_on_sd("current_template.bin", template, FFT_NORM_MAG_SIZE);
 	}
 
-	//Borro archivos y libero memoria
+	//Borro archivos generados para crear el template y libero memoria
 	for(uint8_t i = 0; i < NUM_OF_SAMPLES; i++){
 		f_unlink(filenames[i]);																//Borro archivos creados para generar template
 		vPortFree(voices[i]);																//Libero memoria usada para cada una de las voces
@@ -88,3 +99,31 @@ void generate_template(void){
 	vPortFree(aux);
 	return;
 }
+
+bool compare_features(float32_t *feature_1, float32_t *feature_2, uint32_t size){
+
+}
+
+bool check_voice(char *template_path, char *feature_path){
+	float32_t *template = pvPortMalloc(FLOAT_SIZE_BYTES(FFT_NORM_MAG_SIZE));
+	float32_t *extracted_feature = pvPortMalloc(FLOAT_SIZE_BYTES(FFT_NORM_MAG_SIZE));
+	bool compare_res = false;
+	bool is_recognized = false;
+	uint8_t block_counter = 0;
+	for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
+		//Leo cada bloque del archivo, y comparo bin a bin
+		read_buffer_from_sd(template_path, template, FFT_NORM_MAG_SIZE, i * FFT_NORM_MAG_SIZE);
+		read_buffer_from_sd(feature_path, extracted_feature, FFT_NORM_MAG_SIZE, i * FFT_NORM_MAG_SIZE);
+		compare_res = compare_features(extracted_feature, template, FFT_NORM_MAG_SIZE);
+		if(compare_res == false){
+			break;
+		}
+		block_counter++;																	//Aumento el conteo de bloques correctos
+	}
+
+	//Compruebo si hay NUM_OF_BLOCKS bloques correctos
+	is_recognized = (block_counter < NUM_OF_BLOCKS) ? false : true;
+	return is_recognized;																	//Devuelvo estado del reconocimiento
+}
+
+
