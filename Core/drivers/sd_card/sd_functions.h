@@ -2,6 +2,11 @@
 #define SD_FUNCTIONS_H
 #include "ff.h"
 #include "utils.h"
+
+/*================[Public enums]========================*/
+typedef enum{
+
+};
 /*===============[Public functions]=====================*/
 void send_uart(char *string);
 FRESULT mount_sd(char* path);
