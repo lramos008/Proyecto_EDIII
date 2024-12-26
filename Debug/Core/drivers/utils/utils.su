@@ -1,2 +1,3 @@
 ../Core/drivers/utils/utils.c:3:6:clear_buffer	24	static
 ../Core/drivers/utils/utils.c:12:6:clear_char	24	static
+../Core/drivers/utils/utils.c:24:6:send_message_to_display	16	static

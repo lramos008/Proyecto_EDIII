@@ -29,7 +29,8 @@ Core/drivers/display \
 Core/drivers/keypad \
 Core/drivers/sd_card \
 Core/drivers/utils \
-Core/subsystems \
+Core/tasks \
+Core/utils \
 Drivers/STM32F4xx_HAL_Driver/Src \
 FATFS/App \
 FATFS/Target \

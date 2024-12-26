@@ -1,5 +1,5 @@
 #include "display_functions.h"
-#include "utils.h"
+#include "common_utils.h"
 #define DISPLAY_FUNCTION 1										//0 realiza prueba de display completa
 																//1 provee la version funcional del codigo
 
@@ -50,41 +50,41 @@ void display_task(void *pvParameters){
 #elif DISPLAY_FUNCTION == 1
 //Version funcional que utiliza el control de acceso
 void display_task(void *pvParameters){
-	indicatorMessage display_message;
+	display_message_t message;
 	uint8_t counter = 0;
 	display_init();						//Inicializo el display
 	display_start_msg();				//Muestro mensaje inicial
 	while(1){
-		xQueueReceive(display_queue, &display_message, portMAX_DELAY);
-		switch(display_message){
-		case PANTALLA_DE_INICIO:
+		xQueueReceive(display_queue, &message, portMAX_DELAY);
+		switch(message){
+		case DISPLAY_SCREEN_WELCOME:
 			display_start_msg();
 			break;
-		case PANTALLA_INGRESO_KEYPAD:
+		case DISPLAY_ENTER_DIGIT:
 			if(counter < MAX_DIGITS){
 				counter++;
 				display_sequence_entry_msg(counter);
 			}
 			break;
-		case PANTALLA_BORRAR_KEYPAD:
+		case DISPLAY_ERASE_DIGIT:
 			if(counter > 0){
 				counter--;
 				display_sequence_entry_msg(counter);
 			}
 			break;
-		case PANTALLA_USUARIO_ENCONTRADO:
+		case DISPLAY_USER_FOUND:
 			xSemaphoreTake(sd_display_sync, portMAX_DELAY);			//Se utiliza para sincronizar las tareas sd y display
 			display_user_found_msg();
 			counter = 0;
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
 			break;
-		case PANTALLA_USUARIO_NO_EXISTE:
+		case DISPLAY_USER_NOT_FOUND:
 			display_user_not_found_msg();
 			counter = 0;							//Reinicio el contador
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case PANTALLA_RECONOCIMIENTO_DE_VOZ:
+		case DISPLAY_START_SPEECH_REC:
 			xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 			display_start_voice_recognition_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
@@ -92,42 +92,42 @@ void display_task(void *pvParameters){
 			display_capturing_voice_msg();
 			xSemaphoreGive(sd_display_sync);
 			break;
-		case PANTALLA_VOZ_RECONOCIDA:
+		case DISPLAY_VOICE_RECOGNIZED:
 			display_recognized_voice_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case PANTALLA_VOZ_NO_RECONOCIDA:
+		case DISPLAY_VOICE_NOT_RECOGNIZED:
 			display_not_recognized_voice_msg();
 			xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
 			break;
-		case PANTALLA_PROCESANDO_DATOS:
+		case DISPLAY_PROCESSING_DATA:
 			display_processing_data_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case PANTALLA_ACCESO_CONCEDIDO:
+		case DISPLAY_ACCESS_GRANTED:
 			display_access_granted_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case PANTALLA_TIMEOUT:
+		case DISPLAY_TIMEOUT_EVENT:
 			display_timeout_msg();
 			counter = 0;
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case PANTALLA_SECUENCIA_INCOMPLETA:
+		case DISPLAY_INCOMPLETE_SEQUENCE_EVENT:
 			display_incomplete_entry_msg();
 			counter = 0;
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case PANTALLA_DATABASE_NO_EXISTE:
+		case DISPLAY_DATABASE_NOT_FOUND:
 			display_missing_database_msg();
 			break;
-		case PANTALLA_TEMPLATE_NO_EXISTE:
+		case DISPLAY_TEMPLATE_NOT_FOUND:
 			display_missing_template_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case PANTALLA_TEMPLATE_GUARDADO:
+		case DISPLAY_TEMPLATE_SAVED:
 			display_template_saved_msg();
 			break;
 		default:

@@ -1,6 +1,6 @@
 Core/drivers/adc/capture_voice_functions.o: \
  ../Core/drivers/adc/capture_voice_functions.c \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h \
+ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/utils/utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -54,12 +54,12 @@ Core/drivers/adc/capture_voice_functions.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
+ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../Core/Inc/arm_math.h \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/dsp_functions.h
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h:
+ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/dsp_functions.h
+C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/utils/utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -114,9 +114,9 @@ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/utils/utils.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
+C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
 ../FATFS/Target/ffconf.h:
 ../Core/Inc/arm_math.h:
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/dsp_functions.h:
+C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/dsp_functions.h:

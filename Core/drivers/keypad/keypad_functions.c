@@ -11,27 +11,22 @@ typedef enum{
 	ROW_2 = GPIO_PIN_7,
 	ROW_3 = GPIO_PIN_8,
 	ROW_4 = GPIO_PIN_9
-}row_t;
+}row_t;												//Filas del keypad
 
 typedef enum{
 	COL_1 = GPIO_PIN_0,
 	COL_2 = GPIO_PIN_1,
 	COL_3 = GPIO_PIN_2,
 	COL_4 = GPIO_PIN_3
-}col_t;
-
-typedef enum{
-	IDLE_COL = 0,
-	ACTIVE_COL
-}col_state;
+}col_t;												//Columnas del keypad
 
 /*================[Private variables]=====================*/
 row_t keypad_rows[ROW_LENGTH] = {ROW_1, ROW_2, ROW_3, ROW_4};
 col_t keypad_cols[COL_LENGTH] = {COL_1, COL_2, COL_3, COL_4};
-char keypad_chars[ROW_LENGTH][COL_LENGTH] = { {'1', '2', '3', 'A'},
-	      	  	  	  	  		  	  	  	  {'4', '5', '6', 'B'},
-											  {'7', '8', '9', 'C'},
-											  {'*', '0', '#', 'D'} };
+const char keypad_chars[ROW_LENGTH][COL_LENGTH] = { {'1', '2', '3', 'A'},
+	      	  	  	  	  		  	  	  	  	  {'4', '5', '6', 'B'},
+												  {'7', '8', '9', 'C'},
+												  {'*', '0', '#', 'D'} };
 
 /*================[Private functions]====================*/
 static void set_row(row_t row){
