@@ -1,6 +1,6 @@
 #ifndef DISPLAY_FUNCTIONS_H
 #define DISPLAY_FUNCTIONS_H
-#include "utils.h"
+#include "common_utils.h"
 /*================[Public function prototypes]=====================*/
 void display_init(void);
 void display_start_msg(void);

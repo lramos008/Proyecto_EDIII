@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "common_utils.h"
 //Funciones utiles
 void clear_buffer(char *buffer, size_t length) {
     if (buffer == NULL) {

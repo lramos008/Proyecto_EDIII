@@ -1,7 +1,7 @@
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
 #include "ssd1306_tests.h"
-#include "utils.h"
+#include "common_utils.h"
 
 #define LINE_HEIGHT 18  // Altura de la fuente (ajustar según la fuente usada)
 #define DISPLAY_WIDTH 128
@@ -98,11 +98,11 @@ void display_start_msg(void){
 
 void display_sequence_entry_msg(uint8_t input_cont){
 	/*Maneja el ingreso de digitos en el display*/
-	char message[MAX_DIGITS + 1] = {0};
+	char message[SEQUENCE_LENGTH + 1] = {0};
 	uint8_t x = 10;														//x e y definen coordenadas en pantalla
 	uint8_t y = 26;
 	//Chequeo que counter no supere el numero maximo de digitos
-	if(input_cont <= MAX_DIGITS){
+	if(input_cont <= SEQUENCE_LENGTH){
 		//Armo el string a mostrar en el display
 		for(uint8_t i = 0; i < input_cont; i++){
 			message[i] = '*';

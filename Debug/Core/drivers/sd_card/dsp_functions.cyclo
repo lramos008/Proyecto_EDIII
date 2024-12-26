@@ -1,7 +1,0 @@
-../Core/drivers/sd_card/dsp_functions.c:47:13:fir_filter	2
-../Core/drivers/sd_card/dsp_functions.c:60:13:hamming_window	2
-../Core/drivers/sd_card/dsp_functions.c:74:13:calculate_fft	2
-../Core/drivers/sd_card/dsp_functions.c:86:13:normalize_array	2
-../Core/drivers/sd_card/dsp_functions.c:102:13:get_fft_norm_mag	1
-../Core/drivers/sd_card/dsp_functions.c:111:6:process_signal	1
-../Core/drivers/sd_card/dsp_functions.c:132:9:compare_features	4

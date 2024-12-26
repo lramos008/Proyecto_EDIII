@@ -55,8 +55,8 @@ Core/drivers/sd_card/sd_utils.o: ../Core/drivers/sd_card/sd_utils.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/utils/utils.h \
- C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/adc/capture_voice_functions.h
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
+ ../Core/drivers/sd_card/capture_and_store.h
 ../Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
@@ -115,5 +115,5 @@ Core/drivers/sd_card/sd_utils.o: ../Core/drivers/sd_card/sd_utils.c \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/utils/utils.h:
-C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/adc/capture_voice_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
+../Core/drivers/sd_card/capture_and_store.h:

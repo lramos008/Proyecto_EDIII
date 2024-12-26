@@ -40,7 +40,7 @@ display_message_t handle_keypad_input(char input, char *buffer, bool *send_flag)
 			current_message = DISPLAY_ENTER_DIGIT;
 		}
 		else{
-			current_message = DISPLAY_SCREEN_WELCOME;
+			current_message = DISPLAY_IDLE;
 		}
 		break;
 	case WAITING_FOR_DIGIT_2:
@@ -95,13 +95,13 @@ display_message_t handle_keypad_input(char input, char *buffer, bool *send_flag)
 		*send_flag = 1;															//Habilito flag para enviar el string
 		context.current_state = WAITING_FOR_DIGIT_1;
 		context.current_index = 0;
-		//current_message = PANTALLA_DE_INICIO;									//Luego del procesamiento se vuelve al estado inicial
+		current_message = DISPLAY_SCREEN_WELCOME;								//Luego del procesamiento se vuelve al estado inicial
 		break;
 	case INCOMPLETE_SEQUENCE:
 	case TIMEOUT:
 	default:
 		clear_buffer(buffer, SEQUENCE_LENGTH + 1);
-		context.current_state = WAITING_FOR_DIGIT_1;								//Vuelvo al estado inicial
+		context.current_state = WAITING_FOR_DIGIT_1;							//Vuelvo al estado inicial
 		context.current_index = 0;
 		current_message = DISPLAY_SCREEN_WELCOME;
 		break;

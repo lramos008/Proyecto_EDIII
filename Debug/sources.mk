@@ -24,11 +24,9 @@ C_DEPS :=
 SUBDIRS := \
 Core/Src \
 Core/Startup \
-Core/drivers/adc \
 Core/drivers/display \
 Core/drivers/keypad \
 Core/drivers/sd_card \
-Core/drivers/utils \
 Core/tasks \
 Core/utils \
 Drivers/STM32F4xx_HAL_Driver/Src \

@@ -1,9 +1,11 @@
 #ifndef PROCESSING_H
 #define PROCESSING_H
+#include "common_utils.h"
+#define ARM_MATH_CM4
+#include "arm_math.h"
 /*=========================[Public defines]==============================*/
-#define AUDIO_BUFFER_SIZE 	18432
-#define FRAME_SIZE 		   	2048
-#define FEATURE_SIZE   		(FRAME_SIZE / 2)
-#define NUM_OF_FRAMES 	   	(BUFFER_SIZE / FRAME_SIZE)
 
+/*================[Public function prototypes]=====================*/
+void process_frame(float32_t *psrc, float32_t *pdst, uint32_t size);
+bool compare_features(float32_t *template, float32_t *target, uint32_t size);
 #endif // PROCESSING_H

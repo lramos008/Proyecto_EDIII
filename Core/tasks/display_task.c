@@ -61,7 +61,7 @@ void display_task(void *pvParameters){
 			display_start_msg();
 			break;
 		case DISPLAY_ENTER_DIGIT:
-			if(counter < MAX_DIGITS){
+			if(counter < SEQUENCE_LENGTH){
 				counter++;
 				display_sequence_entry_msg(counter);
 			}
@@ -73,11 +73,9 @@ void display_task(void *pvParameters){
 			}
 			break;
 		case DISPLAY_USER_FOUND:
-			xSemaphoreTake(sd_display_sync, portMAX_DELAY);			//Se utiliza para sincronizar las tareas sd y display
 			display_user_found_msg();
 			counter = 0;
 			vTaskDelay(2000 / portTICK_RATE_MS);
-			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_USER_NOT_FOUND:
 			display_user_not_found_msg();

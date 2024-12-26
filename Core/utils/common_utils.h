@@ -14,6 +14,14 @@ extern SemaphoreHandle_t sd_display_sync;
 
 /*========================[Public defines]=========================*/
 #define SEQUENCE_LENGTH 6
+#define USER_STR_SIZE 50
+#define TEMPLATE_STR_SIZE 50
+
+
+#define AUDIO_BUFFER_SIZE 	18432
+#define FRAME_SIZE 		   	2048
+#define FEATURE_SIZE   		(FRAME_SIZE / 2)
+#define NUM_OF_FRAMES 	   	(AUDIO_BUFFER_SIZE / FRAME_SIZE)
 /*========================[Public macros]==========================*/
 #define FLOAT_SIZE_BYTES(X) ((X) * sizeof(float))
 #define CHAR_SIZE_BYTES(X) ((X) * sizeof(char))

@@ -2,14 +2,13 @@
 #include <fatfs_sd.h>
 #include "ff.h"
 #include <stdlib.h>
-#include "utils.h"
+#include "common_utils.h"
 
 
 
 #define UART &huart2
 
 #define LINE_BUFFER_SIZE 128
-
 FATFS fs;  // file system
 FIL fil; // File
 FILINFO fno;

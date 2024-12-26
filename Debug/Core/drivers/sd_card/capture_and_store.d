@@ -1,6 +1,7 @@
-Core/drivers/keypad/input_sequence_handle.o: \
- ../Core/drivers/keypad/input_sequence_handle.c \
- C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/utils/utils.h \
+Core/drivers/sd_card/capture_and_store.o: \
+ ../Core/drivers/sd_card/capture_and_store.c \
+ ../Core/drivers/sd_card/processing.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -53,8 +54,12 @@ Core/drivers/keypad/input_sequence_handle.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
-C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/utils/utils.h:
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
+ ../Core/Inc/arm_math.h ../Core/drivers/sd_card/sd_functions.h \
+ ../Middlewares/Third_Party/FatFs/src/ff.h \
+ ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h
+../Core/drivers/sd_card/processing.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -109,3 +114,8 @@ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/utils/utils.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
+../Core/Inc/arm_math.h:
+../Core/drivers/sd_card/sd_functions.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../Middlewares/Third_Party/FatFs/src/integer.h:
+../FATFS/Target/ffconf.h:
