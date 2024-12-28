@@ -1,5 +1,6 @@
-../Core/drivers/sd_card/sd_utils.c:10:9:initialize_files	4
-../Core/drivers/sd_card/sd_utils.c:30:6:initialize_sd_and_verify_files	5
-../Core/drivers/sd_card/sd_utils.c:60:6:process_user_key	2
-../Core/drivers/sd_card/sd_utils.c:70:6:build_entry_message	2
-../Core/drivers/sd_card/sd_utils.c:84:6:recognize_user_voice	3
+../Core/drivers/sd_card/sd_utils.c:11:9:initialize_files	4
+../Core/drivers/sd_card/sd_utils.c:31:6:initialize_sd_and_verify_files	5
+../Core/drivers/sd_card/sd_utils.c:61:6:process_user_key	2
+../Core/drivers/sd_card/sd_utils.c:71:6:build_entry_message	2
+../Core/drivers/sd_card/sd_utils.c:85:6:recognize_user_voice	3
+../Core/drivers/sd_card/sd_utils.c:130:6:generate_template	8

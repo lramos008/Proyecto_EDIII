@@ -1,0 +1,12 @@
+../Core/drivers/sd_card/sd_functions.c:27:6:send_uart	8	static
+../Core/drivers/sd_card/sd_functions.c:32:6:send_buffer_via_uart	40	static
+../Core/drivers/sd_card/sd_functions.c:41:9:mount_sd	8	static
+../Core/drivers/sd_card/sd_functions.c:50:9:unmount_sd	8	static
+../Core/drivers/sd_card/sd_functions.c:60:9:check_if_file_exists	8	static
+../Core/drivers/sd_card/sd_functions.c:66:9:create_file	4200	static
+../Core/drivers/sd_card/sd_functions.c:84:6:get_time_from_rtc	48	static
+../Core/drivers/sd_card/sd_functions.c:101:9:save_u16_buffer	4208	static
+../Core/drivers/sd_card/sd_functions.c:118:9:save_buffer_on_sd	4208	static
+../Core/drivers/sd_card/sd_functions.c:141:9:read_buffer_from_sd	24	static
+../Core/drivers/sd_card/sd_functions.c:175:9:write_entry	4200	static
+../Core/drivers/sd_card/sd_functions.c:193:9:search_user	176	static

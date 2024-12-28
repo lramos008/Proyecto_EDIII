@@ -5,8 +5,8 @@
 #include "processing.h"
 
 /*=========================[Private defines]==============================*/
-#define	BIN_RATIO_THRESHOLD		0.9f								//Cantidad de bins correctos aceptable
-#define DIF_THRESHOLD 			0.1f								//Diferencia aceptable entre bins
+#define	BIN_RATIO_THRESHOLD		0.8f								//Cantidad de bins correctos aceptable
+#define DIF_THRESHOLD 			0.25f								//Diferencia aceptable entre bins
 #define NUM_TAPS 				50
 #define STATE_SIZE 				(NUM_TAPS + FRAME_SIZE - 1)
 

@@ -24,7 +24,27 @@ void sd_task(void *pvParameters){
 		for(uint8_t i = 0; i < SEQUENCE_LENGTH + 1; i++){
 			xQueueReceive(sequence_queue, &user_key_retrieved[i], portMAX_DELAY);
 		}
-		xSemaphoreTake(keypad_sd_sync, portMAX_DELAY);												//Luego de recibir la secuencia, bloqueo la tarea keypad
+
+		//Verifico si la clave es 000000. En cuyo caso se debe crear el template
+		if(strcmp(user_key_retrieved, "000000") == 0){
+			if(generate_template()){
+				//Muestro mensaje en display indicando que se creo el template
+				message = DISPLAY_TEMPLATE_SAVED;
+				xQueueSend(display_queue, &message, portMAX_DELAY);
+				xSemaphoreTake(sd_display_sync, portMAX_DELAY);
+				xSemaphoreGive(keypad_sd_sync);
+			}
+			else{
+				//Mostrar mensaje no se pudo generar template
+				message = DISPLAY_TEMPLATE_NOT_FOUND;
+				xQueueSend(display_queue, &message, portMAX_DELAY);
+				xSemaphoreTake(sd_display_sync, portMAX_DELAY);
+				xSemaphoreGive(keypad_sd_sync);
+			}
+			continue;
+		}
+
+		//Continuo con flujo normal de ejecucion
 
 		//Reservo memoria para almacenar usuario
 		user_name = pvPortMalloc(USER_STR_SIZE * sizeof(char));
@@ -39,6 +59,7 @@ void sd_task(void *pvParameters){
 			//Usuario no existe. Enviar mensaje al display
 			xQueueSend(display_queue, &message, portMAX_DELAY);
 			vPortFree(user_name);
+			xSemaphoreGive(keypad_sd_sync);
 			continue;
 		}
 
@@ -52,6 +73,7 @@ void sd_task(void *pvParameters){
 			message = DISPLAY_ERROR_MEMORY;
 			xQueueSend(display_queue, &message, portMAX_DELAY);
 			vPortFree(user_name);
+			xSemaphoreGive(keypad_sd_sync);
 			continue;
 		}
 
@@ -62,6 +84,7 @@ void sd_task(void *pvParameters){
 			xQueueSend(display_queue, &message, portMAX_DELAY);
 			vPortFree(user_name);
 			vPortFree(template_path);
+			xSemaphoreGive(keypad_sd_sync);
 			continue;
 		}
 
@@ -75,58 +98,12 @@ void sd_task(void *pvParameters){
 		vPortFree(user_name);
 		vPortFree(template_path);
 
-		xSemaphoreGive(sd_display_sync);
 		xQueueSend(display_queue, &message, portMAX_DELAY);
 		xSemaphoreTake(sd_display_sync, portMAX_DELAY);												//Bloqueo la tarea hasta que termine de mostrarse el mensaje de reconocimiento
 		xSemaphoreGive(keypad_sd_sync);																//Doy el semaforo para que la tarea keypad pueda ejecutarse
 	}
 }
 
-#elif CODE_VERSION == 2
-//Generador de template
-void sd_task(void *pvParameters){
-	indicatorMessage current_message;
-	uint16_t *voice_buffer;
-	char filename[NUM_OF_SAMPLES][15] = {"voice_1.bin", "voice_2.bin", "voice_3.bin", "voice_4.bin", "voice_5.bin"};
-	//Monto la tarjeta SD. Si  esta correcto, se continua con el procesamiento.
-	if(mount_sd("") == FR_OK){
-		voice_buffer = pvPortMalloc(VOICE_BUFFER_SIZE * sizeof(uint16_t));
-		for(uint8_t i = 0; i < NUM_OF_SAMPLES; i++){
-			//Indico al display que se inicia el reconocimiento de voz
-			xSemaphoreGive(sd_display_sync);												//Doy el semaforo para que el display pueda tomarlo
-			current_message = PANTALLA_RECONOCIMIENTO_DE_VOZ;
-			xQueueSend(display_queue, &current_message, portMAX_DELAY);						//Envio el evento de reconocimiento al display
-			xSemaphoreTake(sd_display_sync, portMAX_DELAY);									//Bloqueo la tarea hasta que el display me devuelva el semaforo
-
-			//Capturo 1.5 segundos de voz
-			capture_voice(voice_buffer, VOICE_BUFFER_SIZE);
-
-			//Envio mensaje al display que indique que se estan procesando los datos
-			current_message = PANTALLA_PROCESANDO_DATOS;
-			xQueueSend(sd_display_sync, &current_message, portMAX_DELAY);					//En este caso puedo seguir procesando mientras se muestra el mensaje
-
-			//Guardo la voz en la SD
-			store_voice(voice_buffer, VOICE_BUFFER_SIZE, filename[i]);						//Guardo voz en el archivo voice_{i+1}.bin
-		}
-		vPortFree(voice_buffer);
-
-		//Genero template
-		generate_template();
-
-		//Envio mensaje al display para indicarle que ya se guardo el template
-		xSemaphoreGive(sd_display_sync);
-		current_message = PANTALLA_TEMPLATE_GUARDADO;
-		xQueueSend(display_queue, &current_message, portMAX_DELAY);
-		xSemaphoreTake(sd_display_sync, portMAX_DELAY);										//Bloqueo la tarea hasta que el display me devuelva el semaforo
-
-		//Desmonto tarjeta SD y libero memoria ocupada con filename
-		unmount_sd("");
-	}
-
-	while(1){
-
-	}
-}
 #endif
 
 

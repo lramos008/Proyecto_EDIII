@@ -1,0 +1,2 @@
+../Core/utils/common_utils.c:3:6:clear_buffer	0	static
+../Core/utils/common_utils.c:12:6:clear_char	0	static

@@ -1,0 +1,6 @@
+../Core/drivers/sd_card/sd_utils.c:11:9:initialize_files	8	static
+../Core/drivers/sd_card/sd_utils.c:31:6:initialize_sd_and_verify_files	8	static
+../Core/drivers/sd_card/sd_utils.c:61:6:process_user_key	16	static
+../Core/drivers/sd_card/sd_utils.c:71:6:build_entry_message	16	static
+../Core/drivers/sd_card/sd_utils.c:85:6:recognize_user_voice	32	static
+../Core/drivers/sd_card/sd_utils.c:130:6:generate_template	144	static

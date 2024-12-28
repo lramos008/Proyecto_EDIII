@@ -11,7 +11,6 @@ void keypad_task(void *pvParameters){
 		message = handle_keypad_input(input, kp_buffer, &send_flag);
 		if(send_flag){
 			//Envio uno por uno los digitos obtenidos con el keypad a la tarea SD
-			xSemaphoreGive(keypad_sd_sync);											//Cedo semaforo para que lo tome la tarea SD
 			for(uint8_t i = 0; i < SEQUENCE_LENGTH + 1; i++){
 				xQueueSend(sequence_queue, &kp_buffer[i], portMAX_DELAY);
 			}

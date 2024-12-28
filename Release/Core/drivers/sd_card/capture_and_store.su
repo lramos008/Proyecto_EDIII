@@ -1,0 +1,5 @@
+../Core/drivers/sd_card/capture_and_store.c:12:6:capture_voice	16	static
+../Core/drivers/sd_card/capture_and_store.c:20:6:get_voltage	32	static
+../Core/drivers/sd_card/capture_and_store.c:26:6:store_voice	40	static
+../Core/drivers/sd_card/capture_and_store.c:59:6:extract_and_save_features	32	static
+../Core/drivers/sd_card/capture_and_store.c:83:6:check_voice	40	static

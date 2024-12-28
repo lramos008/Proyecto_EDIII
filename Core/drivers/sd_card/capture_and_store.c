@@ -24,6 +24,8 @@ void get_voltage(uint16_t *in_buffer, float *out_buffer, uint32_t size){
 }
 
 void store_voice(uint16_t *voice_buffer, uint32_t buf_size, uint32_t frame_size, char *filename){
+	display_message_t message;
+	float *current_frame;
 	//Verifico que size sea multiplo de frame_size
 	if((buf_size % frame_size) != 0){
 		//Manejar error
@@ -32,9 +34,12 @@ void store_voice(uint16_t *voice_buffer, uint32_t buf_size, uint32_t frame_size,
 
 	//Reservo memoria para el bloque de procesamiento
 	uint32_t num_of_frames = buf_size / frame_size;
-	float *current_frame = pvPortMalloc(FLOAT_SIZE_BYTES(frame_size));
+	current_frame = pvPortMalloc(FLOAT_SIZE_BYTES(frame_size));
 	if(current_frame == NULL){
 		//Manejar este caso, enviar un print
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
 		return;
 	}
 
@@ -52,8 +57,14 @@ void store_voice(uint16_t *voice_buffer, uint32_t buf_size, uint32_t frame_size,
 }
 
 void extract_and_save_features(char *voice_name, char *feature_name){
+	display_message_t message;
 	float *current_frame = pvPortMalloc(FLOAT_SIZE_BYTES(FRAME_SIZE));
 	float *feature_frame = pvPortMalloc(FLOAT_SIZE_BYTES(FEATURE_SIZE));
+	if(current_frame == NULL || feature_frame == NULL){
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
+	}
 	for(uint8_t i = 0; i < NUM_OF_FRAMES; i++){
 		read_buffer_from_sd(voice_name, current_frame, FRAME_SIZE, i * FRAME_SIZE);
 		process_frame(current_frame, feature_frame, FRAME_SIZE);
@@ -70,8 +81,14 @@ void extract_and_save_features(char *voice_name, char *feature_name){
 }
 
 bool check_voice(char *template_path, char *feature_path){
+	display_message_t message;
 	float32_t *template = pvPortMalloc(FLOAT_SIZE_BYTES(FEATURE_SIZE));
 	float32_t *extracted_feature = pvPortMalloc(FLOAT_SIZE_BYTES(FEATURE_SIZE));
+	if(template == NULL || extracted_feature == NULL){
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
+	}
 	bool compare_res = false;
 	bool is_recognized = false;
 	uint8_t frame_counter = 0;
@@ -93,7 +110,7 @@ bool check_voice(char *template_path, char *feature_path){
 
 //void generate_template(void){
 //	float *template, *aux;
-//	float *voices[NUM_OF_SAMPLES];
+//	float *voices[NUM_OF_SAMPLES] = {0};
 //	char filenames[NUM_OF_SAMPLES][15] = {"voice_1.bin", "voice_2.bin", "voice_3.bin", "voice_4.bin", "voice_5.bin"};
 //
 //	//Reservo memoria para el template y para el buffer auxiliar

@@ -143,7 +143,7 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-  display_queue = xQueueCreate(1, sizeof(uint8_t));
+  display_queue = xQueueCreate(1, sizeof(display_message_t));
   sequence_queue = xQueueCreate(1, sizeof(char));
   /* USER CODE END RTOS_QUEUES */
 
@@ -155,7 +155,7 @@ int main(void)
   xTaskCreate(display_task, "Tarea display", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
   //xTaskCreate(LockControl, "Tarea 04", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
   //xTaskCreate(VoiceProcessing, "Tarea 03", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
-  xTaskCreate(sd_task, "Tarea SD", 10 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
+  xTaskCreate(sd_task, "Tarea SD", 12 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
   xTaskCreate(keypad_task, "Tarea keypad", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
   xTaskCreate(idle_task, "Tarea Idle", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
   /* USER CODE END RTOS_THREADS */

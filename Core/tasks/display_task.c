@@ -11,7 +11,7 @@ void display_task(void *pvParameters){
 	while(1){
 		display_start_msg();
 		vTaskDelay(1000 / portTICK_RATE_MS);
-		for(uint8_t i = 0; i < MAX_DIGITS; i++){
+		for(uint8_t i = 0; i < SEQUENCE_LENGTH; i++){
 			display_sequence_entry_msg(i);
 			vTaskDelay(200 / portTICK_RATE_MS);
 		}
@@ -83,7 +83,6 @@ void display_task(void *pvParameters){
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
 		case DISPLAY_START_SPEECH_REC:
-			xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 			display_start_voice_recognition_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			countdown_msg();
@@ -96,13 +95,12 @@ void display_task(void *pvParameters){
 			break;
 		case DISPLAY_VOICE_NOT_RECOGNIZED:
 			display_not_recognized_voice_msg();
-			xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_PROCESSING_DATA:
 			display_processing_data_msg();
-			vTaskDelay(2000 / portTICK_RATE_MS);
+			//vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
 		case DISPLAY_ACCESS_GRANTED:
 			display_access_granted_msg();
@@ -127,7 +125,11 @@ void display_task(void *pvParameters){
 			break;
 		case DISPLAY_TEMPLATE_SAVED:
 			display_template_saved_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
+		case DISPLAY_ERROR_MEMORY:
+			display_missing_database_msg();
 		default:
 		}
 	}
