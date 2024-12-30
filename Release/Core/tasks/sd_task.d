@@ -1,6 +1,6 @@
 Core/tasks/sd_task.o: ../Core/tasks/sd_task.c \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_utils.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
+ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/sd_utils.h \
+ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
@@ -56,9 +56,9 @@ Core/tasks/sd_task.o: ../Core/tasks/sd_task.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_utils.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
+ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/utils/common_utils.h
+C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/sd_utils.h:
+C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
 ../FATFS/Target/ffconf.h:
@@ -116,4 +116,4 @@ C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Pr
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h:
+C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/utils/common_utils.h:

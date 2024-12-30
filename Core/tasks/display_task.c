@@ -92,6 +92,7 @@ void display_task(void *pvParameters){
 		case DISPLAY_VOICE_RECOGNIZED:
 			display_recognized_voice_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_VOICE_NOT_RECOGNIZED:
 			display_not_recognized_voice_msg();

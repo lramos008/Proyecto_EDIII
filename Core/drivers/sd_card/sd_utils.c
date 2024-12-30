@@ -83,6 +83,7 @@ void build_entry_message(char *entry, char *user_name, const char *status){
 }
 
 bool recognize_user_voice(char *template_path, char *user_name, display_message_t *message){
+	size_t free_heap = xPortGetFreeHeapSize();
 	uint16_t *voice_buf = pvPortMalloc(U16_SIZE_BYTES(AUDIO_BUFFER_SIZE));
 	display_message_t aux;
 	char *entry;
@@ -104,7 +105,7 @@ bool recognize_user_voice(char *template_path, char *user_name, display_message_
 	xQueueSend(display_queue, &aux, portMAX_DELAY);									//Envio mensaje indicando que se esta procesando la voz
 	store_voice(voice_buf, AUDIO_BUFFER_SIZE, FRAME_SIZE, "current_voice.bin");
 	vPortFree(voice_buf);
-
+	free_heap = xPortGetFreeHeapSize();
 	//Extraigo los features de la voz
 	entry = pvPortMalloc(CHAR_SIZE_BYTES(ENTRY_STR_SIZE));
 	extract_and_save_features("current_voice.bin", "current_feature.bin");
@@ -113,7 +114,7 @@ bool recognize_user_voice(char *template_path, char *user_name, display_message_
 		write_entry("registro.txt", entry);
 		*message = DISPLAY_VOICE_RECOGNIZED;
 		vPortFree(entry);
-		//f_unlink("current_feature.bin");
+		f_unlink("current_feature.bin");
 		return true;
 	}
 	else{
@@ -121,10 +122,9 @@ bool recognize_user_voice(char *template_path, char *user_name, display_message_
 		write_entry("registro.txt", entry);
 		*message = DISPLAY_VOICE_NOT_RECOGNIZED;
 		vPortFree(entry);
-		//f_unlink("current_feature.bin");
+		f_unlink("current_feature.bin");
 		return false;
 	}
-
 }
 
 bool generate_template(void){
@@ -132,7 +132,7 @@ bool generate_template(void){
 	float *template, *my_feature;
 	char filenames[NUM_OF_VOICES][20] = {"feature_1.bin", "feature_2.bin", "feature_3.bin", "feature_4.bin", "feature_5.bin"};
 
-	size_t free_heap = xPortGetFreeHeapSize();
+
 	//Reservo memoria para el buffer que contiene la captura de voz
 	uint16_t *voice_buf = pvPortMalloc(U16_SIZE_BYTES(AUDIO_BUFFER_SIZE));
 	if(voice_buf == NULL){
@@ -142,7 +142,6 @@ bool generate_template(void){
 		while(1);
 		return false;
 	}
-	free_heap = xPortGetFreeHeapSize();
 	//Capturo las voces y las guardo en la tarjeta SD
 	for(uint8_t i = 0; i < NUM_OF_VOICES; i++){
 		//Envio mensaje de inicio de reconocimiento al display
@@ -184,6 +183,7 @@ bool generate_template(void){
 		//Escalo para obtener el promedio
 		arm_scale_f32(template, 1.0f / NUM_OF_VOICES, template, FEATURE_SIZE);
 		save_buffer_on_sd("current_template.bin", template, FEATURE_SIZE);
+		arm_fill_f32(0.0f, template, FEATURE_SIZE);
 	}
 
 	//Borro los archivos generados para crear el template

@@ -55,7 +55,7 @@ Core/drivers/sd_card/sd_utils.o: ../Core/drivers/sd_card/sd_utils.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h \
+ C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/drivers/sd_card/capture_and_store.h ../Core/Inc/arm_math.h
 ../Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
@@ -115,6 +115,6 @@ Core/drivers/sd_card/sd_utils.o: ../Core/drivers/sd_card/sd_utils.c \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h:
+C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/drivers/sd_card/capture_and_store.h:
 ../Core/Inc/arm_math.h:

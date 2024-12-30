@@ -78,7 +78,6 @@ static void MX_RTC_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM3_Init(void);
 
-
 /* USER CODE BEGIN PFP */
 void idle_task(void *pvParameters);
 /* USER CODE END PFP */
@@ -149,7 +148,6 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-
 
   /* USER CODE BEGIN RTOS_THREADS */
   xTaskCreate(display_task, "Tarea display", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
@@ -589,7 +587,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-
 
 /**
   * @brief  Period elapsed callback in non blocking mode

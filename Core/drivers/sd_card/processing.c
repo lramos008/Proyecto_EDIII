@@ -5,8 +5,8 @@
 #include "processing.h"
 
 /*=========================[Private defines]==============================*/
-#define	BIN_RATIO_THRESHOLD		0.8f								//Cantidad de bins correctos aceptable
-#define DIF_THRESHOLD 			0.25f								//Diferencia aceptable entre bins
+#define	BIN_RATIO_THRESHOLD		0.97f								//Cantidad de bins correctos aceptable
+#define DIF_THRESHOLD 			0.14f								//Diferencia aceptable entre bins
 #define NUM_TAPS 				50
 #define STATE_SIZE 				(NUM_TAPS + FRAME_SIZE - 1)
 
@@ -65,6 +65,7 @@ const float32_t filter_taps[NUM_TAPS] = { 0.025663017507547244, 0.04316119936562
  * @param size Tamaño de ambos vectores.
  */
 static void fir_filter(float32_t *psrc, float32_t *pdst, uint32_t size){
+	size_t free_heap = xPortGetFreeHeapSize();
 	//Reservo memoria para el vector de estado que necesita la instancia del filtro FIR
 	float32_t *fir_state = pvPortMalloc(FLOAT_SIZE_BYTES(STATE_SIZE));
 	if(fir_state == NULL){
