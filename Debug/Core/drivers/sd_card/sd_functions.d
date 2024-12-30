@@ -56,7 +56,7 @@ Core/drivers/sd_card/sd_functions.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
- C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/utils/common_utils.h
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h
 ../Core/Inc/fatfs_sd.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
@@ -116,4 +116,4 @@ Core/drivers/sd_card/sd_functions.o: \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 ../Middlewares/Third_Party/FatFs/src/diskio.h:
-C:/Users/Juli-Leo/Documents/Facultad/Proyecto_EDIII/Core/utils/common_utils.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:

@@ -40,7 +40,6 @@ void store_voice(uint16_t *voice_buffer, uint32_t buf_size, uint32_t frame_size,
 		message = DISPLAY_ERROR_MEMORY;
 		xQueueSend(display_queue, &message, portMAX_DELAY);
 		while(1);
-		return;
 	}
 
 	for(uint8_t i = 0; i < num_of_frames; i++){
@@ -102,6 +101,10 @@ bool check_voice(char *template_path, char *feature_path){
 		}
 		frame_counter++;																	//Aumento el conteo de bloques correctos
 	}
+
+	//Libero memoria
+	vPortFree(template);
+	vPortFree(extracted_feature);
 
 	//Compruebo si hay NUM_OF_BLOCKS bloques correctos
 	is_recognized = (frame_counter < NUM_OF_FRAMES) ? false : true;

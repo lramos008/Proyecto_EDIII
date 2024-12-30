@@ -88,8 +88,9 @@ bool recognize_user_voice(char *template_path, char *user_name, display_message_
 	display_message_t aux;
 	char *entry;
 	if(voice_buf == NULL){
-		*message = DISPLAY_ERROR_MEMORY;
-		return false;
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
 	}
 
 	//Envio mensaje a display para indicar que comienza el reconocimiento de voz
@@ -106,8 +107,14 @@ bool recognize_user_voice(char *template_path, char *user_name, display_message_
 	store_voice(voice_buf, AUDIO_BUFFER_SIZE, FRAME_SIZE, "current_voice.bin");
 	vPortFree(voice_buf);
 	free_heap = xPortGetFreeHeapSize();
+
 	//Extraigo los features de la voz
 	entry = pvPortMalloc(CHAR_SIZE_BYTES(ENTRY_STR_SIZE));
+	if(entry == NULL){
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
+	}
 	extract_and_save_features("current_voice.bin", "current_feature.bin");
 	if(check_voice(template_path, "current_feature.bin")){
 		build_entry_message(entry, user_name, "Concedido\n");
@@ -140,7 +147,6 @@ bool generate_template(void){
 		message = DISPLAY_ERROR_MEMORY;
 		xQueueSend(display_queue, &message, portMAX_DELAY);
 		while(1);
-		return false;
 	}
 	//Capturo las voces y las guardo en la tarjeta SD
 	for(uint8_t i = 0; i < NUM_OF_VOICES; i++){
@@ -168,7 +174,6 @@ bool generate_template(void){
 		message = DISPLAY_ERROR_MEMORY;
 		xQueueSend(display_queue, &message, portMAX_DELAY);
 		while(1);
-		return false;
 	}
 
 	arm_fill_f32(0.0f, template, FEATURE_SIZE);

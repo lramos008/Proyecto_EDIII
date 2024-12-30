@@ -7,7 +7,7 @@
 /*=========================[Private defines]==============================*/
 #define	BIN_RATIO_THRESHOLD		0.97f								//Cantidad de bins correctos aceptable
 #define DIF_THRESHOLD 			0.14f								//Diferencia aceptable entre bins
-#define NUM_TAPS 				50
+#define NUM_TAPS 				100
 #define STATE_SIZE 				(NUM_TAPS + FRAME_SIZE - 1)
 
 /*=========================[Private variables]============================*/
@@ -15,40 +15,24 @@ arm_fir_instance_f32 fir_instance;
 arm_rfft_fast_instance_f32 fft_instance;
 
 /*
-
-FIR filter designed with
-http://t-filter.appspot.com
-
-sampling frequency: 12000 Hz
-
-* 0 Hz - 100 Hz
-  gain = 0
-  desired attenuation = -40 dB
-  actual attenuation = -45.06015749030636 dB
-
-* 400 Hz - 3500 Hz
-  gain = 1
-  desired ripple = 5 dB
-  actual ripple = 2.3015718508000034 dB
-
-* 4000 Hz - 6000 Hz
-  gain = 0
-  desired attenuation = -40 dB
-  actual attenuation = -45.06015749030636 dB
-
-*/
+ * Filtro FIR pasa bandas
+ * fc_low = 300 Hz
+ * fc_high = 3400 Hz
+ * num of taps = 100
+ * Coeficientes generados con funcion firwin de python
+ */
 //Se colocaron los coeficientes obtenidos en orden inverso, pues la biblioteca cmsis dsp asi los necesita
-const float32_t filter_taps[NUM_TAPS] = { 0.025663017507547244, 0.043161199365629975, 0.009987413560588994, -0.019344649278080953, 0.003579388809249739,
-		 	 	 	 	 	 	 	 	  0.009067929219325404, -0.01872037528825959, -0.007413256377189857, 0.006276987439723166, -0.02485046961359185,
-										  -0.02205694447886603, 0.0028270126760762916, -0.03125345871490819, -0.04154747028815444, -0.0014112320202949225,
-										  -0.03404755206589369, -0.06602492769687618, -0.00582972886335776, -0.027505345684807933, -0.0989845714402987,
-										  -0.009438922328850387, 0.006415464554856044, -0.17166579577787455, -0.011509402813520562, 0.48183338925387226,
-										  0.48183338925387226, -0.011509402813520562, -0.17166579577787455, 0.006415464554856044, -0.009438922328850387,
-										  -0.0989845714402987, -0.027505345684807933, -0.00582972886335776, -0.06602492769687618, -0.03404755206589369,
-										  -0.0014112320202949225, -0.04154747028815444, -0.03125345871490819, 0.0028270126760762916, -0.02205694447886603,
-										  -0.02485046961359185, 0.006276987439723166, -0.007413256377189857, -0.01872037528825959, 0.009067929219325404,
-										  0.003579388809249739, -0.019344649278080953, 0.009987413560588994, 0.043161199365629975, 0.025663017507547244   };
-
+const float32_t filter_taps[] = {0.00016416,    0.00078524,    0.00066796,    0.00002544,    -0.00004986,    0.00083598,    0.00158431,    0.00107636,    0.00008082,    0.00045637,
+								 0.00221183,    0.00293797,    0.00134017,    -0.00016516,    0.00132617,    0.00421179,    0.00395919,    0.00024936,    -0.00140802,    0.00217440,
+								 0.00575325,    0.00270323,    -0.00390922,    -0.00443200,    0.00227573,    0.00505210,    -0.00315476,    -0.01244816,    -0.00930689,    0.00124646,
+								 0.00042645,    -0.01531275,    -0.02523568,    -0.01442676,    -0.00008402,    -0.00902672,    -0.03442258,    -0.04015809,    -0.01542199,    0.00132009,
+								 -0.02410139,    -0.06236457,    -0.05354372,    -0.00067314,    0.01514441,    -0.05398490,    -0.12597791,    -0.06148915,    0.15520218,    0.35683563,
+								 0.35683563,    0.15520218,    -0.06148915,    -0.12597791,    -0.05398490,    0.01514441,    -0.00067314,    -0.05354372,    -0.06236457,    -0.02410139,
+								 0.00132009,    -0.01542199,    -0.04015809,    -0.03442258,    -0.00902672,    -0.00008402,    -0.01442676,    -0.02523568,    -0.01531275,    0.00042645,
+								 0.00124646,    -0.00930689,    -0.01244816,    -0.00315476,    0.00505210,    0.00227573,    -0.00443200,    -0.00390922,    0.00270323,    0.00575325,
+								 0.00217440,    -0.00140802,    0.00024936,    0.00395919,    0.00421179,    0.00132617,    -0.00016516,    0.00134017,    0.00293797,    0.00221183,
+								 0.00045637,    0.00008082,    0.00107636,    0.00158431,    0.00083598,    -0.00004986,    0.00002544,    0.00066796,    0.00078524,    0.00016416,
+};
 
 /*=========================[Private functions]==============================*/
 /**
@@ -65,12 +49,14 @@ const float32_t filter_taps[NUM_TAPS] = { 0.025663017507547244, 0.04316119936562
  * @param size Tamaño de ambos vectores.
  */
 static void fir_filter(float32_t *psrc, float32_t *pdst, uint32_t size){
+	display_message_t message;
 	size_t free_heap = xPortGetFreeHeapSize();
 	//Reservo memoria para el vector de estado que necesita la instancia del filtro FIR
 	float32_t *fir_state = pvPortMalloc(FLOAT_SIZE_BYTES(STATE_SIZE));
 	if(fir_state == NULL){
-		//Manejar error
-		return;
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
 	}
 
 	//Inicializo instancia de filtro fir predeterminada
@@ -201,11 +187,14 @@ static void get_fft_norm_mag(float32_t *psrc, float32_t *pdst, uint32_t size){
  * @param size Tamaño del vector psrc.
  */
 void process_frame(float32_t *psrc, float32_t *pdst, uint32_t size){
+	display_message_t message;
 	//Reservo memoria para salida filtrada
 	float32_t *filtered = pvPortMalloc(FLOAT_SIZE_BYTES(size));
-	if(filtered == NULL){
-		//Manejar error
-		return;
+	float32_t *fft_output = pvPortMalloc(FLOAT_SIZE_BYTES(size));
+	if(filtered == NULL || fft_output == NULL){
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
 	}
 
 	//Filtro la señal
@@ -214,16 +203,13 @@ void process_frame(float32_t *psrc, float32_t *pdst, uint32_t size){
 	//Aplico ventana de hamming al vector
 	hamming_window(filtered, size);
 
-	/*Reservo memoria para la salida de FFT y calculo la fft. Libero memoria de salida filtrada*/
-	float32_t *fft_output = pvPortMalloc(FLOAT_SIZE_BYTES(size));
+	//Calculo la fft
 	calculate_fft(filtered, fft_output, size);
-	vPortFree(filtered);
-	filtered = NULL;
 
 	/*Calculo la magnitud de la fft y libero la memoria ocupada por la fft.*/
 	get_fft_norm_mag(fft_output, pdst, size / 2);
+	vPortFree(filtered);
 	vPortFree(fft_output);
-	fft_output = NULL;
 	return;
 }
 
@@ -241,11 +227,19 @@ void process_frame(float32_t *psrc, float32_t *pdst, uint32_t size){
  * @return comp_state Estado de la comparacion de features.
  */
 bool compare_features(float32_t *template, float32_t *target, uint32_t size){
+	display_message_t message;
 	uint32_t accepted_bins = 0;										//Bins dentro del threshold
 	float32_t accepted_bins_ratio;									//Proporcion de bins aceptados con respecto al total
+	bool comp_state;												//Estado de comparacion de los features
+
+	//Reservo memoria para los vectores de procesamiento
 	float32_t *diff = pvPortMalloc(FLOAT_SIZE_BYTES(size));
 	float32_t *abs_diff = pvPortMalloc(FLOAT_SIZE_BYTES(size));
-	bool comp_state;												//Estado de comparacion de los features
+	if(diff == NULL || abs_diff == NULL){
+		message = DISPLAY_ERROR_MEMORY;
+		xQueueSend(display_queue, &message, portMAX_DELAY);
+		while(1);
+	}
 
 	//Resto bin a bin los features y calculo el valor absoluto
 	arm_sub_f32(template, target, diff, size);
