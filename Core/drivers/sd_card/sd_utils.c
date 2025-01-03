@@ -88,9 +88,9 @@ bool recognize_user_voice(char *template_path, char *user_name, display_message_
 	display_message_t aux;
 	char *entry;
 	if(voice_buf == NULL){
-		message = DISPLAY_ERROR_MEMORY;
+		message = DISPLAY_SD_WRITE_ERROR;
 		xQueueSend(display_queue, &message, portMAX_DELAY);
-		while(1);
+		return false;
 	}
 
 	//Envio mensaje a display para indicar que comienza el reconocimiento de voz
