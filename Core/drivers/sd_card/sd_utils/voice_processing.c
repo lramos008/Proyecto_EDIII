@@ -21,7 +21,7 @@ arm_rfft_fast_instance_f32 fft_instance;
  * num of taps = 100
  * Coeficientes generados con funcion firwin de python
  */
-//Se colocaron los coeficientes obtenidos en orden inverso, pues la biblioteca cmsis dsp asi los necesita
+
 const float32_t filter_taps[] = {0.00016416,    0.00078524,    0.00066796,    0.00002544,    -0.00004986,    0.00083598,    0.00158431,    0.00107636,    0.00008082,    0.00045637,
 								 0.00221183,    0.00293797,    0.00134017,    -0.00016516,    0.00132617,    0.00421179,    0.00395919,    0.00024936,    -0.00140802,    0.00217440,
 								 0.00575325,    0.00270323,    -0.00390922,    -0.00443200,    0.00227573,    0.00505210,    -0.00315476,    -0.01244816,    -0.00930689,    0.00124646,

@@ -1,4 +1,5 @@
 #include "common_utils.h"
+#include "file_handling.h"
 
 #define TEMPLATE_CREATION_SEQUENCE "000000"
 
