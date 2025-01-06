@@ -27,6 +27,16 @@ Core/Startup \
 Core/drivers/display \
 Core/drivers/keypad \
 Core/drivers/sd_card \
+Core/drivers/sd_card/sd_utils \
+Core/subsystems/access_control \
+Core/subsystems/comparing \
+Core/subsystems/feature_extraction \
+Core/subsystems/file_handling \
+Core/subsystems/handle_digit_logic \
+Core/subsystems/processing \
+Core/subsystems/template_creation \
+Core/subsystems/voice_capture \
+Core/subsystems/voice_recognition \
 Core/tasks \
 Core/utils \
 Drivers/STM32F4xx_HAL_Driver/Src \

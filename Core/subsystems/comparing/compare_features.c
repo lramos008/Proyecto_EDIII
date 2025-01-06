@@ -3,7 +3,7 @@
 #include "arm_math.h"
 #include "common_utils.h"
 
-#define DISTANCE_THRESHOLD 1.0f
+
 
 static bool calculate_euclidean_distance(float32_t *array_1, float32_t *array_2, float32_t *result,  uint32_t size){
 	float32_t *diff = NULL;

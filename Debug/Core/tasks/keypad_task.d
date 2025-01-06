@@ -1,5 +1,5 @@
 Core/tasks/keypad_task.o: ../Core/tasks/keypad_task.c \
- C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/keypad/digit_handle_logic.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/handle_digit_logic/digit_handle_logic.h \
  C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
@@ -55,7 +55,7 @@ Core/tasks/keypad_task.o: ../Core/tasks/keypad_task.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/keypad/keypad_functions.h
-C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/keypad/digit_handle_logic.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/handle_digit_logic/digit_handle_logic.h:
 C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:

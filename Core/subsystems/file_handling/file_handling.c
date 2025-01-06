@@ -36,10 +36,9 @@ bool initialize_sd_and_verify_files(display_message_t *error_message){
 }
 
 
-bool process_user_key(char *user_key, char *user_name, display_message_t *error_message){
-	FRESULT res = search_user("usuarios.txt", user_key, user_name);
+bool process_user_key(char *user_key, char *user_name){
+	FRESULT res = search_user(DATABASE, user_key, user_name);
 	if(res != FR_OK){
-		*error_message = DISPLAY_USER_NOT_FOUND;
 		return false;
 	}
 	clear_char(user_name, '\r');										//Limpio '\r' agregado por windows

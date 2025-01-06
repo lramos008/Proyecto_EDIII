@@ -115,6 +115,54 @@ FRESULT save_u16_buffer(char *filename, uint16_t *buffer, size_t size){
 	return FR_OK;
 }
 
+FRESULT save_u16_buffer(char *filename, uint16_t *buffer, uint32_t size){
+	//Declaracion de variables
+	FIL fil;
+
+	//Abro el archivo
+	fresult = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
+	if(fresult != FR_OK){
+		return fresult;
+	}
+
+	//Escribo datos del buffer en el archivo
+	fresult = f_write(&fil, buffer, U16_SIZE_BYTES(size), &bw);
+	if(fresult != FR_OK || bw < U16_SIZE_BYTES(size)){
+		f_close(&fil);																	//Frente a un error cierro el archivo y salgo de la funcion
+		return (fresult != FR_OK) ? fresult : FR_DISK_ERR;								//Si se escribieron bytes de menos, devuelve FR_DISK_ERR
+	}
+
+	//Cierro el archivo
+	fresult = f_close(&fil);
+	return FR_OK;
+}
+
+FRESULT read_u16_file(char *filename, uint16_t *buffer, uint32_t size, uint32_t current_pos){
+	//Abro el archivo
+	fresult = f_open(&fil, filename, FA_READ);
+	if(fresult != FR_OK){
+		return fresult;
+	}
+
+	//Posiciono el puntero de lectura en el archivo
+	fresult = f_lseek(&fil, current_pos);
+	if(fresult != FR_OK){
+		f_close(&fil);
+		return fresult;
+	}
+
+	//Leo el bloque de tamaño size desde el archivo
+	fresult = f_read(&fil, buffer, U16_SIZE_BYTES(size), &br);
+	if(fresult != FR_OK){
+		f_close(&fil);
+		return fresult;
+	}
+
+	//Cierro el archivo
+	fresult = f_close(&fil);
+	return FR_OK;
+}
+
 FRESULT save_buffer_on_sd(char *filename, float *buffer, size_t size){
 	/* Guarda los valores de un vector float con tamaño size en el archivo filename.
 	 * Es importante que el archivo sea .bin, ya que es más conveniente guardar
@@ -137,6 +185,7 @@ FRESULT save_buffer_on_sd(char *filename, float *buffer, size_t size){
 	fresult = f_close(&fil);
 	return FR_OK;
 }
+
 
 FRESULT read_buffer_from_sd(char *filename, float *buffer, size_t size, uint32_t current_pos){
 	/* Lee un bloque de valores float con tamaño size desde el archivo filename

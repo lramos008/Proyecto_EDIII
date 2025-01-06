@@ -24,6 +24,7 @@ static void get_voltage(uint16_t *in_buffer, float *out_buffer, uint32_t size){
 	}
 }
 
+//Debo cambiar este codigo
 static bool store_voice(uint16_t *voice_buffer, uint32_t size, uint32_t block_size, char *filename){
 	float *current_block;
 	//Verifico que size sea multiplo de frame_size
@@ -71,8 +72,11 @@ bool capture_and_store_voice(char *filename){
 	//Capturo la voz
 	capture_voice(voice_buffer, AUDIO_BUFFER_SIZE);
 
+	//Muestro en pantalla que se estan procesando los datos
 	message = DISPLAY_PROCESSING_DATA;
 	xQueueSend(display_queue, &message, portMAX_DELAY);
+
+
 
 	//Guardo señal de audio convertida en tension en la memoria SD
 	process_flag = (!store_voice(voice_buffer, AUDIO_BUFFER_SIZE, BLOCK_SIZE, filename)) ? false : true;

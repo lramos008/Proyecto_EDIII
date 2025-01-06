@@ -20,6 +20,16 @@ RM := rm -rf
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/utils/subdir.mk
 -include Core/tasks/subdir.mk
+-include Core/subsystems/voice_recognition/subdir.mk
+-include Core/subsystems/voice_capture/subdir.mk
+-include Core/subsystems/template_creation/subdir.mk
+-include Core/subsystems/processing/subdir.mk
+-include Core/subsystems/handle_digit_logic/subdir.mk
+-include Core/subsystems/file_handling/subdir.mk
+-include Core/subsystems/feature_extraction/subdir.mk
+-include Core/subsystems/comparing/subdir.mk
+-include Core/subsystems/access_control/subdir.mk
+-include Core/drivers/sd_card/sd_utils/subdir.mk
 -include Core/drivers/sd_card/subdir.mk
 -include Core/drivers/keypad/subdir.mk
 -include Core/drivers/display/subdir.mk

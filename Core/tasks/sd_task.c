@@ -1,4 +1,5 @@
-#include "sd_utils.h"
+#include "access_control.h"
+#include "file_handling.h"
 /*================[Private defines]========================*/
 #define CODE_VERSION 1
 
@@ -27,7 +28,7 @@ void sd_task(void *pvParameters){
 		}
 
 		//Realizo verificacion de usuario normal
-		handle_user_verification(user_key_retrieved, &message);
+		handle_user_verification(user_key_retrieved);
 	}
 }
 

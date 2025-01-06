@@ -10,6 +10,8 @@ FRESULT mount_sd(char* path);
 void unmount_sd(const char* path);
 FRESULT check_if_file_exists(char *filename);
 FRESULT create_file(char *filename, char *header);
+FRESULT save_u16_buffer(char *filename, uint16_t *buffer, uint32_t size);
+FRESULT read_u16_file(char *filename, uint16_t *buffer, uint32_t size, uint32_t current_pos);
 FRESULT save_buffer_on_sd(char *filename, float *buffer, size_t size);
 FRESULT read_buffer_from_sd(char *filename, float *buffer, size_t size, uint32_t current_pos);
 FRESULT search_user(char *filename, char *user_key, char *user_name);

@@ -21,9 +21,13 @@ extern SemaphoreHandle_t sd_display_sync;
 #define AUDIO_BUFFER_SIZE 	24576
 #define BLOCK_SIZE 		   	2048
 #define FEATURE_SIZE   		(BLOCK_SIZE / 2)
-#define NUM_OF_BLOCKS 	   	(AUDIO_BUFFER_SIZE / BLOCK_SIZE)
 #define NUM_OF_VOICES 		5
 #define OVERLAP_RATIO 0.5f
+#define NUM_OF_BLOCKS 	   	(uint32_t)((AUDIO_BUFFER_SIZE / BLOCK_SIZE) / OVERLAP_RATIO)
+
+//Defines asociados al reconocimiento de voz
+#define DISTANCE_THRESHOLD 1.0f
+#define ACCEPTED_BLOCK_RATIO 0.9f
 /*========================[Public macros]==========================*/
 #define FLOAT_SIZE_BYTES(X) ((X) * sizeof(float))
 #define CHAR_SIZE_BYTES(X) ((X) * sizeof(char))
