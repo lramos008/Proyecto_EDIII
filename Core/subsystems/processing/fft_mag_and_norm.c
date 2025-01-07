@@ -26,7 +26,7 @@ static void calculate_magnitude(float32_t *psrc, float32_t *pdst, uint32_t size)
 	return;
 }
 
-static void normalize_array(float32_t *array, uint32_t size){
+static void normalize_array(float32_t *psrc, uint32_t size){
 	//Declaracion de variables
 	float32_t min_val, max_val;
 	uint32_t min_index, max_index;

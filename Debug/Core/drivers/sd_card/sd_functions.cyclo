@@ -5,8 +5,9 @@
 ../Core/drivers/sd_card/sd_functions.c:60:9:check_if_file_exists	2
 ../Core/drivers/sd_card/sd_functions.c:66:9:create_file	5
 ../Core/drivers/sd_card/sd_functions.c:84:6:get_time_from_rtc	1
-../Core/drivers/sd_card/sd_functions.c:101:9:save_u16_buffer	5
-../Core/drivers/sd_card/sd_functions.c:118:9:save_buffer_on_sd	5
-../Core/drivers/sd_card/sd_functions.c:141:9:read_buffer_from_sd	4
-../Core/drivers/sd_card/sd_functions.c:175:9:write_entry	4
-../Core/drivers/sd_card/sd_functions.c:193:9:search_user	6
+../Core/drivers/sd_card/sd_functions.c:102:9:save_u16_buffer	5
+../Core/drivers/sd_card/sd_functions.c:124:9:read_u16_file	4
+../Core/drivers/sd_card/sd_functions.c:150:9:save_buffer_on_sd	5
+../Core/drivers/sd_card/sd_functions.c:174:9:read_buffer_from_sd	4
+../Core/drivers/sd_card/sd_functions.c:208:9:write_entry	4
+../Core/drivers/sd_card/sd_functions.c:226:9:search_user	6

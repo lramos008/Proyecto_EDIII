@@ -1,0 +1,2 @@
+../Core/subsystems/voice_recognition/voice_recognition.c:13:13:check_voice	5
+../Core/subsystems/voice_recognition/voice_recognition.c:55:6:recognize_user_voice	4

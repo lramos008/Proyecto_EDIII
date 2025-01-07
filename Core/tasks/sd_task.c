@@ -23,7 +23,7 @@ void sd_task(void *pvParameters){
 
 		//Verifico si se ingreso clave para creacion de template
 		if(is_template_creation(user_key_retrieved)){
-			handle_template_creation(&message);
+			handle_template_creation();
 			continue;
 		}
 

@@ -5,22 +5,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Core/drivers/sd_card/capture_and_store.c \
-../Core/drivers/sd_card/processing.c \
-../Core/drivers/sd_card/sd_functions.c \
-../Core/drivers/sd_card/sd_utils.c 
+../Core/drivers/sd_card/sd_functions.c 
 
 OBJS += \
-./Core/drivers/sd_card/capture_and_store.o \
-./Core/drivers/sd_card/processing.o \
-./Core/drivers/sd_card/sd_functions.o \
-./Core/drivers/sd_card/sd_utils.o 
+./Core/drivers/sd_card/sd_functions.o 
 
 C_DEPS += \
-./Core/drivers/sd_card/capture_and_store.d \
-./Core/drivers/sd_card/processing.d \
-./Core/drivers/sd_card/sd_functions.d \
-./Core/drivers/sd_card/sd_utils.d 
+./Core/drivers/sd_card/sd_functions.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -30,7 +21,7 @@ Core/drivers/sd_card/%.o Core/drivers/sd_card/%.su Core/drivers/sd_card/%.cyclo:
 clean: clean-Core-2f-drivers-2f-sd_card
 
 clean-Core-2f-drivers-2f-sd_card:
-	-$(RM) ./Core/drivers/sd_card/capture_and_store.cyclo ./Core/drivers/sd_card/capture_and_store.d ./Core/drivers/sd_card/capture_and_store.o ./Core/drivers/sd_card/capture_and_store.su ./Core/drivers/sd_card/processing.cyclo ./Core/drivers/sd_card/processing.d ./Core/drivers/sd_card/processing.o ./Core/drivers/sd_card/processing.su ./Core/drivers/sd_card/sd_functions.cyclo ./Core/drivers/sd_card/sd_functions.d ./Core/drivers/sd_card/sd_functions.o ./Core/drivers/sd_card/sd_functions.su ./Core/drivers/sd_card/sd_utils.cyclo ./Core/drivers/sd_card/sd_utils.d ./Core/drivers/sd_card/sd_utils.o ./Core/drivers/sd_card/sd_utils.su
+	-$(RM) ./Core/drivers/sd_card/sd_functions.cyclo ./Core/drivers/sd_card/sd_functions.d ./Core/drivers/sd_card/sd_functions.o ./Core/drivers/sd_card/sd_functions.su
 
 .PHONY: clean-Core-2f-drivers-2f-sd_card
 

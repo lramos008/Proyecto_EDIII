@@ -29,7 +29,6 @@ RM := rm -rf
 -include Core/subsystems/feature_extraction/subdir.mk
 -include Core/subsystems/comparing/subdir.mk
 -include Core/subsystems/access_control/subdir.mk
--include Core/drivers/sd_card/sd_utils/subdir.mk
 -include Core/drivers/sd_card/subdir.mk
 -include Core/drivers/keypad/subdir.mk
 -include Core/drivers/display/subdir.mk

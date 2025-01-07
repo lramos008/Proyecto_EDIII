@@ -1,5 +1,8 @@
 #include "common_utils.h"
 #include "file_handling.h"
+#include "voice_recognition.h"
+#include "template_creation.h"
+#include "sd_functions.h"
 
 #define TEMPLATE_CREATION_SEQUENCE "000000"
 
@@ -22,7 +25,7 @@ void handle_template_creation(void){
 	message = generate_template() ? DISPLAY_TEMPLATE_SAVED : DISPLAY_TEMPLATE_NOT_CREATED;
 
 	//Envio mensaje al display
-	xQueueSend(display_queue, message, portMAX_DELAY);
+	xQueueSend(display_queue, &message, portMAX_DELAY);
 
 	//Sincronizo con las otras tareas
 	xSemaphoreTake(sd_display_sync, portMAX_DELAY);								//Espero a que el display termine de mostrar su mensaje
@@ -38,7 +41,7 @@ void handle_user_verification(char *user_key){
 	if(!process_user_key(user_key, user_name)){
 		//Usuario no encontrado
 		message = DISPLAY_USER_NOT_FOUND;
-		xQueueSend(display_queue, message, portMAX_DELAY);
+		xQueueSend(display_queue, &message, portMAX_DELAY);
 		xSemaphoreTake(sd_display_sync, portMAX_DELAY);							//Espero que el display me devuelva el control de la tarea
 		xSemaphoreGive(keypad_sd_sync);											//Devuelvo el control a la tarea keypad
 		return;
@@ -63,7 +66,7 @@ void handle_user_verification(char *user_key){
 	message = recognize_user_voice(template_path, user_name) ? DISPLAY_ACCESS_GRANTED : DISPLAY_ACCESS_DENIED;
 
 	//Envio mensaje al display
-	xQueueSend(display_queue, message, portMAX_DELAY);
+	xQueueSend(display_queue, &message, portMAX_DELAY);
 	xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 	xSemaphoreGive(keypad_sd_sync);
 	return;

@@ -25,22 +25,22 @@ static void get_voltage(uint16_t *in_buffer, float *out_buffer, uint32_t size){
 }
 
 //Debo cambiar este codigo
-static bool store_voice(uint16_t *voice_buffer, uint32_t size, uint32_t block_size, char *filename){
+static bool store_voice(uint16_t *voice_buffer, uint32_t total_size, uint32_t block_size, char *filename){
 	float *current_block;
 	//Verifico que size sea multiplo de frame_size
-	if((size % block_size) != 0){
+	if((total_size % block_size) != 0){
 		//Devuelve false si no son multiplos
 		return false;
 	}
 
 	//Reservo memoria para el bloque de procesamiento
-	uint32_t num_of_frames = size / block_size;
+	uint32_t num_of_blocks = total_size / block_size;
 	current_block = pvPortMalloc(FLOAT_SIZE_BYTES(block_size));
 	if(current_block == NULL){
 		return false;
 	}
 
-	for(uint8_t i = 0; i < num_of_frames; i++){
+	for(uint8_t i = 0; i < num_of_blocks; i++){
 		//Convierto los valores obtenidos a tension
 		get_voltage(&voice_buffer[i * block_size], current_block, block_size);
 

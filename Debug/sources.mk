@@ -27,7 +27,6 @@ Core/Startup \
 Core/drivers/display \
 Core/drivers/keypad \
 Core/drivers/sd_card \
-Core/drivers/sd_card/sd_utils \
 Core/subsystems/access_control \
 Core/subsystems/comparing \
 Core/subsystems/feature_extraction \

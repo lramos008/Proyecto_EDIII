@@ -1,0 +1,4 @@
+../Core/subsystems/processing/fft_mag_and_norm.c:6:13:calculate_fft	2
+../Core/subsystems/processing/fft_mag_and_norm.c:23:13:calculate_magnitude	1
+../Core/subsystems/processing/fft_mag_and_norm.c:29:13:normalize_array	2
+../Core/subsystems/processing/fft_mag_and_norm.c:49:6:get_normalized_fft_magnitude	3

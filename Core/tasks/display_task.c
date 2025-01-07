@@ -129,8 +129,6 @@ void display_task(void *pvParameters){
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
 			break;
-		case DISPLAY_ERROR_MEMORY:
-			display_missing_database_msg();
 		default:
 		}
 	}

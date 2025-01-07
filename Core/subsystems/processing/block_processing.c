@@ -8,13 +8,9 @@ bool process_block(float32_t *psrc, float32_t *pdst, uint32_t size){
 	//Reservo memoria para la señal filtrada
 	filtered_signal = pvPortMalloc(FLOAT_SIZE_BYTES(size));
 
-	//Filtro la señal
-	if(!filter_and_windowing(psrc, filtered_signal, size) || !get_normalized_fft_magnitude(filtered_signal, pdst, size)){
-		process_flag = false;
-	}
-	else{
-		process_flag = true;
-	}
+	//Filtro la señal y calculo la magnitud normalizada de la fft
+	process_flag = (!filter_and_windowing(psrc, filtered_signal, size) ||
+					!get_normalized_fft_magnitude(filtered_signal, pdst, size)) ? false : true;
 	vPortFree(filtered_signal);
-	return process_flag;					//Operacion exitosa
+	return process_flag;					//Resultado de la operacion
 }

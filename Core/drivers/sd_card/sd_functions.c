@@ -98,22 +98,6 @@ void get_time_from_rtc(char *rtc_lecture){
 	return;
 }
 
-FRESULT save_u16_buffer(char *filename, uint16_t *buffer, size_t size){
-	//Abro el archivo
-	FIL fil;
-	fresult = f_open(&fil, filename, FA_OPEN_APPEND | FA_WRITE);						//Se abre con append por si es necesario seguir escribiendo desde el final
-	if(fresult != FR_OK){
-		return fresult;
-	}
-	fresult = f_write(&fil, buffer, FLOAT_SIZE_BYTES(size), bw);
-	if(fresult != FR_OK || bw < FLOAT_SIZE_BYTES(size)){
-		f_close(&fil);																	//Frente a un error cierro el archivo y salgo de la funcion
-		return (fresult != FR_OK) ? fresult : FR_DISK_ERR;								//Si se escribieron bytes de menos, devuelve FR_DISK_ERR
-	}
-	//Cierro el archivo
-	fresult = f_close(&fil);
-	return FR_OK;
-}
 
 FRESULT save_u16_buffer(char *filename, uint16_t *buffer, uint32_t size){
 	//Declaracion de variables
