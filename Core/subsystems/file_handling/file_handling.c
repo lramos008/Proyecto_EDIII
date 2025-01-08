@@ -8,7 +8,7 @@ bool initialize_sd_and_verify_files(display_message_t *error_message){
 	FRESULT res;
 	res = mount_sd("");
 	if(res != FR_OK){
-		*error_message = DISPLAY_SD_MOUNT_ERROR;
+		*error_message = DISPLAY_INIT_ERROR;
 		return false;
 	}
 

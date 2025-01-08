@@ -55,7 +55,7 @@ void display_task(void *pvParameters){
 	display_init();						//Inicializo el display
 	display_start_msg();				//Muestro mensaje inicial
 	while(1){
-		xQueueReceive(display_queue, &message, portMAX_DELAY);
+		xQueueReceive(display_queue, &message, portMAX_DELAY);				//Espero a que llegue una pantalla para mostrar
 		switch(message){
 		case DISPLAY_SCREEN_WELCOME:
 			display_start_msg();
@@ -79,24 +79,15 @@ void display_task(void *pvParameters){
 			break;
 		case DISPLAY_USER_NOT_FOUND:
 			display_user_not_found_msg();
-			counter = 0;							//Reinicio el contador
+			counter = 0;													//Reinicio el contador
 			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_START_SPEECH_REC:
 			display_start_voice_recognition_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			countdown_msg();
 			display_capturing_voice_msg();
-			xSemaphoreGive(sd_display_sync);
-			break;
-		case DISPLAY_VOICE_RECOGNIZED:
-			display_recognized_voice_msg();
-			vTaskDelay(2000 / portTICK_RATE_MS);
-			xSemaphoreGive(sd_display_sync);
-			break;
-		case DISPLAY_VOICE_NOT_RECOGNIZED:
-			display_not_recognized_voice_msg();
-			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_PROCESSING_DATA:
@@ -106,6 +97,12 @@ void display_task(void *pvParameters){
 		case DISPLAY_ACCESS_GRANTED:
 			display_access_granted_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
+			break;
+		case DISPLAY_ACCESS_DENIED:
+			display_access_denied_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_TIMEOUT_EVENT:
 			display_timeout_msg();
@@ -117,17 +114,39 @@ void display_task(void *pvParameters){
 			counter = 0;
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			break;
-		case DISPLAY_DATABASE_NOT_FOUND:
-			display_missing_database_msg();
-			break;
-		case DISPLAY_TEMPLATE_NOT_FOUND:
-			display_missing_template_msg();
-			vTaskDelay(2000 / portTICK_RATE_MS);
-			break;
 		case DISPLAY_TEMPLATE_SAVED:
 			display_template_saved_msg();
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
+			break;
+		//Casos asociados a errores
+		case DISPLAY_TEMPLATE_NOT_CREATED:
+			display_template_not_created_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
+			break;
+		case DISPLAY_INIT_ERROR:
+			display_init_error_msg();
+			break;
+		case DISPLAY_TEMPLATE_NOT_FOUND:
+			display_missing_template_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
+			break;
+		case DISPLAY_DATABASE_NOT_FOUND:
+			display_missing_database_msg();
+			break;
+		case DISPLAY_REGISTER_NOT_CREATED:
+			display_register_not_created_msg();
+			break;
+		case DISPLAY_MEMORY_ERROR:
+
+			break;
+		case DISPLAY_READ_SD_ERROR:
+
+			break;
+		case DISPLAY_WRITE_SD_ERROR:
+
 			break;
 		default:
 		}

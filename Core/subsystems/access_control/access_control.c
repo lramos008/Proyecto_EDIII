@@ -26,8 +26,6 @@ void handle_template_creation(void){
 
 	//Envio mensaje al display
 	xQueueSend(display_queue, &message, portMAX_DELAY);
-
-	//Sincronizo con las otras tareas
 	xSemaphoreTake(sd_display_sync, portMAX_DELAY);								//Espero a que el display termine de mostrar su mensaje
 	xSemaphoreGive(keypad_sd_sync);												//Cedo semaforo para que el keypad pueda volver a ejecutarse
 }

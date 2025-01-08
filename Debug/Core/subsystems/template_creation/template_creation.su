@@ -1,1 +1,3 @@
-../Core/subsystems/template_creation/template_creation.c:7:6:generate_template	4	static
+../Core/subsystems/template_creation/template_creation.c:21:13:capture_and_extract_features	32	static
+../Core/subsystems/template_creation/template_creation.c:42:13:process_features	32	static
+../Core/subsystems/template_creation/template_creation.c:99:6:generate_template	16	static

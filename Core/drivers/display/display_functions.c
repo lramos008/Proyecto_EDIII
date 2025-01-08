@@ -132,6 +132,11 @@ void display_access_granted_msg(void){
 	return;
 }
 
+void display_access_denied_msg(void){
+	display_text("  Acceso\n denegado", 2);
+	return;
+}
+
 void display_user_found_msg(void){
 	display_text("  Usuario\n  hallado", 2);
 	return;
@@ -201,6 +206,21 @@ void display_missing_template_msg(void){
 
 void display_template_saved_msg(void){
 	display_text("  Template\n  guardado", 2);
+	return;
+}
+
+void display_template_not_created_msg(void){
+	display_text("  Template\n  Fallo", 2);
+	return;
+}
+
+void display_init_error_msg(void){
+	display_text("  Mounting\n  Error", 2);
+	return;
+}
+
+void display_register_not_created_msg(void){
+	display_text("  Registro\n  Fallo", 2);
 	return;
 }
 

@@ -36,8 +36,8 @@ static bool check_voice(char *template_path, char *feature_path, uint32_t featur
 		read_buffer_from_sd(feature_path, extracted_feature, feature_size, i * feature_size);
 		compare_res = compare_features(template, extracted_feature, feature_size);
 		if(compare_res){
-			block_counter++;
-		}																		//Aumento el conteo de bloques correctos
+			block_counter++;														//Aumento el conteo de bloques correctos
+		}
 	}
 
 	//Libero memoria
@@ -60,6 +60,8 @@ bool recognize_user_voice(char *template_path, char *user_name){
 	//Capturo y guardo la voz en la memoria SD
 	if(!capture_and_store_voice(CURRENT_VOICE_FILEPATH) ||
 	   !extract_features_from_file(CURRENT_VOICE_FILEPATH, CURRENT_FEATURE_FILEPATH, AUDIO_BUFFER_SIZE, BLOCK_SIZE, OVERLAP_RATIO)){
+		//Mostrar error en captura
+
 		return false;
 	}
 

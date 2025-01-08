@@ -14,7 +14,7 @@ extern SemaphoreHandle_t sd_display_sync;
 
 /*========================[Public defines]=========================*/
 #define SEQUENCE_LENGTH 6
-#define USER_STR_SIZE 50
+#define USER_STR_SIZE 40
 #define TEMPLATE_STR_SIZE 50
 #define ENTRY_STR_SIZE 60
 
@@ -39,22 +39,21 @@ typedef enum{
 	DISPLAY_USER_FOUND,									//Usuario encontrado
 	DISPLAY_USER_NOT_FOUND,								//Usuario no encontrado
 	DISPLAY_START_SPEECH_REC,							//Comienzo de speech recognition (cuenta regresiva)
-	DISPLAY_VOICE_RECOGNIZED,							//Voz reconocida
-	DISPLAY_VOICE_NOT_RECOGNIZED,						//Voz no reconocida
+	DISPLAY_PROCESSING_DATA,							//Procesando datos
 	DISPLAY_ACCESS_GRANTED,								//Acceso concedido
 	DISPLAY_ACCESS_DENIED,								//Acceso denegado
 	DISPLAY_TIMEOUT_EVENT,								//Timeout. Se tardo mucho tiempo en ingresar digitos
 	DISPLAY_INCOMPLETE_SEQUENCE_EVENT,					//Se ingreso secuencia incompleta
-	DISPLAY_PROCESSING_DATA,							//Procesando datos
 	DISPLAY_TEMPLATE_SAVED,								//Se guardo el template correctamente
 	//Pantallas asociadas a los errores
 	DISPLAY_TEMPLATE_NOT_CREATED,						//No se pudo crear el template
-	DISPLAY_INIT_ERROR,									//No se inicializo correctamente el sistema
+	DISPLAY_INIT_ERROR,									//No se pudo montar la tarjeta SD
 	DISPLAY_TEMPLATE_NOT_FOUND,							//No se encuentra template
 	DISPLAY_DATABASE_NOT_FOUND,							//No se encuentra base de datos
 	DISPLAY_REGISTER_NOT_CREATED,						//No se pudo crear el registro de accesos
-	DISPLAY_SD_MOUNT_ERROR,								//Problema al querer escribir en la tarjeta SD
-	DISPLAY_ERROR_UNKNOWN								//Error desconocido
+	DISPLAY_MEMORY_ERROR,								//Error al intentar reservar memoria con pvPortMalloc
+	DISPLAY_READ_SD_ERROR,								//Error al querer leer buffer desde tarjeta SD
+	DISPLAY_WRITE_SD_ERROR								//Error al querer escribir buffer en la tarjeta SD
 }display_message_t;
 /*========================[Public function prototypes]===========================*/
 void clear_buffer(char *buffer, size_t length);

@@ -1,4 +1,4 @@
 ../Core/subsystems/access_control/access_control.c:9:6:receive_user_key	24	static
 ../Core/subsystems/access_control/access_control.c:16:6:is_template_creation	16	static
 ../Core/subsystems/access_control/access_control.c:20:6:handle_template_creation	16	static
-../Core/subsystems/access_control/access_control.c:35:6:handle_user_verification	128	static
+../Core/subsystems/access_control/access_control.c:33:6:handle_user_verification	112	static
