@@ -39,8 +39,7 @@ void handle_user_verification(char *user_key){
 	if(!process_user_key(user_key, user_name)){
 		//Usuario no encontrado
 		message = DISPLAY_USER_NOT_FOUND;
-		xQueueSend(display_queue, &message, portMAX_DELAY);
-		xSemaphoreTake(sd_display_sync, portMAX_DELAY);							//Espero que el display me devuelva el control de la tarea
+		send_error(message);
 		xSemaphoreGive(keypad_sd_sync);											//Devuelvo el control a la tarea keypad
 		return;
 	}
@@ -54,8 +53,7 @@ void handle_user_verification(char *user_key){
 	if(check_if_file_exists(template_path) != FR_OK){
 		//Template no existe
 		message = DISPLAY_TEMPLATE_NOT_FOUND;
-		xQueueSend(display_queue, &message, portMAX_DELAY);
-		xSemaphoreTake(sd_display_sync, portMAX_DELAY);
+		send_error(message);
 		xSemaphoreGive(keypad_sd_sync);
 		return;
 	}

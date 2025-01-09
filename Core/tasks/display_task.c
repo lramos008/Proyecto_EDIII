@@ -140,13 +140,19 @@ void display_task(void *pvParameters){
 			display_register_not_created_msg();
 			break;
 		case DISPLAY_MEMORY_ERROR:
-
+			display_memory_error_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_READ_SD_ERROR:
-
+			display_read_sd_error_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_WRITE_SD_ERROR:
-
+			display_write_sd_error_msg();
+			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		default:
 		}

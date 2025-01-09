@@ -7,6 +7,11 @@ bool process_block(float32_t *psrc, float32_t *pdst, uint32_t size){
 
 	//Reservo memoria para la señal filtrada
 	filtered_signal = pvPortMalloc(FLOAT_SIZE_BYTES(size));
+	if(filtered_signal == NULL){
+		//Manejo error de memoria
+		send_error(DISPLAY_MEMORY_ERROR);
+		return false;
+	}
 
 	//Filtro la señal y calculo la magnitud normalizada de la fft
 	process_flag = (!filter_and_windowing(psrc, filtered_signal, size) ||

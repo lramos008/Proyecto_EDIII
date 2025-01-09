@@ -23,4 +23,7 @@ void display_template_saved_msg(void);
 void display_template_not_created_msg(void);
 void display_register_not_created_msg(void);
 void display_init_error_msg(void);
+void display_memory_error_msg(void);
+void display_read_sd_error_msg(void);
+void display_write_sd_error_msg(void);
 #endif /* DISPLAY_FUNCTIONS_H */

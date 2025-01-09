@@ -20,3 +20,11 @@ void clear_char(char *buffer, char character){
 	*ptr = 0;
 	return;
 }
+
+
+void send_error(display_message_t error_message){
+	//Esta funcion envia mensaje de error al display
+	xQueueSend(display_queue, &error_message, portMAX_DELAY);			//Envio mensaje de error al display
+	xSemaphoreTake(sd_display_sync, portMAX_DELAY);						//Esperar hasta que el display termine de mostrar el error
+	return;
+}

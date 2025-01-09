@@ -26,14 +26,26 @@ static bool check_voice(char *template_path, char *feature_path, uint32_t featur
 		//No se pudo reservar memoria. Libero ambos arrays.
 		vPortFree(template);
 		vPortFree(extracted_feature);
+
+		//Envio mensaje de error al display
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 
 
 	for(uint32_t i = 0; i < num_of_blocks; i++){
 		//Leo cada bloque del archivo, y comparo bin a bin
-		read_buffer_from_sd(template_path, template, feature_size, i * feature_size);
-		read_buffer_from_sd(feature_path, extracted_feature, feature_size, i * feature_size);
+		if(read_buffer_from_sd(template_path, template, feature_size, i * feature_size) != FR_OK ||
+		   read_buffer_from_sd(feature_path, extracted_feature, feature_size, i * feature_size) != FR_OK){
+			//Libero memoria utilizada
+			vPortFree(template);
+			vPortFree(extracted_feature);
+
+			//Mostrar pantalla de error
+			send_error(DISPLAY_READ_SD_ERROR);
+			return false;
+		}
+
 		compare_res = compare_features(template, extracted_feature, feature_size);
 		if(compare_res){
 			block_counter++;														//Aumento el conteo de bloques correctos

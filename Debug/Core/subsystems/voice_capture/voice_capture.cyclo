@@ -1,4 +1,4 @@
 ../Core/subsystems/voice_capture/voice_capture.c:13:13:capture_voice	2
 ../Core/subsystems/voice_capture/voice_capture.c:21:13:get_voltage	2
-../Core/subsystems/voice_capture/voice_capture.c:28:13:store_voice	4
-../Core/subsystems/voice_capture/voice_capture.c:56:6:capture_and_store_voice	3
+../Core/subsystems/voice_capture/voice_capture.c:28:13:store_voice	5
+../Core/subsystems/voice_capture/voice_capture.c:63:6:capture_and_store_voice	3

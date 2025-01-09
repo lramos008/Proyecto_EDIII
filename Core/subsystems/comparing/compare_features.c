@@ -13,6 +13,8 @@ static bool calculate_euclidean_distance(float32_t *array_1, float32_t *array_2,
 	//Reservo memoria para los vectores de procesamiento
 	diff = pvPortMalloc(FLOAT_SIZE_BYTES(size));
 	if(diff == NULL){
+		//Manejar error al reservar memoria
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 
@@ -25,7 +27,11 @@ static bool calculate_euclidean_distance(float32_t *array_1, float32_t *array_2,
 	//Calculo la raiz para obtener la distancia euclidea
 	status = arm_sqrt_f32(distance, &distance);
 	if(status != ARM_MATH_SUCCESS){
+		//Libero memoria utilizada
 		vPortFree(diff);
+
+		//Manejar error
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 

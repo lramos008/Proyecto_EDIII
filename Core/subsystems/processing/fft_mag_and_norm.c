@@ -12,6 +12,7 @@ static bool calculate_fft(float32_t *psrc, float32_t *pdst, uint32_t size){
 	status = arm_rfft_fast_init_f32(&fft_instance, size);
 	if(status != ARM_MATH_SUCCESS){
 		//Error al inicializar instancia de fft
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 
@@ -53,6 +54,7 @@ bool get_normalized_fft_magnitude(float32_t *psrc, float32_t *pdst, uint32_t siz
 	//Reservo memoria para los vectores
 	fft_array = pvPortMalloc(FLOAT_SIZE_BYTES(size));
 	if(fft_array == NULL){
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;													//Operacion fallida
 	}
 

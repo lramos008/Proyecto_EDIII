@@ -57,7 +57,6 @@ TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
 
-
 /* USER CODE BEGIN PV */
 QueueHandle_t sequence_queue;
 QueueHandle_t display_queue;
@@ -77,6 +76,7 @@ static void MX_SPI3_Init(void);
 static void MX_RTC_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM3_Init(void);
+
 
 /* USER CODE BEGIN PFP */
 void idle_task(void *pvParameters);
@@ -148,6 +148,7 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
+
 
   /* USER CODE BEGIN RTOS_THREADS */
   xTaskCreate(display_task, "Tarea display", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
@@ -429,7 +430,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 5334 - 1;
+  htim3.Init.Period = 4000 - 1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -526,9 +527,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, Lock_Pin|GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8
                           |GPIO_PIN_9, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CS_SDB4_GPIO_Port, CS_SDB4_Pin, GPIO_PIN_RESET);
-
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
@@ -557,13 +555,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : CS_SDB4_Pin */
-  GPIO_InitStruct.Pin = CS_SDB4_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(CS_SDB4_GPIO_Port, &GPIO_InitStruct);
-
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
@@ -587,6 +578,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
+
 
 /**
   * @brief  Period elapsed callback in non blocking mode

@@ -37,6 +37,8 @@ static bool store_voice(uint16_t *voice_buffer, uint32_t total_size, uint32_t bl
 	uint32_t num_of_blocks = total_size / block_size;
 	current_block = pvPortMalloc(FLOAT_SIZE_BYTES(block_size));
 	if(current_block == NULL){
+		//Manejar error de memoria
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 
@@ -45,7 +47,12 @@ static bool store_voice(uint16_t *voice_buffer, uint32_t total_size, uint32_t bl
 		get_voltage(&voice_buffer[i * block_size], current_block, block_size);
 
 		//Guardo en la SD
-		save_buffer_on_sd(filename, current_block, block_size);
+		if(save_buffer_on_sd(filename, current_block, block_size) != FR_OK){
+			//Manejo error de escritura en SD
+			send_error(DISPLAY_WRITE_SD_ERROR);
+			return false;
+		}
+
 	}
 
 	//Libero memoria utilizada
@@ -61,6 +68,8 @@ bool capture_and_store_voice(char *filename){
 	//Reservo espacio para el buffer de voz
 	voice_buffer = pvPortMalloc(U16_SIZE_BYTES(AUDIO_BUFFER_SIZE));
 	if(voice_buffer == NULL){
+		//Manejar error de memoria
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 

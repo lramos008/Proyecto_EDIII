@@ -1,2 +1,2 @@
 ../Core/subsystems/voice_recognition/voice_recognition.c:13:13:check_voice	56	static
-../Core/subsystems/voice_recognition/voice_recognition.c:55:6:recognize_user_voice	80	static
+../Core/subsystems/voice_recognition/voice_recognition.c:67:6:recognize_user_voice	80	static

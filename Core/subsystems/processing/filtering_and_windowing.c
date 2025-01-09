@@ -43,7 +43,8 @@ static bool filter_signal(float32_t *psrc, float32_t *pdst, uint32_t size){
 	//Reservo memoria para el vector de estado
 	state_vector = pvPortMalloc(FLOAT_SIZE_BYTES(STATE_SIZE));
 	if(state_vector == NULL){
-		//No se pudo reservar la memoria para el vector de estado, devuelve false
+		//Manejo error al reservar memoria
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 

@@ -224,6 +224,22 @@ void display_register_not_created_msg(void){
 	return;
 }
 
+void display_memory_error_msg(void){
+	display_text("  Error\n  Malloc", 2);
+	return;
+}
+
+void display_read_sd_error_msg(void){
+	display_text("  Error\n Read SD", 2);
+	return;
+}
+
+void display_write_sd_error_msg(void){
+	display_text("  Error\n Write SD", 2);
+	return;
+}
+
+
 
 
 

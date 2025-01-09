@@ -48,10 +48,12 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 	template = pvPortMalloc(FLOAT_SIZE_BYTES(feature_size));
 	current_feature = pvPortMalloc(FLOAT_SIZE_BYTES(feature_size));
 	if(template == NULL || current_feature == NULL){
-		//Enviar error al reservar memoria
-
+		//Libero memoria si alguno de los 2 arrays fue reservado
 		vPortFree(template);
 		vPortFree(current_feature);
+
+		//Envio error de reservacion de memoria
+		send_error(DISPLAY_MEMORY_ERROR);
 		return false;
 	}
 
@@ -59,10 +61,12 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 		for(uint8_t j = 0; j < num_of_voices; j++){
 			res = read_buffer_from_sd((char *) feature_filepath[j], current_feature, feature_size, i * feature_size);
 			if(res != FR_OK){
-				//Enviar error de lectura
-
+				//Libero memoria
 				vPortFree(template);
 				vPortFree(current_feature);
+
+				//Envio error de escritura en sd al display
+				send_error(DISPLAY_READ_SD_ERROR);
 				return false;
 			}
 
@@ -76,10 +80,11 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 		//Guardo bloque en el archivo template
 		res = save_buffer_on_sd(CURRENT_TEMPLATE_FILE, template, feature_size);
 		if(res != FR_OK){
-			//Enviar error de escritura
-
+			//Libero memoria
 			vPortFree(template);
 			vPortFree(current_feature);
+			//Enviar error de escritura de SD al display
+			send_error(DISPLAY_WRITE_SD_ERROR);
 			return false;
 		}
 		arm_fill_f32(0.0f, template, feature_size);
