@@ -6,8 +6,8 @@
 
 /*===============[Public functions]=====================*/
 void send_uart(char *string);
-FRESULT mount_sd(char* path);
-void unmount_sd(const char* path);
+bool try_mount(char *path);
+bool try_unmount(char *path);
 FRESULT check_if_file_exists(char *filename);
 FRESULT create_file(char *filename, char *header);
 FRESULT save_u16_buffer(char *filename, uint16_t *buffer, uint32_t size);
