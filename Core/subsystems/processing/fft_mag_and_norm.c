@@ -58,6 +58,9 @@ bool get_normalized_fft_magnitude(float32_t *psrc, float32_t *pdst, uint32_t siz
 		return false;													//Operacion fallida
 	}
 
+	//Inicializo array con ceros
+	arm_fill_f32(0.0f, fft_array, size);
+
 	//Calculo la fft
 	if(!calculate_fft(psrc, fft_array, size)){
 		//Si hubo un error en la operacion de la fft, devuelve false

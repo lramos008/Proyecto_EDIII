@@ -13,6 +13,9 @@ bool process_block(float32_t *psrc, float32_t *pdst, uint32_t size){
 		return false;
 	}
 
+	//Inicializo array con ceros
+	arm_fill_f32(0.0f, filtered_signal, size);
+
 	//Filtro la señal y calculo la magnitud normalizada de la fft
 	process_flag = (!filter_and_windowing(psrc, filtered_signal, size) ||
 					!get_normalized_fft_magnitude(filtered_signal, pdst, size)) ? false : true;
