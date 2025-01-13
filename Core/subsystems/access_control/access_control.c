@@ -3,6 +3,7 @@
 #include "voice_recognition.h"
 #include "template_creation.h"
 #include "sd_functions.h"
+#include "user_and_entry.h"
 
 #define TEMPLATE_CREATION_SEQUENCE "000000"
 
@@ -50,7 +51,7 @@ void handle_user_verification(char *user_key){
 
 	//Verifico que exista template asociado al usuario
 	snprintf(template_path, TEMPLATE_STR_SIZE, "%s.bin", user_name);
-	if(check_if_file_exists(template_path) != FR_OK){
+	if(!check_if_file_exists(template_path)){
 		//Template no existe
 		message = DISPLAY_TEMPLATE_NOT_FOUND;
 		send_error(message);

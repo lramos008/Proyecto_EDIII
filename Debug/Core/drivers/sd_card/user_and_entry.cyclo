@@ -1,0 +1,5 @@
+../Core/drivers/sd_card/user_and_entry.c:14:6:check_if_file_exists	1
+../Core/drivers/sd_card/user_and_entry.c:21:6:create_file	4
+../Core/drivers/sd_card/user_and_entry.c:41:6:get_time_from_rtc	1
+../Core/drivers/sd_card/user_and_entry.c:57:6:write_entry	6
+../Core/drivers/sd_card/user_and_entry.c:87:6:search_user	6

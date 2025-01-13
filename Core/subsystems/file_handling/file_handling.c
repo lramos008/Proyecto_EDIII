@@ -1,31 +1,27 @@
 #include "common_utils.h"
 #include "sd_functions.h"
+#include "user_and_entry.h"
 
 #define DATABASE "usuarios.txt"
 #define REGISTER "registro.txt"
 
 bool initialize_sd_and_verify_files(display_message_t *error_message){
-	FRESULT res;
-	if(!try_mount("")){
-		*error_message = DISPLAY_INIT_ERROR;
-		return false;
-	}
-
+	bool res;
 	//Verifico existencia de la base de datos
 	res = check_if_file_exists(DATABASE);
-	if(res != FR_OK){
+	if(!res){
 		*error_message = DISPLAY_DATABASE_NOT_FOUND;
-		unmount_sd("");
+		res = try_unmount("");
 		return false;
 	}
 
 	//Verifico existencia del registro de acceso, o lo creo en su defecto
 	res = check_if_file_exists(REGISTER);
-	if(res != FR_OK){
+	if(!res){
 		res = create_file(REGISTER, "Fecha Usuario Estado\n");
-		if(res != FR_OK){
+		if(!res){
 			*error_message = DISPLAY_REGISTER_NOT_CREATED;
-			unmount_sd("");
+			res = try_unmount("");
 			return false;
 		}
 	}
@@ -36,12 +32,15 @@ bool initialize_sd_and_verify_files(display_message_t *error_message){
 
 
 bool process_user_key(char *user_key, char *user_name){
-	FRESULT res = search_user(DATABASE, user_key, user_name);
-	if(res != FR_OK){
+	//Busco el usuario
+	if(!search_user(DATABASE, user_key, user_name)){
+		//Devuelve false si no lo encuentra
 		return false;
 	}
+
+	//Usuario encontrado
 	clear_char(user_name, '\r');										//Limpio '\r' agregado por windows
-	return true;														//Usuario encontrado
+	return true;														//True indica usuario encontrado
 }
 
 void build_entry_message(char *entry, char *user_name, const char *status){

@@ -1,6 +1,6 @@
 #include "common_utils.h"
 #include "sd_functions.h"
-
+#include "save_and_read_data.h"
 /*================[Private defines]======================*/
 #define ADC_RESOLUTION 4096.0
 #define VOLTAGE_REFERENCE 3.3
@@ -47,9 +47,10 @@ static bool store_voice(uint16_t *voice_buffer, uint32_t total_size, uint32_t bl
 		get_voltage(&voice_buffer[i * block_size], current_block, block_size);
 
 		//Guardo en la SD
-		if(save_buffer_on_sd(filename, current_block, block_size) != FR_OK){
-			//Manejo error de escritura en SD
-			send_error(DISPLAY_WRITE_SD_ERROR);
+		if(!save_data_on_sd(filename, (void *)current_block, FLOAT_SIZE_BYTES(block_size))){
+			vPortFree(current_block);									//Libero memoria utilizada
+			f_unlink(filename);											//Elimino el archivo creado
+			send_error(DISPLAY_WRITE_SD_ERROR);							//Envio el error al display
 			return false;
 		}
 

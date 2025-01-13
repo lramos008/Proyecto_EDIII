@@ -1,0 +1,2 @@
+../Core/drivers/sd_card/save_and_read_data.c:12:6:save_data_on_sd	32	static
+../Core/drivers/sd_card/save_and_read_data.c:34:6:read_data_from_sd	40	static

@@ -2,6 +2,7 @@
 #include "voice_capture.h"
 #include "feature_extraction.h"
 #include "sd_functions.h"
+#include "save_and_read_data.h"
 #define __FPU_PRESENT  1U
 #define ARM_MATH_CM4
 #include "arm_math.h"
@@ -42,7 +43,8 @@ static bool capture_and_extract_features(uint8_t num_of_blocks, uint8_t num_of_v
 static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint32_t feature_size){
 	float32_t *template = NULL;
 	float32_t *current_feature = NULL;
-	FRESULT res;
+	uint32_t last_pos[NUM_OF_VOICES] = {0};
+	bool res;
 
 	//Reservo memoria para los vectores de procesamiento
 	template = pvPortMalloc(FLOAT_SIZE_BYTES(feature_size));
@@ -57,10 +59,11 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 		return false;
 	}
 
+	arm_fill_f32(0.0f, template, feature_size);
 	for(uint8_t i = 0; i < num_of_blocks; i++){
 		for(uint8_t j = 0; j < num_of_voices; j++){
-			res = read_buffer_from_sd((char *) feature_filepath[j], current_feature, feature_size, i * feature_size);
-			if(res != FR_OK){
+			res = read_data_from_sd((char *) feature_filepath[j], (void *) current_feature, FLOAT_SIZE_BYTES(feature_size), &last_pos[j]);
+			if(!res){
 				//Libero memoria
 				vPortFree(template);
 				vPortFree(current_feature);
@@ -78,8 +81,8 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 		arm_scale_f32(template, 1.0f / num_of_voices, template, feature_size);
 
 		//Guardo bloque en el archivo template
-		res = save_buffer_on_sd(CURRENT_TEMPLATE_FILE, template, feature_size);
-		if(res != FR_OK){
+		res = save_data_on_sd(CURRENT_TEMPLATE_FILE, (void *) template, FLOAT_SIZE_BYTES(feature_size));
+		if(!res){
 			//Libero memoria
 			vPortFree(template);
 			vPortFree(current_feature);
@@ -87,6 +90,8 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 			send_error(DISPLAY_WRITE_SD_ERROR);
 			return false;
 		}
+
+		//Reinicio valores de bloque de template luego de guardarlos en archivo
 		arm_fill_f32(0.0f, template, feature_size);
 	}
 
@@ -101,10 +106,12 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 	return true;
 }
 
+
+//#define TEST
 bool generate_template(void){
 	//Declaracion de variables
 	bool is_generated;
-	uint32_t num_of_blocks = (uint32_t)((AUDIO_BUFFER_SIZE / BLOCK_SIZE) / OVERLAP_RATIO);
+	uint32_t num_of_blocks = (uint32_t)(((AUDIO_BUFFER_SIZE / BLOCK_SIZE) / OVERLAP_RATIO) - 1);
 
 	//Capturo voces y genero los features asociados
 	if(!capture_and_extract_features(num_of_blocks, NUM_OF_VOICES, AUDIO_BUFFER_SIZE, BLOCK_SIZE)){
@@ -113,8 +120,13 @@ bool generate_template(void){
 		return false;
 	}
 
+#ifdef TEST
+	//Utilizar este define para crear los features y no el template
+	is_generated = true;
+#else
 	//Proceso features para generar el template
 	is_generated = process_features(num_of_blocks, NUM_OF_VOICES, FEATURE_SIZE);
+#endif
 	return is_generated;
 }
 

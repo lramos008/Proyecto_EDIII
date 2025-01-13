@@ -3,6 +3,8 @@
 #include "feature_extraction.h"
 #include "compare_features.h"
 #include "file_handling.h"
+#include "save_and_read_data.h"
+#include "user_and_entry.h"
 #include "sd_functions.h"
 
 #define CURRENT_VOICE_FILEPATH    "current_voice.bin"
@@ -18,6 +20,7 @@ static bool check_voice(char *template_path, char *feature_path, uint32_t featur
 	float32_t block_ratio;
 	float32_t *template = NULL;
 	float32_t *extracted_feature = NULL;
+	uint32_t last_pos[2] = {0};
 
 	//Reservo memoria para los arrays de procesamiento
 	template = pvPortMalloc(FLOAT_SIZE_BYTES(feature_size));
@@ -35,8 +38,8 @@ static bool check_voice(char *template_path, char *feature_path, uint32_t featur
 
 	for(uint32_t i = 0; i < num_of_blocks; i++){
 		//Leo cada bloque del archivo, y comparo bin a bin
-		if(read_buffer_from_sd(template_path, template, feature_size, i * feature_size) != FR_OK ||
-		   read_buffer_from_sd(feature_path, extracted_feature, feature_size, i * feature_size) != FR_OK){
+		if(!read_data_from_sd(template_path, (void *) template, FLOAT_SIZE_BYTES(feature_size), &last_pos[0]) ||
+		   !read_data_from_sd(feature_path, (void *) extracted_feature, FLOAT_SIZE_BYTES(feature_size), &last_pos[1])){
 			//Libero memoria utilizada
 			vPortFree(template);
 			vPortFree(extracted_feature);
