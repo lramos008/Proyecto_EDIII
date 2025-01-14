@@ -49,6 +49,7 @@ bool extract_features_from_file(char *target_file, char *feature_file, uint32_t 
 			return false;
 		}
 
+
 		//Guardo feature en la SD
 		if(!save_data_on_sd(feature_file, (void *) feature_block, FLOAT_SIZE_BYTES(block_size / 2))){
 			//Libero memoria y borro archivo de features

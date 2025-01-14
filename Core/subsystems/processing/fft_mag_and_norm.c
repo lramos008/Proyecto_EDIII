@@ -70,6 +70,11 @@ bool get_normalized_fft_magnitude(float32_t *psrc, float32_t *pdst, uint32_t siz
 	//Calculo magnitud de la fft
 	calculate_magnitude(fft_array, pdst, size / 2);						//Guardo resultado en vector destino
 
+	//Elimino los primeros 5 bloques para eliminar el leakage en baja frecuencia
+	for(uint8_t i = 0; i < 5; i++){
+		pdst[i] = 0;
+	}
+
 	//Normalizo array
 	normalize_array(pdst, size / 2);
 

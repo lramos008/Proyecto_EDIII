@@ -24,8 +24,8 @@ extern SemaphoreHandle_t sd_display_sync;
 #define OVERLAP_RATIO		0.5f						//Usar solo 0.5f o 0.25f como overlap ratio
 
 //Defines asociados al reconocimiento de voz
-#define DISTANCE_THRESHOLD 2.8f
-#define ACCEPTED_BLOCK_RATIO 0.9f
+#define DISTANCE_THRESHOLD 3.5f
+#define ACCEPTED_BLOCK_RATIO 0.85f
 /*========================[Public macros]==========================*/
 #define FLOAT_SIZE_BYTES(X) ((X) * sizeof(float))
 #define CHAR_SIZE_BYTES(X) ((X) * sizeof(char))

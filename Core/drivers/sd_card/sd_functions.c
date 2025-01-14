@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "common_utils.h"
 
-#define MAX_RETRIES 20
+#define MAX_RETRIES 255
 
 FATFS fs;  // file system
 FIL fil; // File

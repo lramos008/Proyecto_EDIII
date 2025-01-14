@@ -107,7 +107,7 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 }
 
 
-//#define TEST
+#define TEST
 bool generate_template(void){
 	//Declaracion de variables
 	bool is_generated;
