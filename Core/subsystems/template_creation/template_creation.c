@@ -107,7 +107,8 @@ static bool process_features(uint8_t num_of_blocks, uint8_t num_of_voices, uint3
 }
 
 
-#define TEST
+//#define V1
+#ifdef V1
 bool generate_template(void){
 	//Declaracion de variables
 	bool is_generated;
@@ -120,13 +121,22 @@ bool generate_template(void){
 		return false;
 	}
 
-#ifdef TEST
-	//Utilizar este define para crear los features y no el template
-	is_generated = true;
-#else
+
 	//Proceso features para generar el template
 	is_generated = process_features(num_of_blocks, NUM_OF_VOICES, FEATURE_SIZE);
-#endif
+
 	return is_generated;
 }
+#else
+bool generate_template(void){
+	char feature_path[15] = "feature_x.bin";
 
+	for(uint8_t i = 0; i < 10; i++){
+		feature_path[8] = '0' + i;
+		if(!capture_and_store_voice(feature_path)){
+			return false;
+		}
+	}
+	return true;
+}
+#endif
