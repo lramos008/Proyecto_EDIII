@@ -11,4 +11,5 @@ bool try_f_open(FIL *fil, char *path, BYTE mode);
 bool try_f_close(FIL *fil);
 bool try_f_read(FIL *fil, void *buffer, UINT btr, UINT *br);
 bool try_f_write(FIL *fil, void *buffer, UINT btw, UINT *bw);
+uint32_t get_file_size(char *filename);
 #endif // SD_FUNCTIONS_H

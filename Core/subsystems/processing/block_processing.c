@@ -22,3 +22,4 @@ bool process_block(float32_t *psrc, float32_t *pdst, uint32_t size){
 	vPortFree(filtered_signal);
 	return process_flag;					//Resultado de la operacion
 }
+

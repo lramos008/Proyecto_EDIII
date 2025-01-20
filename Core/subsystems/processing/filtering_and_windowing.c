@@ -59,7 +59,8 @@ float fir_coefficients[] = {
 };
 
 
-static bool filter_signal(float32_t *psrc, float32_t *pdst, uint32_t size){
+bool filter_signal(float32_t *psrc, float32_t *pdst, uint32_t size){
+
 	/*Es necesaria la instancia y el vector de estado para usar el filtro FIR*/
 	arm_fir_instance_f32 fir_instance;											//Instancia del filtro fir
 	float32_t *state_vector = NULL;
@@ -86,7 +87,7 @@ static bool filter_signal(float32_t *psrc, float32_t *pdst, uint32_t size){
 	return true;										//Filtrado realizado con exito
 }
 
-static bool apply_windowing(float32_t *psrc, uint32_t size){
+bool apply_windowing(float32_t *psrc, uint32_t size){
 
 	// Constantes para la ventana de hamming
 	const float32_t alpha = 0.54f;

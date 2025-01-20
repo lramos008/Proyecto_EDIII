@@ -130,6 +130,14 @@ bool try_f_write(FIL *fil, void *buffer, UINT btw, UINT *bw){
 	return is_written;
 }
 
+uint32_t get_file_size(char *filename){
+	FRESULT res;
+	uint32_t file_size;
+	res = f_stat(filename, &fno);
+	file_size = (res == FR_OK) ? (uint32_t)fno.fsize : 0;
+	return file_size;
+}
+
 
 
 
