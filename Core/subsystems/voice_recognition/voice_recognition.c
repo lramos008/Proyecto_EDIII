@@ -1,98 +1,97 @@
 #include "common_utils.h"
+#include "euclidean_distance.h"
 #include "voice_capture.h"
 #include "feature_extraction.h"
-#include "compare_features.h"
 #include "file_handling.h"
 #include "save_and_read_data.h"
 #include "user_and_entry.h"
 #include "sd_functions.h"
 
-#define CURRENT_VOICE_FILEPATH    "current_voice.bin"
-#define CURRENT_FEATURE_FILEPATH  "current_feature.bin"
+#define VOICE_PATH    "captured_voice.bin"
+#define FILTERED_PATH "filtered_signal.bin"
+#define FEATURE_PATH  "current_feature.bin"
 #define REGISTER_PATH 	"registro.txt"
 
-
-static bool check_voice(char *template_path, char *feature_path, uint32_t feature_size){
-	bool compare_res = false;
-	bool is_recognized = false;
-	uint32_t block_counter = 0;
-	uint32_t num_of_blocks = (AUDIO_BUFFER_SIZE / BLOCK_SIZE) * (uint32_t) (1 / OVERLAP_RATIO);
-	float32_t block_ratio;
-	float32_t *template = NULL;
-	float32_t *extracted_feature = NULL;
+static bool compare_features(char *feature_1, char *feature_2){
+	//Declaro vectores de procesamiento
+	float32_t feature1_block[FEATURE_SIZE] = {0};
+	float32_t feature2_block[FEATURE_SIZE] = {0};
+	float32_t distance = 0;
+	uint32_t blocks_ok = 0;
 	uint32_t last_pos[2] = {0};
+	bool is_recognized;
 
-	//Reservo memoria para los arrays de procesamiento
-	template = pvPortMalloc(FLOAT_SIZE_BYTES(feature_size));
-	extracted_feature = pvPortMalloc(FLOAT_SIZE_BYTES(feature_size));
-	if(template == NULL || extracted_feature == NULL){
-		//No se pudo reservar memoria. Libero ambos arrays.
-		vPortFree(template);
-		vPortFree(extracted_feature);
-
-		//Envio mensaje de error al display
-		send_error(DISPLAY_MEMORY_ERROR);
-		return false;
-	}
-
-
-	for(uint32_t i = 0; i < num_of_blocks; i++){
+	for(uint8_t i = 0; i < NUM_OF_BLOCKS; i++){
 		//Leo cada bloque del archivo, y comparo bin a bin
-		if(!read_data_from_sd(template_path, (void *) template, FLOAT_SIZE_BYTES(feature_size), &last_pos[0]) ||
-		   !read_data_from_sd(feature_path, (void *) extracted_feature, FLOAT_SIZE_BYTES(feature_size), &last_pos[1])){
-			//Libero memoria utilizada
-			vPortFree(template);
-			vPortFree(extracted_feature);
-
-			//Mostrar pantalla de error
+		if(!read_data_from_sd(feature_1, (void *) feature1_block, FLOAT_SIZE_BYTES(FEATURE_SIZE), &last_pos[0]) ||
+		   !read_data_from_sd(feature_2, (void *) feature2_block, FLOAT_SIZE_BYTES(FEATURE_SIZE), &last_pos[1])){
 			send_error(DISPLAY_READ_SD_ERROR);
 			return false;
 		}
 
-		compare_res = compare_features(template, extracted_feature, feature_size);
-		if(compare_res){
-			block_counter++;														//Aumento el conteo de bloques correctos
+		//Calculo la distancia euclideana
+		distance = euclidean_distance(feature1_block, feature2_block);
+
+		//Verifico si es menor al threshold
+		if(distance <= DISTANCE_THRESHOLD){
+			blocks_ok++;
 		}
 	}
 
-	//Libero memoria
-	vPortFree(template);
-	vPortFree(extracted_feature);
 
-	//Compruebo si hay NUM_OF_BLOCKS bloques correctos
-	block_ratio = ((float32_t) block_counter) / ((float32_t) num_of_blocks);				//Calculo el ratio de bloques aceptados
-	is_recognized = (block_ratio < ACCEPTED_BLOCK_RATIO) ? false : true;
-	return is_recognized;																	//Devuelvo estado del reconocimiento
+
+
 }
+
 
 
 
 bool recognize_user_voice(char *template_path, char *user_name){
 	//Declaracion de variables
 	char entry[ENTRY_STR_SIZE];
+	bool res;
 	bool is_recognized;
 
-	//Capturo y guardo la voz en la memoria SD
-	if(!capture_and_store_voice(CURRENT_VOICE_FILEPATH) ||
-	   !extract_features_from_file(CURRENT_VOICE_FILEPATH, CURRENT_FEATURE_FILEPATH, AUDIO_BUFFER_SIZE, BLOCK_SIZE, OVERLAP_RATIO)){
-		//Mostrar error en captura
+	//Capturo voz
+	capture_voice_signal(VOICE_PATH);
 
+	//Filtro la señal
+	res = filter_signal(VOICE_PATH, FILTERED_PATH);
+	if(!res){
+		//Borro archivo de voz y de señal filtrada
+		f_unlink(VOICE_PATH);
+		f_unlink(FILTERED_PATH);
 		return false;
 	}
 
-	//Elimino la voz creada y me quedo solo con los features
-	f_unlink(CURRENT_VOICE_FILEPATH);
+	//Obtengo features
+	res = get_fft_feature(FILTERED_PATH, FEATURE_PATH);
+	if(!res){
+		//Borro archivo de señal filtrada y de feature
+		f_unlink(VOICE_PATH);
+		f_unlink(FILTERED_PATH);
+		f_unlink(FEATURE_PATH);
+		return false;
+	}
 
-	//Compruebo si la voz capturada es similar al template
-	if(check_voice(template_path, CURRENT_FEATURE_FILEPATH, FEATURE_SIZE)){
+	//Comparo features con el template
+	is_recognized = compare_features(FEATURE_PATH, template_path);
+
+	if(is_recognized){
 		build_entry_message(entry, user_name, "Concedido");
-		is_recognized = true;
 	}
 	else{
 		build_entry_message(entry, user_name, "Denegado");
-		is_recognized = false;
 	}
+
+	//Escribo entrada de registro
 	write_entry(REGISTER_PATH, entry);
-	f_unlink(CURRENT_FEATURE_FILEPATH);
+
+	//Elimino los archivos creados en el reconocimiento de voz
+	f_unlink(VOICE_PATH);
+	f_unlink(FILTERED_PATH);
+	f_unlink(FEATURE_PATH);
+
+	//Devuelvo estado de reconocimiento
 	return is_recognized;
 }

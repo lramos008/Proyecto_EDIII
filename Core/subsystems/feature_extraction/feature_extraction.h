@@ -5,5 +5,6 @@
 #include "arm_math.h"
 #include "common_utils.h"
 /*===================[Public function prototypes]=========================*/
-bool extract_features_from_file(char *target_file, char *feature_file, uint32_t total_size,  uint32_t block_size, float32_t overlap_ratio);
+bool filter_signal(char *input_file, char *output_file);
+bool get_fft_feature(char *input_file, char *output_file);
 #endif // FEATURE_EXTRACTION_H

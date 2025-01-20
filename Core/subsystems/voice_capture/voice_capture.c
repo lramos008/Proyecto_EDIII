@@ -1,6 +1,9 @@
 #include "common_utils.h"
 #include "sd_functions.h"
 #include "save_and_read_data.h"
+#define __FPU_PRESENT  1U
+#define ARM_MATH_CM4
+#include "arm_math.h"
 /*================[Private defines]======================*/
 #define ADC_RESOLUTION 4096.0
 #define VOLTAGE_REFERENCE 3.3
@@ -24,76 +27,63 @@ static void get_voltage(uint16_t *in_buffer, float *out_buffer, uint32_t size){
 	}
 }
 
-//Debo cambiar este codigo
-static bool store_voice(uint16_t *voice_buffer, uint32_t total_size, uint32_t block_size, char *filename){
-	float *current_block;
-	//Verifico que size sea multiplo de frame_size
-	if((total_size % block_size) != 0){
-		//Devuelve false si no son multiplos
+static bool save_voice(char *voice_path, uint16_t *voice_buffer, uint32_t total_size, uint32_t block_size){
+	//Declaro vector de procesamiento
+	float32_t voice_block[BLOCK_SIZE] = {0};
+	uint32_t num_of_blocks;
+	bool res;
+
+	//Verifico que el tamaño total sea multiplo del tamaño del bloque
+	if(total_size % block_size != 0){
 		return false;
 	}
 
-	//Reservo memoria para el bloque de procesamiento
-	uint32_t num_of_blocks = total_size / block_size;
-	current_block = pvPortMalloc(FLOAT_SIZE_BYTES(block_size));
-	if(current_block == NULL){
-		//Manejar error de memoria
-		send_error(DISPLAY_MEMORY_ERROR);
-		return false;
-	}
+	//Calculo numero de bloques
+	num_of_blocks = total_size / block_size;
 
+	//Convierto la voz a float de a bloques
 	for(uint8_t i = 0; i < num_of_blocks; i++){
-		//Convierto los valores obtenidos a tension
-		get_voltage(&voice_buffer[i * block_size], current_block, block_size);
+		//Convierto cuentas del adc a valores de tension
+		get_voltage(&voice_buffer[i * block_size], voice_block, block_size);
 
-		//Guardo en la SD
-		if(!save_data_on_sd(filename, (void *)current_block, FLOAT_SIZE_BYTES(block_size))){
-			vPortFree(current_block);									//Libero memoria utilizada
-			f_unlink(filename);											//Elimino el archivo creado
+		//Guardo bloque
+		res = save_data_on_sd(voice_path, (void *)voice_block, FLOAT_SIZE_BYTES(block_size));
+		if(!res){
 			send_error(DISPLAY_WRITE_SD_ERROR);							//Envio el error al display
 			return false;
 		}
-
 	}
 
-	//Libero memoria utilizada
-	vPortFree(current_block);
-	return true;											//Ejecucion exitosa de la funcion
+	//Si se llego hasta aca, la operacion de guardado fue un exito
+	return true;
 }
 
-bool capture_and_store_voice(char *filename){
+bool capture_voice_signal(char *voice_path){
 	//Declaracion de variables
-	uint16_t *voice_buffer = NULL;
 	display_message_t message;
-	bool process_flag;
-	//Reservo espacio para el buffer de voz
-	voice_buffer = pvPortMalloc(U16_SIZE_BYTES(AUDIO_BUFFER_SIZE));
-	if(voice_buffer == NULL){
-		//Manejar error de memoria
-		send_error(DISPLAY_MEMORY_ERROR);
-		return false;
-	}
+	bool res;
+	uint16_t voice_buffer[AUDIO_BUFFER_SIZE] = {0};
 
 	//Envio mensaje al display para indicar que comienza reconocimiento de voz
 	message = DISPLAY_START_SPEECH_REC;
 	xQueueSend(display_queue, &message, portMAX_DELAY);									//Envio mensaje al display
 	xSemaphoreTake(sd_display_sync, portMAX_DELAY);
 
-	//Capturo la voz
+	//Capturo voz
 	capture_voice(voice_buffer, AUDIO_BUFFER_SIZE);
 
 	//Muestro en pantalla que se estan procesando los datos
 	message = DISPLAY_PROCESSING_DATA;
 	xQueueSend(display_queue, &message, portMAX_DELAY);
 
+	//Almaceno la voz en la memoria SD
+	res = save_voice(voice_path, voice_buffer, AUDIO_BUFFER_SIZE, BLOCK_SIZE);
+	if(!res){
+		f_unlink(voice_path);															//Borro el archivo creado parcialmente
+		return false;
+	}
 
-
-	//Guardo señal de audio convertida en tension en la memoria SD
-	process_flag = (!store_voice(voice_buffer, AUDIO_BUFFER_SIZE, BLOCK_SIZE, filename)) ? false : true;
-	vPortFree(voice_buffer);
-	return process_flag;
+	//Voz capturada con exito
+	return true;
 }
-
-
-
 
