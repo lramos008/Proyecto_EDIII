@@ -1,6 +1,6 @@
 Core/subsystems/voice_recognition/voice_recognition.o: \
  ../Core/subsystems/voice_recognition/voice_recognition.c \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -54,17 +54,17 @@ Core/subsystems/voice_recognition/voice_recognition.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/voice_capture/voice_capture.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/feature_extraction/feature_extraction.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/comparing/euclidean_distance.h \
  ../Core/Inc/arm_math.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/comparing/compare_features.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/file_handling/file_handling.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/voice_capture/voice_capture.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/feature_extraction/feature_extraction.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/file_handling/file_handling.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -119,14 +119,14 @@ C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Pr
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/voice_capture/voice_capture.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/feature_extraction/feature_extraction.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/comparing/euclidean_distance.h:
 ../Core/Inc/arm_math.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/comparing/compare_features.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/file_handling/file_handling.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/voice_capture/voice_capture.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/feature_extraction/feature_extraction.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/file_handling/file_handling.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
 ../FATFS/Target/ffconf.h:

@@ -1,6 +1,6 @@
 Core/subsystems/file_handling/file_handling.o: \
  ../Core/subsystems/file_handling/file_handling.c \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -54,11 +54,11 @@ Core/subsystems/file_handling/file_handling.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h:
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -113,8 +113,8 @@ C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Pr
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
 ../FATFS/Target/ffconf.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/user_and_entry.h:

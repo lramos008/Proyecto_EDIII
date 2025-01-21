@@ -1,11 +1,10 @@
-Core/subsystems/processing/block_processing.o: \
- ../Core/subsystems/processing/block_processing.c \
- ../Core/subsystems/processing/processing_functions.h \
- ../Core/Inc/arm_math.h ../Drivers/CMSIS/Include/core_cm4.h \
+Core/subsystems/comparing/euclidean_distance.o: \
+ ../Core/subsystems/comparing/euclidean_distance.c ../Core/Inc/arm_math.h \
+ ../Drivers/CMSIS/Include/core_cm4.h \
  ../Drivers/CMSIS/Include/cmsis_version.h \
  ../Drivers/CMSIS/Include/cmsis_compiler.h \
  ../Drivers/CMSIS/Include/cmsis_gcc.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -55,13 +54,12 @@ Core/subsystems/processing/block_processing.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
-../Core/subsystems/processing/processing_functions.h:
 ../Core/Inc/arm_math.h:
 ../Drivers/CMSIS/Include/core_cm4.h:
 ../Drivers/CMSIS/Include/cmsis_version.h:
 ../Drivers/CMSIS/Include/cmsis_compiler.h:
 ../Drivers/CMSIS/Include/cmsis_gcc.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:

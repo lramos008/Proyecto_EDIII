@@ -1,10 +1,10 @@
-Core/subsystems/processing/filtering_and_windowing.o: \
- ../Core/subsystems/processing/filtering_and_windowing.c \
- ../Core/Inc/arm_math.h ../Drivers/CMSIS/Include/core_cm4.h \
+Core/subsystems/processing/fft_calculation.o: \
+ ../Core/subsystems/processing/fft_calculation.c ../Core/Inc/arm_math.h \
+ ../Drivers/CMSIS/Include/core_cm4.h \
  ../Drivers/CMSIS/Include/cmsis_version.h \
  ../Drivers/CMSIS/Include/cmsis_compiler.h \
  ../Drivers/CMSIS/Include/cmsis_gcc.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -59,7 +59,7 @@ Core/subsystems/processing/filtering_and_windowing.o: \
 ../Drivers/CMSIS/Include/cmsis_version.h:
 ../Drivers/CMSIS/Include/cmsis_compiler.h:
 ../Drivers/CMSIS/Include/cmsis_gcc.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:

@@ -78,8 +78,7 @@ bool capture_voice_signal(char *voice_path){
 
 	//Almaceno la voz en la memoria SD
 	res = save_voice(voice_path, voice_buffer, AUDIO_BUFFER_SIZE, BLOCK_SIZE);
-	if(!res){
-		f_unlink(voice_path);															//Borro el archivo creado parcialmente
+	if(!res){														//Borro el archivo creado parcialmente
 		return false;
 	}
 

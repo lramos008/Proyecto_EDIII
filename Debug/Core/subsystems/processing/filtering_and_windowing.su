@@ -1,3 +1,0 @@
-../Core/subsystems/processing/filtering_and_windowing.c:170:13:filter_signal	48	static
-../Core/subsystems/processing/filtering_and_windowing.c:197:13:apply_windowing	32	static
-../Core/subsystems/processing/filtering_and_windowing.c:214:6:filter_and_windowing	24	static

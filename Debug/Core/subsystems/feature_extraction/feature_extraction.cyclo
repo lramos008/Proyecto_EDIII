@@ -1,1 +1,2 @@
-../Core/subsystems/feature_extraction/feature_extraction.c:6:6:extract_features_from_file	7
+../Core/subsystems/feature_extraction/feature_extraction.c:8:6:filter_signal	7
+../Core/subsystems/feature_extraction/feature_extraction.c:78:6:get_fft_feature	5

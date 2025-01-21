@@ -1,6 +1,8 @@
 #include "sd_functions.h"
 #include "feature_extraction.h"
 #include "save_and_read_data.h"
+#include "processing_functions.h"
+#define NUM_TAPS 401
 #define STATE_SIZE 	(NUM_TAPS + BLOCK_SIZE - 1)
 
 bool filter_signal(char *input_file, char *output_file){
@@ -83,13 +85,12 @@ bool get_fft_feature(char *input_file, char *output_file){
 	uint32_t last_pos;
 	uint32_t file_size;
 	uint32_t total_samples;
-	uint32_t num_of_blocks;
 	bool res;
 
 	//Calculo cantidad de bloques (se espera que sea multiplo de block size)
 	file_size = get_file_size(input_file);
 	total_samples = file_size / sizeof(float32_t);
-	num_of_blocks = (total_samples - OVERLAP) / OVERLAP;
+	//num_of_blocks = (total_samples - OVERLAP) / OVERLAP;
 
 	//Inicializo la fft
 	res = initialize_fft(&rfft_instance, BLOCK_SIZE);
@@ -101,7 +102,7 @@ bool get_fft_feature(char *input_file, char *output_file){
 	//Leo de a bloques, con solapamiento de 50%, y obtengo los features
 	for(uint32_t start = 0; start <= total_samples - BLOCK_SIZE; start += step){
 		//Leo bloque desde archivo
-		last_pos = FLOAT_SIZE_BYTES(start);
+		last_pos = FLOAT_SIZE_BYTES(start);																		//Conversion a cantidad de bytes
 		res = read_data_from_sd(input_file, (void *) voice_block, FLOAT_SIZE_BYTES(BLOCK_SIZE), &last_pos);
 		if(!res){
 			//Manejo error de lectura en SD
@@ -116,7 +117,7 @@ bool get_fft_feature(char *input_file, char *output_file){
 		calculate_rfft(&rfft_instance, voice_block, fft_block);
 
 		//Calculo la magnitud de la fft
-		calculate_magnitude(fft_block, feature_block, FEATURE_SIZE);				//El tamaño es la cantidad de nros complejos en el vector de entrada
+		calculate_magnitude(fft_block, feature_block, FEATURE_SIZE);											//El tamaño es la cantidad de nros complejos en el vector de entrada
 
 		//Normalizo el array
 		normalize_array(feature_block, FEATURE_SIZE);

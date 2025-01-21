@@ -1,4 +1,0 @@
-../Core/subsystems/processing/fft_mag_and_norm.c:6:13:calculate_fft	56	static
-../Core/subsystems/processing/fft_mag_and_norm.c:24:13:calculate_magnitude	24	static
-../Core/subsystems/processing/fft_mag_and_norm.c:30:13:normalize_array	40	static
-../Core/subsystems/processing/fft_mag_and_norm.c:50:6:get_normalized_fft_magnitude	32	static

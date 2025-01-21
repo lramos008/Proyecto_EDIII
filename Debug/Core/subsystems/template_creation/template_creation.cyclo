@@ -1,3 +1,1 @@
-../Core/subsystems/template_creation/template_creation.c:22:13:capture_and_extract_features	5
-../Core/subsystems/template_creation/template_creation.c:43:13:process_features	8
-../Core/subsystems/template_creation/template_creation.c:131:6:generate_template	3
+../Core/subsystems/template_creation/template_creation.c:43:6:generate_template	4

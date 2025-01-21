@@ -1,3 +1,0 @@
-../Core/subsystems/processing/filtering_and_windowing.c:170:13:filter_signal	2
-../Core/subsystems/processing/filtering_and_windowing.c:197:13:apply_windowing	2
-../Core/subsystems/processing/filtering_and_windowing.c:214:6:filter_and_windowing	3

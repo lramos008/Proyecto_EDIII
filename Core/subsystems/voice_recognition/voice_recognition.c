@@ -38,9 +38,11 @@ static bool compare_features(char *feature_1, char *feature_2){
 		}
 	}
 
+	//Chequeo si pasaron la verificacion la cantidad de bloques requeridos
+	is_recognized = (blocks_ok >= ACCEPTED_BLOCK_TH) ? true : false;
 
-
-
+	//Devuelvo estado de reconocimiento
+	return is_recognized;
 }
 
 
