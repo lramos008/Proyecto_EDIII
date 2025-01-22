@@ -1,3 +1,3 @@
-../Core/subsystems/file_handling/file_handling.c:8:6:initialize_sd_and_verify_files	4
-../Core/subsystems/file_handling/file_handling.c:34:6:process_user_key	2
-../Core/subsystems/file_handling/file_handling.c:46:6:build_entry_message	2
+../Core/subsystems/file_handling/file_handling.c:18:6:initialize_sd_and_verify_files	4
+../Core/subsystems/file_handling/file_handling.c:52:6:process_user_key	2
+../Core/subsystems/file_handling/file_handling.c:76:6:build_entry_message	2

@@ -22,9 +22,17 @@ void clear_char(char *buffer, char character){
 }
 
 
+void send_message(display_message_t message, bool is_blocking){
+	xQueueSend(display_queue, &message, portMAX_DELAY);					//Envio mensaje de error al display
+
+	//Compruebo si es bloqueante el mensaje
+	if(is_blocking){
+		xSemaphoreTake(sd_display_sync, portMAX_DELAY);					//Esperar hasta que el display termine de mostrar el mensaje
+	}
+	return;
+}
+
 void send_error(display_message_t error_message){
-	//Esta funcion envia mensaje de error al display
-	xQueueSend(display_queue, &error_message, portMAX_DELAY);			//Envio mensaje de error al display
-	xSemaphoreTake(sd_display_sync, portMAX_DELAY);						//Esperar hasta que el display termine de mostrar el error
+	send_message(error_message, BLOCKING);
 	return;
 }

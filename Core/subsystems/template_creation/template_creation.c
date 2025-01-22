@@ -40,6 +40,12 @@ bool generate_template(void){
 	return is_generated;
 }
 #else
+/**
+ * @brief Captura 10 señales de voz que seran utilizadas para crear un template.
+ *
+ * @param None
+ * @return true si se capturaron correctamente las voces, false en caso contrario.
+ */
 bool generate_template(void){
 	char feature_path[15] = "feature_x.bin";
 	bool res;

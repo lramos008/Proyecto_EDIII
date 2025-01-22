@@ -5,15 +5,12 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Core/subsystems/comparing/compare_features.c \
 ../Core/subsystems/comparing/euclidean_distance.c 
 
 OBJS += \
-./Core/subsystems/comparing/compare_features.o \
 ./Core/subsystems/comparing/euclidean_distance.o 
 
 C_DEPS += \
-./Core/subsystems/comparing/compare_features.d \
 ./Core/subsystems/comparing/euclidean_distance.d 
 
 
@@ -24,7 +21,7 @@ Core/subsystems/comparing/%.o Core/subsystems/comparing/%.su Core/subsystems/com
 clean: clean-Core-2f-subsystems-2f-comparing
 
 clean-Core-2f-subsystems-2f-comparing:
-	-$(RM) ./Core/subsystems/comparing/compare_features.cyclo ./Core/subsystems/comparing/compare_features.d ./Core/subsystems/comparing/compare_features.o ./Core/subsystems/comparing/compare_features.su ./Core/subsystems/comparing/euclidean_distance.cyclo ./Core/subsystems/comparing/euclidean_distance.d ./Core/subsystems/comparing/euclidean_distance.o ./Core/subsystems/comparing/euclidean_distance.su
+	-$(RM) ./Core/subsystems/comparing/euclidean_distance.cyclo ./Core/subsystems/comparing/euclidean_distance.d ./Core/subsystems/comparing/euclidean_distance.o ./Core/subsystems/comparing/euclidean_distance.su
 
 .PHONY: clean-Core-2f-subsystems-2f-comparing
 

@@ -7,9 +7,7 @@ bool initialize_fft(arm_rfft_fast_instance_f32 *rfft_instance, uint32_t block_si
 	arm_status status;
 	status = arm_rfft_fast_init_f32(rfft_instance, block_size);
 	if(status != ARM_MATH_SUCCESS){
-		//Error al inicializar instancia de fft
-		send_error(DISPLAY_MEMORY_ERROR);
-		return false;
+		return false;											//Error al inicializar instancia de fft
 	}
 	return true;
 }

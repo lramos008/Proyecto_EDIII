@@ -18,6 +18,7 @@ extern SemaphoreHandle_t sd_display_sync;
 #define TEMPLATE_STR_SIZE 50
 #define ENTRY_STR_SIZE 60
 
+//Defines asociados al procesamiento de la señal
 #define AUDIO_BUFFER_SIZE 	24576
 #define BLOCK_SIZE 		   	2048
 #define FEATURE_SIZE   		(BLOCK_SIZE / 2)
@@ -29,6 +30,10 @@ extern SemaphoreHandle_t sd_display_sync;
 //Defines asociados al reconocimiento de voz
 #define DISTANCE_THRESHOLD 2.3f
 #define ACCEPTED_BLOCK_TH  (NUM_OF_BLOCKS - 2)
+
+//Defines relacionados al envio de mensajes al display
+#define BLOCKING true
+#define NON_BLOCKING false
 /*========================[Public macros]==========================*/
 #define FLOAT_SIZE_BYTES(X) ((X) * sizeof(float))
 #define CHAR_SIZE_BYTES(X) ((X) * sizeof(char))
@@ -50,7 +55,7 @@ typedef enum{
 	DISPLAY_TEMPLATE_SAVED,								//Se guardo el template correctamente
 	//Pantallas asociadas a los errores
 	DISPLAY_TEMPLATE_NOT_CREATED,						//No se pudo crear el template
-	DISPLAY_INIT_ERROR,									//No se pudo montar la tarjeta SD
+	DISPLAY_MOUNTING_ERROR,								//No se pudo montar la tarjeta SD
 	DISPLAY_TEMPLATE_NOT_FOUND,							//No se encuentra template
 	DISPLAY_DATABASE_NOT_FOUND,							//No se encuentra base de datos
 	DISPLAY_REGISTER_NOT_CREATED,						//No se pudo crear el registro de accesos
@@ -61,5 +66,6 @@ typedef enum{
 /*========================[Public function prototypes]===========================*/
 void clear_buffer(char *buffer, size_t length);
 void clear_char(char *buffer, char character);
+void send_message(display_message_t message, bool is_blocking);
 void send_error(display_message_t error_message);
 #endif // COMMON_UTILS_H

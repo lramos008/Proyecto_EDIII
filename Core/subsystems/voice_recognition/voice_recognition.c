@@ -12,7 +12,19 @@
 #define FEATURE_PATH  "current_feature.bin"
 #define REGISTER_PATH 	"registro.txt"
 
-static bool compare_features(char *feature_1, char *feature_2){
+/**
+ * @brief Compara 2 features y devuelve estado de la comparacion (pass o fail).
+ *
+ * Esta funcion compara 2 vectores con features usando la distancia euclideana, calculandola
+ * bloque a bloque. Si la distancia de un par de bloque esta por debajo de un determinado threshold,
+ * se considera que esos bloques son similares. Si se alcanzan un determinado numero de bloques
+ * aceptados, se considera que la voz es reconocida.
+ *
+ * @param feature_1 String que contiene el nombre del archivo con el feature 1 (terminado en .bin).
+ * @param feature_1 String que contiene el nombre del archivo con el feature 2 (terminado en .bin).
+ * @return true si la voz fue reconocida, false en caso contrario.
+ */
+bool compare_features(char *feature_1, char *feature_2){
 	//Declaro vectores de procesamiento
 	float32_t feature1_block[FEATURE_SIZE] = {0};
 	float32_t feature2_block[FEATURE_SIZE] = {0};
@@ -46,7 +58,17 @@ static bool compare_features(char *feature_1, char *feature_2){
 }
 
 
-
+/**
+ * @brief Realiza reconocimiento de voz comparando una voz con un template.
+ *
+ * Esta funcion captura una señal de voz y la procesa para obtener sus features,
+ * que luego seran comparados con un template para decidir si la señal es reconocida
+ * o no. Luego se genera la entrada del registro acorde al estado de reconocimiento.
+ *
+ * @param template_path String con la direccion del template.
+ * @param user_name String con el nombre de usuario correspondiente al template.
+ * @return true si se reconoce la voz, false en caso contrario.
+ */
 
 bool recognize_user_voice(char *template_path, char *user_name){
 	//Declaracion de variables
@@ -55,7 +77,11 @@ bool recognize_user_voice(char *template_path, char *user_name){
 	bool is_recognized;
 
 	//Capturo voz
-	capture_voice_signal(VOICE_PATH);
+	res = capture_voice_signal(VOICE_PATH);
+	if(!res){
+		f_unlink(VOICE_PATH);
+		return false;
+	}
 
 	//Filtro la señal
 	res = filter_signal(VOICE_PATH, FILTERED_PATH);

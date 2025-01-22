@@ -11,15 +11,16 @@ import os
 
 #Defino threshold de distancia
 distance_threshold = 2.0
-num_of_test_files = 40
+num_of_test_files = 20
 
 #Genero el template
 template_folder = "conjunto_template"
 template = generate_template(template_folder)
+#template.tofile("Leonardo.bin")
 
 
 #Proceso archivos de prueba
-test_folder = "conjunto_prueba_completo"
+test_folder = "conjunto_juliana"
 distancias = []
 max_distancias = []
 for i in range(num_of_test_files):
@@ -27,6 +28,9 @@ for i in range(num_of_test_files):
     current_path = os.path.join(test_folder, f'feature_{i}.bin')
     current_test_voice = leer_bin_a_numpy(current_path)
     current_test_feature = process_voice(current_test_voice)
+    
+    # if i== 0:
+    #     current_test_feature.tofile("test_file_false.bin")
     
     #Calculo las distancias euclideanas de los distintos bloques
     distancia = np.linalg.norm(template - current_test_feature, axis=1)
@@ -39,7 +43,8 @@ for i in range(num_of_test_files):
     
     #Defino threshold tentativo
     threshold_tentativo = np.mean(max_distancias)
-    
+
+
 
 # #Calculo la distancia euclideana para cada threshold
 # distancias = np.linalg.norm(template - processed_test, axis=1)

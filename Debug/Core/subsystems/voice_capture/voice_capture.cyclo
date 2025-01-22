@@ -1,4 +1,4 @@
-../Core/subsystems/voice_capture/voice_capture.c:16:13:capture_voice	2
-../Core/subsystems/voice_capture/voice_capture.c:24:13:get_voltage	2
-../Core/subsystems/voice_capture/voice_capture.c:30:13:save_voice	4
-../Core/subsystems/voice_capture/voice_capture.c:61:6:capture_voice_signal	2
+../Core/subsystems/voice_capture/voice_capture.c:24:13:capture_voice	2
+../Core/subsystems/voice_capture/voice_capture.c:44:13:get_voltage	2
+../Core/subsystems/voice_capture/voice_capture.c:62:13:save_voice	4
+../Core/subsystems/voice_capture/voice_capture.c:102:6:capture_voice_signal	2

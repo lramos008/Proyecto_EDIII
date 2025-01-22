@@ -1,4 +1,4 @@
 ../Core/subsystems/processing/fft_calculation.c:6:6:initialize_fft	2
-../Core/subsystems/processing/fft_calculation.c:17:6:calculate_rfft	1
-../Core/subsystems/processing/fft_calculation.c:24:6:calculate_magnitude	1
-../Core/subsystems/processing/fft_calculation.c:30:6:normalize_array	2
+../Core/subsystems/processing/fft_calculation.c:15:6:calculate_rfft	1
+../Core/subsystems/processing/fft_calculation.c:22:6:calculate_magnitude	1
+../Core/subsystems/processing/fft_calculation.c:28:6:normalize_array	2

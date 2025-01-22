@@ -18,7 +18,7 @@
 ../Core/drivers/display/display_functions.c:202:6:display_missing_template_msg	1
 ../Core/drivers/display/display_functions.c:207:6:display_template_saved_msg	1
 ../Core/drivers/display/display_functions.c:212:6:display_template_not_created_msg	1
-../Core/drivers/display/display_functions.c:217:6:display_init_error_msg	1
+../Core/drivers/display/display_functions.c:217:6:display_mounting_error_msg	1
 ../Core/drivers/display/display_functions.c:222:6:display_register_not_created_msg	1
 ../Core/drivers/display/display_functions.c:227:6:display_memory_error_msg	1
 ../Core/drivers/display/display_functions.c:232:6:display_read_sd_error_msg	1

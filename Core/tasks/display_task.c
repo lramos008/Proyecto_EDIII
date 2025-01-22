@@ -81,7 +81,7 @@ void display_task(void *pvParameters){
 			display_user_not_found_msg();
 			counter = 0;													//Reinicio el contador
 			vTaskDelay(2000 / portTICK_RATE_MS);
-			xSemaphoreGive(sd_display_sync);
+			xSemaphoreGive(sd_display_sync);								//Luego del delay, doy semaforo para que tarea sd siga ejecutandose
 			break;
 		case DISPLAY_START_SPEECH_REC:
 			display_start_voice_recognition_msg();
@@ -125,8 +125,8 @@ void display_task(void *pvParameters){
 			vTaskDelay(2000 / portTICK_RATE_MS);
 			xSemaphoreGive(sd_display_sync);
 			break;
-		case DISPLAY_INIT_ERROR:
-			display_init_error_msg();
+		case DISPLAY_MOUNTING_ERROR:
+			display_mounting_error_msg();
 			break;
 		case DISPLAY_TEMPLATE_NOT_FOUND:
 			display_missing_template_msg();

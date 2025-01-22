@@ -1,4 +1,4 @@
-#include <handle_digit_logic/digit_handle_logic.h>
+#include <digit_handle_logic.h>
 #include "keypad_functions.h"
 /*================[Public Task]=====================*/
 void keypad_task(void *pvParameters){
@@ -8,7 +8,7 @@ void keypad_task(void *pvParameters){
 	display_message_t message;
 	while(1){
 		input = read_keypad();
-		message = handle_keypad_input(input, kp_buffer, &send_flag);
+		message = handle_keypad_input(input, kp_buffer, &send_flag);				//Manejo la logica de recepcion. Con 6 digitos se envia
 		if(send_flag){
 			//Envio uno por uno los digitos obtenidos con el keypad a la tarea SD
 			for(uint8_t i = 0; i < SEQUENCE_LENGTH + 1; i++){
@@ -19,6 +19,7 @@ void keypad_task(void *pvParameters){
 			//Reinicio el flag de envio
 			send_flag = false;
 		}
+
 		//Envio el mensaje a la tarea display si no hay pantalla idle
 		if(message != DISPLAY_IDLE){
 			xQueueSend(display_queue, &message, portMAX_DELAY);

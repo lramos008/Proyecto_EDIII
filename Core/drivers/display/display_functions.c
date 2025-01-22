@@ -214,7 +214,7 @@ void display_template_not_created_msg(void){
 	return;
 }
 
-void display_init_error_msg(void){
+void display_mounting_error_msg(void){
 	display_text("  Mounting\n  Error", 2);
 	return;
 }
