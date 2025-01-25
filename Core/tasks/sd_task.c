@@ -3,7 +3,7 @@
 #include "voice_recognition.h"
 #include "sd_functions.h"
 /*================[Private defines]========================*/
-#define CODE_VERSION 2
+#define CODE_VERSION 1
 #define TEMPLATE_P "template_file.bin"
 #define TEST_P "test_file_ok.bin"
 #define TEST_FALSE_P "test_file_false.bin"
@@ -88,7 +88,7 @@ void sd_task(void *pvParameters){
 	}
 
 	//Comparo features
-	is_recognized = compare_features(TEMPLATE_P, TEST_P);
+	is_recognized = compare_features(TEMPLATE_P, TEST_FALSE_P);
 
 	//Desmonto tarjeta SD
 	res = try_unmount("");

@@ -11,18 +11,18 @@ import os
 
 #Defino threshold de distancia
 distance_threshold = 2.0
-num_of_test_files = 20
+num_of_test_files = 30
 
 #Genero el template
-template_folder = "conjunto_template"
+template_folder = "template"
 template = generate_template(template_folder)
-#template.tofile("Leonardo.bin")
+template.tofile("Leonardo.bin")
 
 
 #Proceso archivos de prueba
-test_folder = "conjunto_juliana"
+test_folder = "voz"
 distancias = []
-max_distancias = []
+max_distancias = [] 
 for i in range(num_of_test_files):
     #Proceso features de la voz actual
     current_path = os.path.join(test_folder, f'feature_{i}.bin')

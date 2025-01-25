@@ -57,6 +57,7 @@ TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
 
+
 /* USER CODE BEGIN PV */
 QueueHandle_t sequence_queue;
 QueueHandle_t display_queue;
@@ -149,13 +150,14 @@ int main(void)
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
 
+
   /* USER CODE BEGIN RTOS_THREADS */
-  xTaskCreate(display_task, "Tarea display", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
+  xTaskCreate(display_task, "Tarea display", 3* configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
   //xTaskCreate(LockControl, "Tarea 04", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
   //xTaskCreate(VoiceProcessing, "Tarea 03", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
-  xTaskCreate(sd_task, "Tarea SD", 15360, NULL, tskIDLE_PRIORITY + 2, NULL);
-  xTaskCreate(keypad_task, "Tarea keypad", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-  xTaskCreate(idle_task, "Tarea Idle", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
+  xTaskCreate(sd_task, "Tarea SD", 15000, NULL, tskIDLE_PRIORITY + 2, NULL);
+  xTaskCreate(keypad_task, "Tarea keypad", 1 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+  xTaskCreate(idle_task, "Tarea Idle", 1 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
@@ -577,6 +579,16 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void const * argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
 
 /**
   * @brief  Period elapsed callback in non blocking mode

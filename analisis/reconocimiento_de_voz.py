@@ -11,15 +11,15 @@ import numpy as np
 import os
 
 #Defino threshold de distancia
-distance_threshold = 2.2
-num_of_test_files = 20
+distance_threshold = 4.7
+num_of_test_files = 10
 
 #Genero el template
-template_folder = "conjunto_template"
+template_folder = "template"
 template = generate_template(template_folder)
 
 #Proceso archivos de prueba
-test_folder = "conjunto_juliana"
+test_folder = "voz"
 
 ratios = []
 estado = [] 
