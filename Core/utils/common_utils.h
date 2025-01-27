@@ -9,6 +9,7 @@
 /*======================[Extern variables]==========================*/
 extern QueueHandle_t display_queue;
 extern QueueHandle_t sequence_queue;
+extern QueueHandle_t lock_state_queue;
 extern SemaphoreHandle_t keypad_sd_sync;
 extern SemaphoreHandle_t sd_display_sync;
 
@@ -25,8 +26,7 @@ extern SemaphoreHandle_t sd_display_sync;
 #define OVERLAP				(BLOCK_SIZE / 2)						//Overlap del 50%
 #define NUM_OF_BLOCKS 		(AUDIO_BUFFER_SIZE - OVERLAP) / OVERLAP
 
-//Defines asociados al template
-#define NUM_OF_TEMPLATE_SAMPLES 10
+
 //Defines asociados al reconocimiento de voz
 #define DISTANCE_THRESHOLD 5.0f
 #define ACCEPTED_BLOCK_TH  (NUM_OF_BLOCKS - 2)
@@ -68,4 +68,5 @@ void clear_buffer(char *buffer, size_t length);
 void clear_char(char *buffer, char character);
 void send_message(display_message_t message, bool is_blocking);
 void send_error(display_message_t error_message);
+bool send_uart(uint8_t *buffer, uint16_t size);
 #endif // COMMON_UTILS_H

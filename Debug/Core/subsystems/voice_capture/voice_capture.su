@@ -1,4 +1,4 @@
-../Core/subsystems/voice_capture/voice_capture.c:24:13:capture_voice	16	static
+../Core/subsystems/voice_capture/voice_capture.c:24:6:capture_voice	16	static
 ../Core/subsystems/voice_capture/voice_capture.c:44:13:get_voltage	40	static
 ../Core/subsystems/voice_capture/voice_capture.c:62:13:save_voice	8240	static
 ../Core/subsystems/voice_capture/voice_capture.c:102:6:capture_voice_signal	49176	static

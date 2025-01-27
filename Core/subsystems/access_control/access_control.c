@@ -35,8 +35,8 @@ bool is_template_creation(char *user_key){
 /**
  * @brief Maneja la generacion de voces para la creacion del template.
  *
- * Esta función captura 10 señales de voz y las guarda en archivos .bin numerados.
- * Luego se utilizaran estas voces para crear el template en PC.
+ * Esta función captura señales de voz para crear el template y las
+ * envia via uart hacia la PC. Alli se creara el template de voz.
  *
  * @param None
  * @return None
@@ -72,7 +72,6 @@ void handle_user_verification(char *user_key){
 	char user_name[USER_STR_SIZE] = {0};
 	char template_path[TEMPLATE_STR_SIZE] = {0};
 	display_message_t message;
-	size_t free_heap = xPortGetFreeHeapSize();
 	//Verifico existencia de usuario en base de datos
 	if(!process_user_key(user_key, user_name)){
 		//Usuario no encontrado
@@ -93,7 +92,6 @@ void handle_user_verification(char *user_key){
 		xSemaphoreGive(keypad_sd_sync);
 		return;
 	}
-	free_heap = xPortGetFreeHeapSize();
 	//El template existe, procedo al reconocimiento de voz
 	message = recognize_user_voice(template_path, user_name) ? DISPLAY_ACCESS_GRANTED : DISPLAY_ACCESS_DENIED;
 	//Envio mensaje al display

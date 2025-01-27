@@ -1,12 +1,10 @@
 #include "access_control.h"
 #include "file_handling.h"
+#include "feature_extraction.h"
 #include "voice_recognition.h"
 #include "sd_functions.h"
 /*================[Private defines]========================*/
 #define CODE_VERSION 1
-#define TEMPLATE_P "template_file.bin"
-#define TEST_P "test_file_ok.bin"
-#define TEST_FALSE_P "test_file_false.bin"
 /*================[Public task]==========================*/
 #if CODE_VERSION == 1
 void sd_task(void *pvParameters){
@@ -75,6 +73,10 @@ void sd_task(void *pvParameters){
 }
 
 #elif CODE_VERSION == 2
+#define INPUT_FILE "test.bin"
+#define FILTERED_FILE "filtered.bin"
+#define FFT_FILE "fft.bin"
+#define TEMPLATE_P "template_file.bin"
 void sd_task(void *pvParameters){
 	display_message_t message;
 	bool res;
@@ -87,8 +89,14 @@ void sd_task(void *pvParameters){
 		while(1);
 	}
 
+	//Filtro la señal
+	filter_signal(INPUT_FILE, FILTERED_FILE);
+
+	//Obtengo features
+	get_fft_feature(FILTERED_FILE, FFT_FILE);
+
 	//Comparo features
-	is_recognized = compare_features(TEMPLATE_P, TEST_FALSE_P);
+	is_recognized = compare_features(TEMPLATE_P, FFT_FILE);
 
 	//Desmonto tarjeta SD
 	res = try_unmount("");

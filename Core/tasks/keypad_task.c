@@ -18,6 +18,9 @@ void keypad_task(void *pvParameters){
 
 			//Reinicio el flag de envio
 			send_flag = false;
+
+			//Limpio el vector char que guarda la secuencia
+			clear_buffer(kp_buffer, SEQUENCE_LENGTH);
 		}
 
 		//Envio el mensaje a la tarea display si no hay pantalla idle

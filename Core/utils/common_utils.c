@@ -1,4 +1,7 @@
 #include "common_utils.h"
+
+extern UART_HandleTypeDef huart2;
+
 //Funciones utiles
 void clear_buffer(char *buffer, size_t length) {
     if (buffer == NULL) {
@@ -35,4 +38,14 @@ void send_message(display_message_t message, bool is_blocking){
 void send_error(display_message_t error_message){
 	send_message(error_message, BLOCKING);
 	return;
+}
+
+void generate_filename(char *filename, uint32_t x){
+	snprintf(filename, "voice_%d.bin", x);
+	return;
+}
+
+bool send_uart(uint8_t *buffer, uint16_t size){
+	HAL_StatusTypeDef status = HAL_UART_Transmit(&huart2, buffer, size, HAL_MAX_DELAY);
+	return (status == HAL_OK) ? true : false;
 }

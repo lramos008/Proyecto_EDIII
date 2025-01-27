@@ -61,6 +61,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 QueueHandle_t sequence_queue;
 QueueHandle_t display_queue;
+QueueHandle_t lock_state_queue;
 SemaphoreHandle_t keypad_sd_sync;
 SemaphoreHandle_t sd_display_sync;
 
@@ -145,6 +146,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_QUEUES */
   display_queue = xQueueCreate(1, sizeof(display_message_t));
   sequence_queue = xQueueCreate(1, sizeof(char));
+  lock_state_queue = xQueueCreate(1, sizeof(bool));
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -153,7 +155,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   xTaskCreate(display_task, "Tarea display", 3* configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
-  //xTaskCreate(LockControl, "Tarea 04", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
+  xTaskCreate(lock_task, "Tarea Lock", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
   //xTaskCreate(VoiceProcessing, "Tarea 03", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
   xTaskCreate(sd_task, "Tarea SD", 15000, NULL, tskIDLE_PRIORITY + 2, NULL);
   xTaskCreate(keypad_task, "Tarea keypad", 1 * configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);

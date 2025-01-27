@@ -46,22 +46,25 @@ bool generate_template(void){
  * @param None
  * @return true si se capturaron correctamente las voces, false en caso contrario.
  */
+
+//Defines asociados al template
+#define NUM_OF_TEMPLATE_SAMPLES 20
 bool generate_template(void){
-	char feature_path[15] = "feature_x.bin";
+	uint16_t voice_buffer[AUDIO_BUFFER_SIZE] = {0};
 	bool res;
 	for(uint8_t i = 0; i < NUM_OF_TEMPLATE_SAMPLES; i++){
-		feature_path[8] = '0' + i;											//Genero el path del feature x
+		//Envio mensaje al display para indicar que comienza reconocimiento de voz
+		send_message(DISPLAY_START_SPEECH_REC, BLOCKING);
 
-		//Capturo señal de voz
-		res = capture_voice_signal(feature_path);
-		if(!res){
-			//De haber un error, borro los archivos creados
-			for(uint8_t j = 0; j <= i; j++){
-				feature_path[8] = '0' + j;
-				f_unlink(feature_path);
-			}
-			return false;
-		}
+		//Capturo voz
+		capture_voice(voice_buffer, AUDIO_BUFFER_SIZE);
+
+		//Muestro en pantalla que se estan procesando los datos
+		send_message(DISPLAY_PROCESSING_DATA, NON_BLOCKING);						//Se envia no bloqueante para seguir procesando datos mientras se muestra el mensaje
+
+		//Envio voz por uart
+		res = send_uart((uint8_t *) voice_buffer, U16_SIZE_BYTES(AUDIO_BUFFER_SIZE));
+		if(!res) return false;
 	}
 
 	//Si se creo el template correctamente devuelve true

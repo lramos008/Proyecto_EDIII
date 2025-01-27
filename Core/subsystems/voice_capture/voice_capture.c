@@ -21,7 +21,7 @@ extern volatile bool conv_cplt_flag;
  * @param size Tamaño del buffer.
  * @return None
  */
-static void capture_voice(uint16_t *buffer, uint32_t size){
+void capture_voice(uint16_t *buffer, uint32_t size){
 	HAL_TIM_Base_Start_IT(&htim3);
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)buffer, size);					//Inicio captura de datos con ADC
 	while(!conv_cplt_flag);												//Espero a que termine la captura

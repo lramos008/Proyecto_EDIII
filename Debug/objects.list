@@ -29,6 +29,7 @@
 "./Core/subsystems/voice_recognition/voice_recognition.o"
 "./Core/tasks/display_task.o"
 "./Core/tasks/keypad_task.o"
+"./Core/tasks/lock_task.o"
 "./Core/tasks/sd_task.o"
 "./Core/utils/common_utils.o"
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o"

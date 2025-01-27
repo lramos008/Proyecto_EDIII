@@ -1,6 +1,6 @@
 Core/subsystems/feature_extraction/feature_extraction.o: \
  ../Core/subsystems/feature_extraction/feature_extraction.c \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
@@ -56,12 +56,12 @@ Core/subsystems/feature_extraction/feature_extraction.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h \
  ../Core/subsystems/feature_extraction/feature_extraction.h \
  ../Core/Inc/arm_math.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h \
- C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/processing/processing_functions.h
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h \
+ C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/processing/processing_functions.h
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/sd_functions.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
 ../FATFS/Target/ffconf.h:
@@ -119,8 +119,8 @@ C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Pr
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/utils/common_utils.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/utils/common_utils.h:
 ../Core/subsystems/feature_extraction/feature_extraction.h:
 ../Core/Inc/arm_math.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h:
-C:/Users/leora/OneDrive\ -\ Universidad\ de\ San\ Martin/Facultad/final_EDIII/Proyecto_EDIII/Core/subsystems/processing/processing_functions.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/drivers/sd_card/save_and_read_data.h:
+C:/Users/dramos/Documents/Final/Proyecto_EDIII/Core/subsystems/processing/processing_functions.h:
