@@ -71,6 +71,7 @@ def filter_signal(data, coefficients, block_size):
 #%%
 def get_fft_mag(data, block_size):
     #Defino variables
+    #energy_threshold = 1.0
     overlap = block_size // 2
     num_blocks = (data.size - overlap) // (block_size - overlap)
     hamming_window = ventana_hamming(block_size)
@@ -81,6 +82,7 @@ def get_fft_mag(data, block_size):
     
     #Declaro lista para guardar el resultado de la fft
     result = []
+    energies = []
     
     #Proceso cada bloque
     for i in range(num_blocks):
@@ -97,15 +99,21 @@ def get_fft_mag(data, block_size):
         #Calculo magnitud
         fft_mag = dsp.arm_cmplx_mag_f32(fft_block) / block_size
         
+        #Calculo la energia del bloque
+        energy = dsp.arm_dot_prod_f32(fft_mag, fft_mag, len(fft_mag))
+        
+        #Normalizo
         normalized_mag = normalize_array(fft_mag)
         
         #Almaceno el resultado
         result.append(normalized_mag)
-    
+        energies.append(energy)
+        
     #Convierto fft_result en un array de numpy
     result = np.array(result)
+    energies = np.array(energies)
     
-    return result
+    return result, energies
 
 #%%
 def process_voice(data):
@@ -124,8 +132,8 @@ def process_voice(data):
     filtered_signal = filter_signal(data, coefficients, block_size)
     
     #Calculo la magnitud normalizada de la fft
-    fft_mag = get_fft_mag(filtered_signal, block_size)
-    return fft_mag
+    fft_mag, energies = get_fft_mag(filtered_signal, block_size)
+    return fft_mag, energies
 
 
 

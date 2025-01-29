@@ -4,6 +4,7 @@
 #include "processing_functions.h"
 #define NUM_TAPS 401
 #define STATE_SIZE 	(NUM_TAPS + BLOCK_SIZE - 1)
+#define ENERGY_THRESHOLD 1.0f
 
 bool filter_signal(char *input_file, char *output_file){
 	//Declaro vectores de procesamiento y variables a utilizar
@@ -75,12 +76,15 @@ bool filter_signal(char *input_file, char *output_file){
 	return true;
 }
 
+
+
 bool get_fft_feature(char *input_file, char *output_file){
 	//Declaro vectores de procesamiento y variables importantes
 	arm_rfft_fast_instance_f32 rfft_instance;
 	float32_t voice_block[BLOCK_SIZE] = {0};
 	float32_t fft_block[BLOCK_SIZE] = {0};
 	float32_t feature_block[FEATURE_SIZE] = {0};
+	float32_t energy;
 	uint32_t step = BLOCK_SIZE - OVERLAP;
 	uint32_t last_pos;
 	uint32_t file_size;
@@ -119,8 +123,21 @@ bool get_fft_feature(char *input_file, char *output_file){
 		//Calculo la magnitud de la fft
 		calculate_magnitude(fft_block, feature_block, FEATURE_SIZE);											//El tamaño es la cantidad de nros complejos en el vector de entrada
 
-		//Normalizo el array
-		normalize_array(feature_block, FEATURE_SIZE);
+		//Escalo la magnitud de la fft para escalar la energia
+		arm_scale_f32(feature_block, 1.0f / BLOCK_SIZE, feature_block, BLOCK_SIZE);
+
+		//Calculo la energia del bloque
+		arm_dot_prod_f32(feature_block, feature_block, FEATURE_SIZE, &energy);
+
+		//Verifico que supere el threshold para comprobar que hay una voz presente
+		if(energy > ENERGY_THRESHOLD){
+			//Normalizo el array
+			normalize_array(feature_block, FEATURE_SIZE);
+		}
+		else{
+			//Si no hay voz presente se llena con ceros el vector para explicitar que no hay voz
+			arm_fill_f32(0.0f, feature_block, FEATURE_SIZE);
+		}
 
 		//Guardo bloque procesado en la memoria SD
 		res = save_data_on_sd(output_file, (void *) feature_block, FLOAT_SIZE_BYTES(FEATURE_SIZE));
