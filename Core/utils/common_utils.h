@@ -28,7 +28,7 @@ extern SemaphoreHandle_t sd_display_sync;
 
 
 //Defines asociados al reconocimiento de voz
-#define DISTANCE_THRESHOLD 5.0f
+#define DISTANCE_THRESHOLD 3.0f
 #define ACCEPTED_BLOCK_TH  (NUM_OF_BLOCKS - 2)
 
 //Defines relacionados al envio de mensajes al display

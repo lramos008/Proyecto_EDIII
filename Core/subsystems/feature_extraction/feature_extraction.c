@@ -4,7 +4,7 @@
 #include "processing_functions.h"
 #define NUM_TAPS 401
 #define STATE_SIZE 	(NUM_TAPS + BLOCK_SIZE - 1)
-#define ENERGY_THRESHOLD 1.0f
+#define ENERGY_THRESHOLD 0.001000f
 
 bool filter_signal(char *input_file, char *output_file){
 	//Declaro vectores de procesamiento y variables a utilizar

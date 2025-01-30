@@ -11,21 +11,22 @@ import os
 
 #Defino threshold de distancia
 distance_threshold = 2.0
-num_of_test_files = 30
+num_of_test_files = 20
 
 #Genero el template
-template_folder = "template"
-template = generate_template(template_folder)
-template.tofile("Leonardo.bin")
-
-
+template_folder = "mis_templates"
+template_name = "Leonardo.bin"
+# template = generate_template(template_folder)
+# template.tofile("Leonardo.bin")
+template = leer_bin_a_numpy(os.path.join(template_folder, template_name))
+template = template.reshape((23, 1024))
 #Proceso archivos de prueba
-test_folder = "voz"
+test_folder = "Silencio"
 distancias = []
 max_distancias = [] 
 for i in range(num_of_test_files):
     #Proceso features de la voz actual
-    current_path = os.path.join(test_folder, f'feature_{i}.bin')
+    current_path = os.path.join(test_folder, f'voz_{i+1}.bin')
     current_test_voice = leer_bin_a_numpy(current_path)
     current_test_feature = process_voice(current_test_voice)
     

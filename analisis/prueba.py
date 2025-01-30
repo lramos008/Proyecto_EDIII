@@ -20,7 +20,7 @@ ADC_RES = 4096
 #Direccion de guardado de voces y template
 carpeta_voces = "voces"
 carpeta_template = "mis_templates"
-nombre_archivo = "Vacio"
+nombre_archivo = "Silencio"
 template_path = os.path.join(carpeta_template, nombre_archivo + ".bin")
 
 #Chequeo si existen las carpetas donde guardar las voces y el template. Sino las creo
@@ -29,7 +29,7 @@ os.makedirs(carpeta_template, exist_ok=True)
 os.makedirs(nombre_archivo, exist_ok=True)
 
 # #Recibo señales de voz desde el stm32 nucleo
-PORT = 'COM6'
+PORT = 'COM18'
 BAUDRATE = 115200
 NUM_DATOS = 24576
 NUM_VECTORES = 20
@@ -37,7 +37,7 @@ recepcion = recibir_n_vectores_uint16_t(
        PORT, BAUDRATE, NUM_DATOS, NUM_VECTORES)
 
 #Convierto a tensiones las señales
-señales_de_voz = [(arr * VCC / ADC_RES) for arr in recepcion]
+señales_de_voz = [(arr * VCC / ADC_RES).astype(np.float32) for arr in recepcion]
   
 #Guardo las señales en archivos
 for i, array in enumerate(señales_de_voz):
@@ -45,17 +45,16 @@ for i, array in enumerate(señales_de_voz):
      array.tofile(path)
 print(f"Voces guardadas en {nombre_archivo}\n")
 
-mediciones = []
-#Proceso voces
-for i, array in enumerate(señales_de_voz):
-    fft, energies = process_voice(array)
-    mediciones.append(energies)
-#Genero template
 # template = generate_template(señales_de_voz[0 : NUM_VECTORES // 2])
-  
+
+# template = template.astype(np.float32)
+# template.tofile(nombre_archivo + ".bin")
 #  #Guardo el template
 # template.tofile(template_path)
 # print(f'Template guardado en {template_path}.\n')
 
+# promedio = np.mean(mediciones, axis = 0)
+# maximo = np.max(promedio)
 
 
+# template = generate_template(señales_de_voz[0 : NUM_VECTORES // 2])
