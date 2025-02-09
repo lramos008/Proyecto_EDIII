@@ -13,33 +13,6 @@
 #define FEATURE_STR_SIZE 20
 
 
-const char feature_filepath[NUM_OF_VOICES][FEATURE_STR_SIZE] = {"feature_1.bin",
-															    "feature_2.bin",
-															    "feature_3.bin",
-															    "feature_4.bin",
-															    "feature_5.bin"	};
-
-//#define V1
-#ifdef V1
-bool generate_template(void){
-	//Declaracion de variables
-	bool is_generated;
-	uint32_t num_of_blocks = (uint32_t)(((AUDIO_BUFFER_SIZE / BLOCK_SIZE) / OVERLAP_RATIO) - 1);
-
-	//Capturo voces y genero los features asociados
-	if(!capture_and_extract_features(num_of_blocks, NUM_OF_VOICES, AUDIO_BUFFER_SIZE, BLOCK_SIZE)){
-		//Error de captura
-
-		return false;
-	}
-
-
-	//Proceso features para generar el template
-	is_generated = process_features(num_of_blocks, NUM_OF_VOICES, FEATURE_SIZE);
-
-	return is_generated;
-}
-#else
 /**
  * @brief Captura 10 señales de voz que seran utilizadas para crear un template.
  *
@@ -48,7 +21,7 @@ bool generate_template(void){
  */
 
 //Defines asociados al template
-#define NUM_OF_TEMPLATE_SAMPLES 20
+#define NUM_OF_TEMPLATE_SAMPLES 10
 bool generate_template(void){
 	uint16_t voice_buffer[AUDIO_BUFFER_SIZE] = {0};
 	bool res;
@@ -70,4 +43,4 @@ bool generate_template(void){
 	//Si se creo el template correctamente devuelve true
 	return true;
 }
-#endif
+

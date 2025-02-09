@@ -19,6 +19,8 @@ def main():
     parser.add_argument("--COM", type=int, help="Número de puerto COM.")
     parser.add_argument("--baudrate", type=int, default=115200,
                         help="Velocidad de transmision UART.")
+    parser.add_argument("--template_folder", type=str, default = "Mis_templates",
+                        help="Carpeta donde se guarda el template.")
     parser.add_argument("--filename", type=str,
                         default="template.bin", help="Nombre del archivo.")
     
@@ -43,7 +45,7 @@ def main():
     PORT = f'COM{args.COM}'
     BAUDRATE = args.baudrate
     NUM_DATOS = 24576
-    NUM_VECTORES = 20
+    NUM_VECTORES = 10
     recepcion = recibir_n_vectores_uint16_t(
           PORT, BAUDRATE, NUM_DATOS, NUM_VECTORES)
     
@@ -57,8 +59,8 @@ def main():
     print(f"Voces guardadas en {nombre_archivo}\n")
   
     #Genero template
-    template = generate_template(señales_de_voz[0 : NUM_VECTORES // 2])
-  
+    template = generate_template(señales_de_voz)
+    template = template.astype(np.float32)
      #Guardo el template
     template.tofile(template_path)
     print(f'Template guardado en {template_path}.\n')

@@ -59,6 +59,7 @@ void display_task(void *pvParameters){
 		switch(message){
 		case DISPLAY_SCREEN_WELCOME:
 			display_start_msg();
+			counter = 0;
 			break;
 		case DISPLAY_ENTER_DIGIT:
 			if(counter < SEQUENCE_LENGTH){

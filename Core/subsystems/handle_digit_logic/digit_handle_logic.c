@@ -58,6 +58,9 @@ display_message_t handle_keypad_input(char input, char *buffer, bool *send_flag)
 						context.start_time = xTaskGetTickCount();				//Reinicio el timeout
 						current_message = DISPLAY_ERASE_DIGIT;
 						context.current_state = (context.current_state > WAITING_FOR_DIGIT_1) ? context.current_state - 1 : WAITING_FOR_DIGIT_1;
+						if(context.current_state == WAITING_FOR_DIGIT_1){
+							current_message = DISPLAY_SCREEN_WELCOME;
+						}
 					}
 				}
 				else if(input == ENTER){

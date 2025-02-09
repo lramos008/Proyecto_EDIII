@@ -36,6 +36,8 @@ void sd_task(void *pvParameters){
 	}
 
 	while(1){
+		//Limpio buffer de recepcion
+		clear_buffer(user_key_retrieved, SEQUENCE_LENGTH + 1);
 		//Recibo clave desde tarea keypad
 		receive_user_key(user_key_retrieved);
 

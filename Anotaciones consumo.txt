@@ -1,0 +1,7 @@
+Display -> ~6 mA con el texto más grande (más píxeles en pantalla), 20 mA consume con todos los píxeles activados.
+SD-> 2mA en reposo, 16.2 mA en máximo procesamiento.
+Amplificador -> Consume 2.3 mA en promedio.
+Cerradura -> 250 mA cuando esta cerrada.
+Nucleo F401RE -> Se extrajo el jumper de JP6 IDD y se midió la corriente que alimenta la núcleo. Picos de 18.4 mA
+al transmitir datos de template por uart, 14.1 mA en reposo (ingrese clave) y 17 mA aproximadamente durante el procesamiento de datos
+(con pico a 18 mA).

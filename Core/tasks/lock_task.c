@@ -2,6 +2,7 @@
 
 void lock_task(void *pvParameters){
 	bool lock_state;
+	HAL_GPIO_WritePin(Lock_GPIO_Port, Lock_Pin, GPIO_PIN_SET);
 	while(1){
 		xQueueReceive(lock_state_queue, &lock_state, portMAX_DELAY);
 		if(lock_state){

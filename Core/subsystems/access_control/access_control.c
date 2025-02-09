@@ -6,6 +6,7 @@
 #include "user_and_entry.h"
 
 #define TEMPLATE_CREATION_SEQUENCE "000000"
+#define TEMPLATE_FOLDER "templates"
 
 /**
  * @brief Recibe secuencia ingresada por el usuario desde la tarea keypad.
@@ -14,7 +15,7 @@
  * @return None
  */
 void receive_user_key(char *user_key){
-	for(uint8_t i = 0; i < SEQUENCE_LENGTH; i++){
+	for(uint8_t i = 0; i < SEQUENCE_LENGTH + 1; i++){
 		xQueueReceive(sequence_queue, &user_key[i], portMAX_DELAY);
 	}
 	return;
@@ -85,7 +86,8 @@ void handle_user_verification(char *user_key){
 	send_message(DISPLAY_USER_FOUND, NON_BLOCKING);
 
 	//Verifico que exista template asociado al usuario
-	snprintf(template_path, TEMPLATE_STR_SIZE, "%s.bin", user_name);
+	//snprintf(template_path, TEMPLATE_STR_SIZE, "%s.bin", user_name);
+	snprintf(template_path, TEMPLATE_STR_SIZE, "/%s/%s.bin", TEMPLATE_FOLDER, user_name);
 	if(!check_if_file_exists(template_path)){
 		//Template no encontrado
 		send_error(DISPLAY_TEMPLATE_NOT_FOUND);
