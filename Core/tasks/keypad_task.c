@@ -8,7 +8,7 @@ void keypad_task(void *pvParameters){
 	display_message_t message;
 	while(1){
 		input = read_keypad();
-		message = handle_keypad_input(input, kp_buffer, &send_flag);				//Manejo la logica de recepcion. Con 6 digitos se envia
+		message = handle_keypad_input(input, kp_buffer, &send_flag);				//Manejo la logica de recepcion.
 		if(send_flag){
 			//Envio uno por uno los digitos obtenidos con el keypad a la tarea SD
 			for(uint8_t i = 0; i < SEQUENCE_LENGTH + 1; i++){

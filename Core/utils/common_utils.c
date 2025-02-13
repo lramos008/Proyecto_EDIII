@@ -26,16 +26,21 @@ void clear_char(char *buffer, char character){
 
 
 void send_message(display_message_t message, bool is_blocking){
-	xQueueSend(display_queue, &message, portMAX_DELAY);					//Envio mensaje de error al display
+	//Me aseguro que el semaforo este tomado para bloquear la tarea (si corresponde)
+	xSemaphoreTake(sd_display_sync, 0);
+
+	//Envio mensaje al display
+	xQueueSend(display_queue, &message, portMAX_DELAY);
 
 	//Compruebo si es bloqueante el mensaje
 	if(is_blocking){
-		xSemaphoreTake(sd_display_sync, portMAX_DELAY);					//Esperar hasta que el display termine de mostrar el mensaje
+		xSemaphoreTake(sd_display_sync, portMAX_DELAY);					//Esperar hasta que el display me devuelva el semaforo
 	}
 	return;
 }
 
 void send_error(display_message_t error_message){
+	//Los mensajes de error son bloqueantes siempre
 	send_message(error_message, BLOCKING);
 	return;
 }

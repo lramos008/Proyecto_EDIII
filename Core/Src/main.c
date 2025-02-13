@@ -64,6 +64,7 @@ QueueHandle_t display_queue;
 QueueHandle_t lock_state_queue;
 SemaphoreHandle_t keypad_sd_sync;
 SemaphoreHandle_t sd_display_sync;
+SemaphoreHandle_t sd_lock_sync;
 
 volatile bool conv_cplt_flag = false;
 /* USER CODE END PV */
@@ -137,6 +138,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   keypad_sd_sync = xSemaphoreCreateBinary();
   sd_display_sync = xSemaphoreCreateBinary();
+  sd_lock_sync = xSemaphoreCreateBinary();
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -566,6 +568,7 @@ static void MX_GPIO_Init(void)
 void idle_task(void *pvParameters){
 	while(1);
 }
+
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 	HAL_TIM_Base_Stop_IT(&htim3);
 	HAL_ADC_Stop_DMA(&hadc1);

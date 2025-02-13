@@ -12,7 +12,7 @@ extern QueueHandle_t sequence_queue;
 extern QueueHandle_t lock_state_queue;
 extern SemaphoreHandle_t keypad_sd_sync;
 extern SemaphoreHandle_t sd_display_sync;
-
+extern SemaphoreHandle_t sd_lock_sync;
 /*========================[Public defines]=========================*/
 #define SEQUENCE_LENGTH 6
 #define USER_STR_SIZE 40
@@ -28,7 +28,7 @@ extern SemaphoreHandle_t sd_display_sync;
 
 
 //Defines asociados al reconocimiento de voz
-#define DISTANCE_THRESHOLD 3.0f
+#define DISTANCE_THRESHOLD 2.5f//3.0f
 #define ACCEPTED_BLOCK_TH  (NUM_OF_BLOCKS - 2)
 
 //Defines relacionados al envio de mensajes al display

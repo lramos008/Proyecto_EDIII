@@ -92,7 +92,7 @@ bool recognize_user_voice(char *template_path, char *user_name){
 		return false;
 	}
 
-	//Obtengo features
+	//Obtengo features (magnitud de la fft normalizada)
 	res = get_fft_feature(FILTERED_PATH, FEATURE_PATH);
 	if(!res){
 		//Borro archivo de señal filtrada y de feature

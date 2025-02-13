@@ -77,6 +77,7 @@ void display_task(void *pvParameters){
 			display_user_found_msg();
 			counter = 0;
 			vTaskDelay(2000 / portTICK_RATE_MS);
+			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_USER_NOT_FOUND:
 			display_user_not_found_msg();
@@ -97,8 +98,6 @@ void display_task(void *pvParameters){
 			break;
 		case DISPLAY_ACCESS_GRANTED:
 			display_access_granted_msg();
-			vTaskDelay(2000 / portTICK_RATE_MS);
-			xSemaphoreGive(sd_display_sync);
 			break;
 		case DISPLAY_ACCESS_DENIED:
 			display_access_denied_msg();

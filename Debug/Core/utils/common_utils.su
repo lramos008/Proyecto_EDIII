@@ -1,6 +1,6 @@
 ../Core/utils/common_utils.c:6:6:clear_buffer	24	static
 ../Core/utils/common_utils.c:15:6:clear_char	24	static
 ../Core/utils/common_utils.c:28:6:send_message	16	static
-../Core/utils/common_utils.c:38:6:send_error	16	static
-../Core/utils/common_utils.c:43:6:generate_filename	16	static
-../Core/utils/common_utils.c:48:6:send_uart	24	static
+../Core/utils/common_utils.c:39:6:send_error	16	static
+../Core/utils/common_utils.c:44:6:generate_filename	16	static
+../Core/utils/common_utils.c:49:6:send_uart	24	static

@@ -8,6 +8,7 @@
 #define TEMPLATE_CREATION_SEQUENCE "000000"
 #define TEMPLATE_FOLDER "templates"
 
+
 /**
  * @brief Recibe secuencia ingresada por el usuario desde la tarea keypad.
  *
@@ -72,6 +73,7 @@ void handle_template_creation(void){
 void handle_user_verification(char *user_key){
 	char user_name[USER_STR_SIZE] = {0};
 	char template_path[TEMPLATE_STR_SIZE] = {0};
+	bool lock_state = false;
 	display_message_t message;
 	//Verifico existencia de usuario en base de datos
 	if(!process_user_key(user_key, user_name)){
@@ -83,7 +85,7 @@ void handle_user_verification(char *user_key){
 	}
 
 	//Indicar que el usuario fue encontrado
-	send_message(DISPLAY_USER_FOUND, NON_BLOCKING);
+	send_message(DISPLAY_USER_FOUND, BLOCKING);
 
 	//Verifico que exista template asociado al usuario
 	//snprintf(template_path, TEMPLATE_STR_SIZE, "%s.bin", user_name);
@@ -95,9 +97,21 @@ void handle_user_verification(char *user_key){
 		return;
 	}
 	//El template existe, procedo al reconocimiento de voz
-	message = recognize_user_voice(template_path, user_name) ? DISPLAY_ACCESS_GRANTED : DISPLAY_ACCESS_DENIED;
-	//Envio mensaje al display
-	send_message(message, BLOCKING);
+	lock_state = recognize_user_voice(template_path, user_name);
+
+	//Verifico si debe abrirse la cerradura magnetica
+	if(lock_state){
+		//Mostrar mensaje de acceso concedido y abrir la cerradura
+		send_message(DISPLAY_ACCESS_GRANTED, NON_BLOCKING);
+		xQueueSend(lock_state_queue, &lock_state, portMAX_DELAY);
+		xSemaphoreTake(sd_lock_sync, 0);									//Garantizo que el semaforo esta tomado para bloquear la tarea
+		xSemaphoreTake(sd_lock_sync, portMAX_DELAY);						//Espero a que la tarea lock me de el semaforo para continuar
+		lock_state = false;
+	}
+	else{
+		//No se permitio abrir la cerradura, mostrar acceso denegado
+		send_message(DISPLAY_ACCESS_DENIED, BLOCKING);
+	}
 
 	//Cedo semaforo para que el keypad pueda continuar ejecutandose
 	xSemaphoreGive(keypad_sd_sync);
